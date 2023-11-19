@@ -5,4 +5,5 @@ using UnityEngine;
 public interface ISearchForNearEnemy
 {
     void Search_For_Near_Enemy();
+    
 }

@@ -2,48 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Monster : UnitInfo
+public class Monster : MonsterUnitClass
 {
+    [SerializeField]
+    Text hpText;
+
+    public override void Act_By_Unit()
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+
     // Start is called before the first frame update
     void Awake()
     {
-        m_this_Unit_Armor_Property = new GambesonArmor();
-
+        _this_Unit_Armor_Property = new MailArmor();
         InitUnitInfoSetting();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        Invoke("Search_For_Near_Enemy", 1f);
-        if (m_targetUnit != null)
-        {
-            //Look_At_The_Target();
-            Debug.Log("Àû Å½»ö ¿Ï·á!!");
-        }
+        hpText.text="ëª¬ìŠ¤í„° ì²´ë ¥ : "+ Mathf.CeilToInt(_unitData._unit_Health).ToString();
+        //Act_By_Unit();
     }
 
     public override void InitUnitInfoSetting()
     {
 
-        m_unitData.m_unit_Name = "¸ó½ºÅÍ";            // À¯´Ö ÀÌ¸§
-        m_unitData.m_unit_Health = 200f;             // À¯´Ö Ã¼·Â
-        m_unitData.m_eUnit_Attack_Property = eUnit_Attack_Property_States.slash_Attack;    // À¯´Ö °ø°İ¼Ó¼º
-        m_unitData.unit_Attack_Damage = 1f;    // À¯´Ö °ø°İ µ¥¹ÌÁö
-        m_unitData.m_eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;   // À¯´Ö ¹æ¾î¼Ó¼º
-        m_unitData.m_unit_Description = "¸ó½ºÅÍÀÔ´Ï´Ù";     // À¯´Ö ¼³¸í
-        m_unitData.m_unit_Type = "¸ó½ºÅÍ";            // À¯´Ö Å¸ÀÔ
-        m_unitData.m_unit_MoveSpeed = 1f;        // À¯´Ö ÀÌµ¿¼Óµµ
-        m_unitData.m_unit_Outlook = 1f;          // À¯´Ö ½Ã¾ß
-        m_unitData.m_unit_Attack_Range = 1f;     // À¯´Ö °ø°İ ¹üÀ§
+        _unitData._unit_Name = "ëª¬ìŠ¤í„°";            // ìœ ë‹› ì´ë¦„
+        _unitData._unit_Health = 200f;             // ìœ ë‹› ì²´ë ¥
+        _unitData._eUnit_Attack_Property = eUnit_Attack_Property_States.slash_Attack;    // ìœ ë‹› ê³µê²©ì†ì„±
+        _unitData._unit_Attack_Damage = 1f;    // ìœ ë‹› ê³µê²© ë°ë¯¸ì§€
+        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.mail_Armor;   // ìœ ë‹› ë°©ì–´ì†ì„±
+        _unitData._unit_Description = "ëª¬ìŠ¤í„°ì…ë‹ˆë‹¤";     // ìœ ë‹› ì„¤ëª…
+        _unitData._unit_Type = "ëª¬ìŠ¤í„°";            // ìœ ë‹› íƒ€ì…
+        _unitData._unit_MoveSpeed = 1f;        // ìœ ë‹› ì´ë™ì†ë„
+        _unitData._unit_Outlook = 1f;          // ìœ ë‹› ì‹œì•¼
+        _unitData._unit_Attack_Range = 1f;     // ìœ ë‹› ê³µê²© ë²”ìœ„
+        _unitData._unit_Attack_Speed = 3f;        // ìœ ë‹› ê³µê²© ì†ë„
+        _unitData._unit_Attack_CoolTime = 3f;     // ìœ ë‹› ê¸°ë³¸ ê³µê²© ì¿¨íƒ€ì„
+        _unitData._unit_Skill_CoolTime = 8f;     // ìœ ë‹› ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        BeAttacked_By_OtherUnit(other);
-    }
+
 
 
 }
