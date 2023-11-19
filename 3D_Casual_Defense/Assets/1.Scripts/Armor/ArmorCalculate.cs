@@ -8,5 +8,5 @@ using UnityEngine;
 
 public abstract class ArmorCalculate
 {
-    public abstract float DecreaseDamaged(unit_Data attackType, unit_Data ArmorType);
+    public abstract float DecreaseDamaged(unit_Data attackType, unit_Data ArmorType, float atkDmg);
 }

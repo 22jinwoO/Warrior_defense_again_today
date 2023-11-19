@@ -1,102 +1,191 @@
-//       ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
-//      | ÇÃ·¹ÀÌ¾î À¯´ÖÀÌ¶ó´Â °øÅëÁ¡À» ¹­¾î¼­ ÇÏ³ªÀÇ Å¬·¡½º·Î ¸¸µé¾î¼­ ÇÑ¹ø¿¡ °ü¸®|
-//       ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ¤Ñ
+ï»¿//       ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
+//      | í”Œë ˆì´ì–´ ìœ ë‹›ì´ë¼ëŠ” ê³µí†µì ì„ ë¬¶ì–´ì„œ í•˜ë‚˜ì˜ í´ë˜ìŠ¤ë¡œ ë§Œë“¤ì–´ì„œ í•œë²ˆì— ê´€ë¦¬|
+//       ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡ã…¡
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.AI;
 
 
-// ÇÔ¼öÀÌ¸§Àº ¸í»ç¸»°í µ¿»ç ¸ÕÀú, enumÀº º¯¼öÀÌ¸§ ¾Õ¿¡ ¼Ò¹®ÀÚ e ÀÛ¼º, º¯¼ö´Â Ä«¸áÇ¥±â¹ıÀ¸·Î ¼Ò¹®ÀÚ ÀÌÈÄ ´Ü¾î Ã¹±ÛÀÚ ´ë¹®ÀÚ
+// í•¨ìˆ˜ì´ë¦„ì€ ëª…ì‚¬ë§ê³  ë™ì‚¬ ë¨¼ì €, enumì€ ë³€ìˆ˜ì´ë¦„ ì•ì— ì†Œë¬¸ì e ì‘ì„±, ë³€ìˆ˜ëŠ” ì¹´ë©œí‘œê¸°ë²•ìœ¼ë¡œ ì†Œë¬¸ì ì´í›„ ë‹¨ì–´ ì²«ê¸€ì ëŒ€ë¬¸ì
 [Serializable]
-public struct unit_Data    // À¯´Ö µ¥ÀÌÅÍ °¡Á®¿À´Â ±¸Á¶Ã¼
+public struct unit_Data    // ìœ ë‹› ë°ì´í„° ê°€ì ¸ì˜¤ëŠ” êµ¬ì¡°ì²´
 {
-    public string m_unit_Name;            // À¯´Ö ÀÌ¸§
-    public float m_unit_Health;             // À¯´Ö Ã¼·Â
-    public eUnit_Attack_Property_States m_eUnit_Attack_Property;    // À¯´Ö °ø°İ¼Ó¼º
-    public float unit_Attack_Damage;    // À¯´Ö °ø°İ µ¥¹ÌÁö
-    public eUnit_Defense_Property_States m_eUnit_Defense_Property; // À¯´Ö ¹æ¾î¼Ó¼º
-    public string m_unit_Description;     // À¯´Ö ¼³¸í
-    public string m_unit_Type;            // À¯´Ö Å¸ÀÔ
-    public float m_unit_MoveSpeed;        // À¯´Ö ÀÌµ¿¼Óµµ
-    public float m_unit_Outlook;          // À¯´Ö ½Ã¾ß
-    public float m_unit_Attack_Range;     // À¯´Ö °ø°İ ¹üÀ§
+    public string _unit_Name;            // ìœ ë‹› ì´ë¦„
+    public float _unit_Health;             // ìœ ë‹› ì²´ë ¥
+    public eUnit_Attack_Property_States _eUnit_Attack_Property;    // ìœ ë‹› ê³µê²©ì†ì„±
+    public float _unit_Attack_Damage;    // ìœ ë‹› ê³µê²© ë°ë¯¸ì§€
+    public float _unit_Skill_Attack_Damage;    // ìœ ë‹› ìŠ¤í‚¬ ê³µê²© ë°ë¯¸ì§€
+    public eUnit_Defense_Property_States _eUnit_Defense_Property; // ìœ ë‹› ë°©ì–´ì†ì„±
+    public string _unit_Description;       // ìœ ë‹› ì„¤ëª…
+    public string _unit_Type;              // ìœ ë‹› íƒ€ì…
+    public float _unit_MoveSpeed;          // ìœ ë‹› ì´ë™ì†ë„
+    public float _unit_Outlook;            // ìœ ë‹› ì‹œì•¼
+    public float _unit_Attack_Range;       // ìœ ë‹› ê³µê²© ë²”ìœ„
+    public float _unit_Attack_Speed;        // ìœ ë‹› ê³µê²© ì†ë„
+    public float _unit_Attack_CoolTime;     // ìœ ë‹› ê¸°ë³¸ ê³µê²© ì¿¨íƒ€ì„
+    public float _unit_Current_Skill_CoolTime;     // ìœ ë‹› í˜„ì¬ ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„
+    public float _unit_Skill_CoolTime;     // ìœ ë‹› ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„
 
 }
 
-public enum eUnit_Attack_Property_States  // À¯´Ö °ø°İ Å¸ÀÔ
+public enum eUnit_Attack_Property_States  // ìœ ë‹› ê³µê²© íƒ€ì…
 {
     Default = 0,
-    slash_Attack,       // º£±â °ø°İ
-    piercing_Attack,    // °üÅë °ø°İ
-    crushing_attack     // ºĞ¼â °ø°İ
+    slash_Attack,       // ë² ê¸° ê³µê²©
+    piercing_Attack,    // ê´€í†µ ê³µê²©
+    crushing_attack     // ë¶„ì‡„ ê³µê²©
 }
 
-public enum eUnit_Defense_Property_States // À¯´Ö ¹æ¾î Å¸ÀÔ
+public enum eUnit_Defense_Property_States // ìœ ë‹› ë°©ì–´ íƒ€ì…
 {
     Default = 0,
-    plate_Armor,       // ÆÇ±İ °©¿Ê
-    gambeson_Armor,    // Ãµ°©¿Ê
-    mail_Armor         // ¼è»ç½½ °©¿Ê
+    plate_Armor,       // íŒê¸ˆ ê°‘ì˜·
+    gambeson_Armor,    // ì²œê°‘ì˜·
+    mail_Armor         // ì‡ ì‚¬ìŠ¬ ê°‘ì˜·
 }
 
-// °ø°İ Å³Å¸ÀÔ¿¡ µû¸¥ ¸ó½ºÅÍ Å½Áö ÇÔ¼ö Ãß»óÅ¬·¡½º·Î »ı¼º ÈÄ »ó¼ÓÇÏ¿© Å³Å¸ÀÔ¿¡ ÇØ´çÇÏ´Â ¸ó½ºÅÍ Å½ÁöÇÔ¼ö ½ÇÇà
+// ê³µê²© í‚¬íƒ€ì…ì— ë”°ë¥¸ ëª¬ìŠ¤í„° íƒì§€ í•¨ìˆ˜ ì¶”ìƒí´ë˜ìŠ¤ë¡œ ìƒì„± í›„ ìƒì†í•˜ì—¬ í‚¬íƒ€ì…ì— í•´ë‹¹í•˜ëŠ” ëª¬ìŠ¤í„° íƒì§€í•¨ìˆ˜ ì‹¤í–‰
 
-public enum eUnit_Action_States           // À¯´Ö Çàµ¿
+public enum eUnit_Action_States           // ìœ ë‹› í–‰ë™
 {
     Default = 0,
-    unit_Idle,          // ´ë±â
-    unit_Move,          // ÀÌµ¿
-    unit_Tracking,      // ÃßÀû
-    unit_Attack,        // °ø°İ
-    unit_Boundary       // È¦µå ÈÄ ÁÖº¯ °æ°è
+    unit_Idle,          // ëŒ€ê¸°
+    unit_Move,          // ì´ë™
+    unit_Tracking,      // ì¶”ì 
+    unit_Attack,        // ê³µê²©
+    unit_Boundary       // í™€ë“œ í›„ ì£¼ë³€ ê²½ê³„
 }
 
 
 public abstract class UnitInfo : MonoBehaviour, ISearchForNearEnemy
 {
-    public unit_Data m_unitData; // À¯´Ö µ¥ÀÌÅÍ ±¸Á¶Ã¼ º¯¼ö
+    public unit_Data _unitData; // ìœ ë‹› ë°ì´í„° êµ¬ì¡°ì²´ ë³€ìˆ˜
 
-    public eUnit_Action_States m_enum_Unit_Action_Type;               // À¯´Ö Çàµ¿ »óÅÂ º¯¼ö
-    public ArmorCalculate m_this_Unit_Armor_Property;
+    public eUnit_Action_States _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;   // ìœ ë‹› í–‰ë™ ìƒíƒœ ë³€ìˆ˜
+    public eUnit_Action_States _enum_Unit_Attack_Type;   // í”Œë ˆì´ì–´ê°€ ì§€ì •í•´ì¤€ í˜„ì¬ ìœ ë‹› ê³µê²© ìƒíƒœ ë³€ìˆ˜
+    public ArmorCalculate _this_Unit_Armor_Property;
+
+    public NavMeshAgent nav;    // ë‚´ë¹„ë©”ì‰¬
+    public Animator anim;       // ì• ë‹ˆë©”ì´í„°
+    public bool isSearch = false;   // ì ì„ íƒì§€í–ˆëŠ”ì§€ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
+    public Vector3 movePos;
+
+    public bool _can_Base_Attack;    // ê¸°ë³¸ ê³µê²© ê°€ëŠ¥ ë¶ˆê°€ëŠ¥ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
+    public bool _can_Skill_Attack;   // ìŠ¤í‚¬ ê³µê²© ê°€ëŠ¥ ë¶ˆê°€ëŠ¥ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
 
 
 
-    public abstract void InitUnitInfoSetting();     // À¯´Ö Á¤º¸ ÃÊ±âÈ­ ½ÃÄÑÁÖ´Â ÇÔ¼ö
-
-    public virtual void Act_By_Unit()  // À¯´Ö Çàµ¿ ±¸ºĞÁö¾îÁÖ´Â ÇÔ¼ö
+    #region # Act_By_Unit() : ìœ ë‹› í–‰ë™ êµ¬ë¶„ì§€ì–´ì£¼ëŠ” í•¨ìˆ˜
+    public virtual void Act_By_Unit()  // ìœ ë‹› í–‰ë™ êµ¬ë¶„ì§€ì–´ì£¼ëŠ” í•¨ìˆ˜
     {
-        switch (m_enum_Unit_Action_Type)  // À¯´Ö Çàµ¿ ±¸ºĞ
+        switch (_enum_Unit_Action_Type)  // ìœ ë‹› í–‰ë™ êµ¬ë¶„
         {
-            case eUnit_Action_States.unit_Idle: // À¯´Ö ´ë±â »óÅÂ
+            case eUnit_Action_States.unit_Idle: // ìœ ë‹› ëŒ€ê¸° ìƒíƒœ
+
+                if (!isSearch)  // ì  íƒì§€ ì•Šì•˜ì„ ë•Œë§Œ ì‹¤í–‰
+                {
+
+                    Search_For_Near_Enemy();
+                }
 
                 break;
 
-            case eUnit_Action_States.unit_Move: // À¯´Ö ÀÌµ¿
+            case eUnit_Action_States.unit_Move: // ìœ ë‹› ì´ë™
+                anim.SetBool("isMove", true);   // ê±·ëŠ” ëª¨ì…˜ ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰
+                nav.SetDestination(movePos);
+                float distance = Vector3.Distance(transform.position, movePos);
+                if (distance <= 2f)
+                {
+
+                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                }
+                if (distance <= 1f)
+                {
+                    anim.SetBool("isMove", false);
+                }
+                break;
+
+            case eUnit_Action_States.unit_Tracking: // ìœ ë‹›ì´ ëª¬ìŠ¤í„° ì¶”ì 
+                                                    //print("íƒ€ê²Ÿ ìœ„ì¹˜"+_targetUnit.position);
+                nav.isStopped = false;
+
+                distance = Vector3.Distance(transform.position, _targetUnit.position);
+                print("ê±°ë¦¬ : " + distance);
+
+                Look_At_The_Target();
+
+                if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_Outlook)   // ìœ ë‹› ì‹œì•¼ë²”ìœ„ë³´ë‹¤ ì‘ë‹¤ë©´
+                {
+                    anim.SetBool("isMove", true);
+                    nav.SetDestination(_targetUnit.position);
+                }
+
+                // ê³µê²© ë²”ìœ„ì— ì ì´ ë“¤ì–´ì™”ì„ ë•Œ
+                else if (distance <= _unitData._unit_Attack_Range)
+                {
+                    print("ê³µê²© íƒ€ì…ìœ¼ë¡œ ë³€í™˜");
+                    anim.SetBool("isMove", false);
+                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+                }
+
+                // ì‹œì•¼ë°–ìœ¼ë¡œ ì ì´ ì‚¬ë¼ì¡Œì„ ë•Œ
+                else if (distance > _unitData._unit_Outlook)
+                {
+                    nav.SetDestination(transform.position);
+                    anim.SetBool("isMove", false);
+
+                    isSearch = false;
+                    _targetUnit = null;
+                    nav.isStopped = false;
+                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                }
+
+                break;
+            case eUnit_Action_States.unit_Attack:   // ìœ ë‹›ì´ ëª¬ìŠ¤í„° ê³µê²©
+                distance = Vector3.Distance(transform.position, _targetUnit.position);
+                if (distance > _unitData._unit_Attack_Range)
+                {
+                    _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                }
+                //ê³µê²©ëª¨ì…˜ì„ ì‹¤í–‰í•˜ê³ 
+                Look_At_The_Target();
+
 
                 break;
 
-            case eUnit_Action_States.unit_Tracking: // À¯´ÖÀÌ ¸ó½ºÅÍ ÃßÀû
+            case eUnit_Action_States.unit_Boundary: // ìœ ë‹› í™€ë“œ(ì œìë¦¬ ê²½ê³„)
 
-                break;
-            case eUnit_Action_States.unit_Attack:   // À¯´ÖÀÌ ¸ó½ºÅÍ °ø°İ
-
-                break;
-
-            case eUnit_Action_States.unit_Boundary: // À¯´Ö È¦µå(Á¦ÀÚ¸® °æ°è)
-
+                distance = Vector3.Distance(transform.position, _targetUnit.position);
+                Look_At_The_Target();
+                if (distance <= _unitData._unit_Attack_Range)
+                {
+                    print("ê³µê²© íƒ€ì…ìœ¼ë¡œ ë³€í™˜");
+                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+                }
+                // ì‹œì•¼ ë²”ìœ„ ë°–ìœ¼ë¡œ ì ì´ ì‚¬ë¼ì¡Œì„ ë•Œ
+                else if (distance > _unitData._unit_Outlook)
+                {
+                    isSearch = false;
+                    _targetUnit = null;
+                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                }
                 break;
 
             default:
-                print("case ¿¹¿Ü µÆÀ½");
+                print("case ì˜ˆì™¸ ëìŒ");
                 break;
         }
     }
-    public void BeAttacked_By_OtherUnit(Collider other) // ±âº»°ø°İ ÀÏ ¶§¿Í ½ºÅ³ °ø°İ ÀÏ ¶§ ¸¦ ³ª´²¾ß ÇÔ...
-    {
-        print("Ãæµ¹ÇßÀ½");
+    #endregion
 
-        switch (m_unitData.m_eUnit_Defense_Property)
+    #region # BeAttacked_By_OtherUnit(Transform other,float attack_Dmg) : ë‹¤ë¥¸ ìœ ë‹›ìœ¼ë¡œë¶€í„°ì˜ ê³µê²©ìœ¼ë¡œ í”¼í•´ë¥¼ ì…ì„ ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
+    public void BeAttacked_By_OtherUnit(Transform other, float attack_Dmg) // ê¸°ë³¸ê³µê²© ì¼ ë•Œì™€ ìŠ¤í‚¬ ê³µê²© ì¼ ë•Œ ë¥¼ ë‚˜ëˆ ì•¼ í•¨...
+    {
+        print("ì¶©ëŒí–ˆìŒ");
+
+        switch (_unitData._eUnit_Defense_Property)
         {
             case eUnit_Defense_Property_States.Default:
                 break;
@@ -104,11 +193,13 @@ public abstract class UnitInfo : MonoBehaviour, ISearchForNearEnemy
             case eUnit_Defense_Property_States.plate_Armor:
                 break;
 
-            case eUnit_Defense_Property_States.gambeson_Armor:  // ¸ó½ºÅÍ ¹æ¾î Å¸ÀÔÀÌ Ãµ °©¿Ê ÀÏ ¶§
-                unit_Data otherUnitData = other.GetComponent<UnitInfo>().m_unitData;
-                print(m_this_Unit_Armor_Property.DecreaseDamaged(m_unitData, otherUnitData));
-                m_unitData.m_unit_Health -= m_this_Unit_Armor_Property.DecreaseDamaged(m_unitData, otherUnitData);
-                print(gameObject.name + "ÀÇ ÇöÀç Ã¼·Â" + m_unitData.m_unit_Health);
+            case eUnit_Defense_Property_States.gambeson_Armor:  // ëª¬ìŠ¤í„° ë°©ì–´ íƒ€ì…ì´ ì²œ ê°‘ì˜· ì¼ ë•Œ
+                                                                //print(gameObject.name);
+                                                                //print(other.name);
+                unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
+                //print(_this_Unit_Armor_Property.CalculateDamaged(_unitData, otherUnitData, attack_Dmg));
+                _unitData._unit_Health -= _this_Unit_Armor_Property.DecreaseDamaged(_unitData, otherUnitData, attack_Dmg);
+                //print(gameObject.name + "ì˜ í˜„ì¬ ì²´ë ¥" + _unitData._unit_Health);
                 break;
 
             case eUnit_Defense_Property_States.mail_Armor:
@@ -119,24 +210,29 @@ public abstract class UnitInfo : MonoBehaviour, ISearchForNearEnemy
         }
 
     }
+    #endregion
 
-    // ±¸Á¶Ã¼ ÇÊµå ÀÌ´Ï¼È ¶óÀÌÂ¡Àº C# 9.0 ¿¡¼­ Áö¿øÀ» ÇÏÁö ¾Ê±â ¶§¹®¿¡ Å¬·¡½º¸¦ µû·Î ¸¸µê
+    // êµ¬ì¡°ì²´ í•„ë“œ ì´ë‹ˆì…œ ë¼ì´ì§•ì€ C# 9.0 ì—ì„œ ì§€ì›ì„ í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— í´ë˜ìŠ¤ë¥¼ ë”°ë¡œ ë§Œë“¦
 
-    public LayerMask m_layerMask = 0;   // ¿À¹ö·¦½ºÇÇ¾î ·¹ÀÌ¾î ¸¶½ºÅ© º¯¼ö
+    public LayerMask _layerMask = 0;   // ì˜¤ë²„ë©ìŠ¤í”¼ì–´ ë ˆì´ì–´ ë§ˆìŠ¤í¬ ë³€ìˆ˜
 
-    public Transform m_targetUnit = null;   // À¯´ÖÀÌ Å¸°ÙÀ¸·Î ÇÒ ´ë»ó
+    public Transform _targetUnit = null;   // ìœ ë‹›ì´ íƒ€ê²Ÿìœ¼ë¡œ í•  ëŒ€ìƒ
 
-
-    public void Search_For_Near_Enemy() // °¡Àå °¡±î¿î Àû Å½ÁöÇÏ´Â ÇÔ¼ö
+    public bool isTracking; // ì¶”ì  í™•ì¸ ë³€ìˆ˜
+    #region # Search_For_Near_Enemy() : ê°€ì¥ ê°€ê¹Œìš´ ì  íƒì§€í•˜ëŠ” í•¨ìˆ˜ , ì‹œì•¼ ë²”ìœ„ì—ì„œ ì  ì¸ì‹
+    public void Search_For_Near_Enemy() // ê°€ì¥ ê°€ê¹Œìš´ ì  íƒì§€í•˜ëŠ” í•¨ìˆ˜ , ì‹œì•¼ ë²”ìœ„ì—ì„œ ì  ì¸ì‹
     {
-        Collider[] _cols = Physics.OverlapSphere(transform.position, m_unitData.m_unit_Attack_Range, m_layerMask); // ¿À¹ö·¦ ½ºÇÇ¾î »ı¼º
+        Collider[] _cols = Physics.OverlapSphere(transform.position, _unitData._unit_Outlook, _layerMask); // ì˜¤ë²„ë© ìŠ¤í”¼ì–´ ìƒì„±
+        Transform _shortestTarget = null;  // ê°€ì¥ ê°€ê¹Œìš´ ì ì„ ì˜ë¯¸í•˜ëŠ” ë³€ìˆ˜
 
-        Transform _shortestTarget = null;  // °¡Àå °¡±î¿î ÀûÀ» ÀÇ¹ÌÇÏ´Â º¯¼ö
-
-        if (_cols.Length < 0)  // Å½ÁöµÈ ÀûÀÌ ¾ø´Ù¸é ÇÔ¼ö Å»Ãâ
+        //print(_cols.Length);  
+        if (_cols.Length <= 0)  // íƒì§€ëœ ì ì´ ì—†ë‹¤ë©´ í•¨ìˆ˜ íƒˆì¶œ
         {
+            //print("ì  ì—†ìŒ!");
             return;
         }
+
+        //CancelInvoke(); // ê·¼ë° ì´ê²Œ ì•ˆë¼
 
         float _shortestDistance = Mathf.Infinity;
 
@@ -149,28 +245,85 @@ public abstract class UnitInfo : MonoBehaviour, ISearchForNearEnemy
                 _shortestTarget = _colTarget.transform;
             }
         }
+        //
+        _targetUnit = _shortestTarget; // ê±°ë¦¬ê°€ ê°€ì¥ ê°€ê¹Œìš´ ì  íƒ€ê²Ÿì„ _targetUnit ë³€ìˆ˜ì— í• ë‹¹
 
-        m_targetUnit = _shortestTarget;
+        //print(_targetUnit.name);
+        isSearch = true;
+        _enum_Unit_Action_Type = _enum_Unit_Attack_Type;    // ã…‡ã…‡ ì—…ë°ì´íŠ¸ì—ì„œ FSM ìƒíƒœ ì‹¤í–‰ì¤‘
+
     }
+    #endregion
 
-    public void Look_At_The_Target()    // À¯´ÖÀÌ Å¸°ÙÀ» °¨Áö ÇßÀ» ¶§ Å¸°Ù ÂÊÀ¸·Î ¸öÀ» È¸ÀüÇÏ¿© Å¸°ÙÀ» ¹Ù¶óº¸´Â ÇÔ¼ö
+
+    #region # Look_At_The_Target() : ìœ ë‹›ì´ íƒ€ê²Ÿì„ ê°ì§€ í–ˆì„ ë•Œ íƒ€ê²Ÿ ìª½ìœ¼ë¡œ ëª¸ì„ íšŒì „í•˜ì—¬ íƒ€ê²Ÿì„ ë°”ë¼ë³´ëŠ” í•¨ìˆ˜
+    public void Look_At_The_Target()    // ìœ ë‹›ì´ íƒ€ê²Ÿì„ ê°ì§€ í–ˆì„ ë•Œ íƒ€ê²Ÿ ìª½ìœ¼ë¡œ ëª¸ì„ íšŒì „í•˜ì—¬ íƒ€ê²Ÿì„ ë°”ë¼ë³´ëŠ” í•¨ìˆ˜
     {
-        Quaternion _lookRotation = Quaternion.LookRotation(m_targetUnit.position);  // Å¸°Ù ÂÊÀ¸·Î ¹Ù¶óº¸´Â °¢µµ
+        Vector3 dir = _targetUnit.position - transform.position;
+        //dir.Normalize();
+        //dir.y = 0;
 
-        Vector3 _euler = Quaternion.RotateTowards(transform.rotation, _lookRotation, 3f * Time.deltaTime).eulerAngles;
+        Quaternion _lookRotation = Quaternion.LookRotation(dir.normalized);  // íƒ€ê²Ÿ ìª½ìœ¼ë¡œ ë°”ë¼ë³´ëŠ” ê°ë„
+
+        Vector3 _euler = Quaternion.RotateTowards(transform.rotation, _lookRotation, 100f * Time.deltaTime).eulerAngles;
 
         transform.rotation = Quaternion.Euler(0, _euler.y, 0);
 
-        Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // À¯´ÖÀÌ ¹ß»çÇÒ ¼ö ÀÖ´Â ¹æÇâÀÇ °¢µµ
+        Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // ìœ ë‹›ì´ ë°œì‚¬í•  ìˆ˜ ìˆëŠ” ë°©í–¥ì˜ ê°ë„
 
 
-        if (Quaternion.Angle(transform.rotation, _fireRotation) < 5f)
+        if (Quaternion.Angle(transform.rotation, _fireRotation) <= 5f)
         {
-            // 1. °ø°İ ¼Óµµ ÄğÅ¸ÀÓ °¨¼Ò
+            _euler.y = 0;
+            print("ìš©ì‚¬ì™€ ëª¬ìŠ¤í„°ì˜ ê°ë„ ê°’ : " + Quaternion.Angle(transform.rotation, _fireRotation));
 
-            // 2. °ø°İ¼Óµµ ÄğÅ¸ÀÓÀÌ 0º¸´Ù ÀÛ¾ÆÁ³´Ù¸é ¹ß»ç ÈÄ °ø°İ¼Óµµ º¯¼ö¿¡ ÃÊ±â°ª ´Ù½Ã ³Ö¾îÁÜ
+            if (_enum_Unit_Action_Type != eUnit_Action_States.unit_Attack)
+                return;
 
-            Debug.Log("°ø°İ!!!");
+            Attack_Unit();
+            // 1. ê³µê²© ì†ë„ ì¿¨íƒ€ì„ ê°ì†Œ
+
+            // 2. ê³µê²©ì†ë„ ì¿¨íƒ€ì„ì´ 0ë³´ë‹¤ ì‘ì•„ì¡Œë‹¤ë©´ ë°œì‚¬ í›„ ê³µê²©ì†ë„ ë³€ìˆ˜ì— ì´ˆê¸°ê°’ ë‹¤ì‹œ ë„£ì–´ì¤Œ
+
         }
     }
+    #endregion
+
+    #region # Attack_Unit() : ìœ ë‹›ì´ ê³µê²©í•  ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜
+    public void Attack_Unit()
+    {
+        nav.isStopped = true;
+        if (_can_Base_Attack)
+        {
+            anim.SetTrigger("isAttack");
+            if (_can_Skill_Attack)
+            {
+                Debug.Log("ìŠ¤í‚¬ê³µê²©!!!");
+                if (_targetUnit == null)
+                {
+                    return;
+                }
+                _targetUnit.GetComponent<UnitInfo>().BeAttacked_By_OtherUnit(_targetUnit, _unitData._unit_Skill_Attack_Damage);
+                _unitData._unit_Current_Skill_CoolTime = 0f;
+                _unitData._unit_Attack_CoolTime = 0f;
+                _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                return;
+            }
+
+            else
+            {
+                Debug.Log("ê¸°ë³¸ê³µê²©!!!");
+                if (_targetUnit == null)
+                {
+                    return; // íƒ€ê²Ÿì´ ì—†ìœ¼ë©´ í•¨ìˆ˜ íƒˆì¶œ
+                }
+                _targetUnit.GetComponent<UnitInfo>().BeAttacked_By_OtherUnit(_targetUnit, _unitData._unit_Attack_Damage);
+                _unitData._unit_Attack_CoolTime = 0f;
+                _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+            }
+
+        }
+    }
+    #endregion
+
 }
