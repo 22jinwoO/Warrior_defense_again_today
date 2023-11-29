@@ -51,6 +51,8 @@ public enum eUnit_Defense_Property_States // 유닛 방어 타입
 public enum eUnit_Action_States           // 유닛 행동
 {
     Default = 0,
+    unit_FreeMode,      // 유닛 자유 모드(추격)
+    unit_HoldMode,      // 유닛 홀드 모드
     unit_Idle,          // 대기
     unit_Move,          // 이동
     unit_Tracking,      // 추적
@@ -63,6 +65,9 @@ public abstract class UnitInfo : MonoBehaviour
 {
     [Header("유닛 데이터 구조체 변수")]
     public unit_Data _unitData; // 유닛 데이터 구조체 변수
+
+    [Header("유닛 행동 모드 상태 변수")]
+    public eUnit_Action_States _enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;   // 유닛 행동 상태 변수
 
     [Header("유닛 행동 상태 변수")]
     public eUnit_Action_States _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;   // 유닛 행동 상태 변수
@@ -80,6 +85,11 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("애니메이터")]
     public Animator anim;       // 애니메이터
 
+
+    [Header("유닛을 클릭했는지 확인하는 변수")]
+    public bool isClick;       // 유닛을 클릭했는지 확인하는 변수
+
+
     [Header("적을 탐지했는지 확인하는 변수")]
     public bool isSearch = false;   // 적을 탐지했는지 확인하는 변수
 
@@ -92,4 +102,5 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("스킬 공격 가능 불가능 확인하는 변수")]
     public bool _can_Skill_Attack;   // 스킬 공격 가능 불가능 확인하는 변수
 
+    
 }

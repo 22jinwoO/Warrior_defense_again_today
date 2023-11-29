@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Knight : PlayerUnitClass, IActByUnit
 {
+    [SerializeField]
+    GameObject holdOb;
+
+    [SerializeField]
+    NavMeshObstacle navObs;
+
     private void Awake()
     {
+        navObs=GetComponent<NavMeshObstacle>();
         anim = GetComponent<Animator>();
         _this_Unit_Armor_Property = new GambesonArmor();
         nav = GetComponent<NavMeshAgent>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
-
+        isClick = false;
         InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
     }
 
@@ -19,7 +27,7 @@ public class Knight : PlayerUnitClass, IActByUnit
     {
 
 
-        if (Input.GetMouseButtonDown(1))
+        if (isClick&&Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -37,101 +45,241 @@ public class Knight : PlayerUnitClass, IActByUnit
 
     public void Act_By_Unit()  // 유닛 행동 구분지어주는 함수
     {
-        switch (_enum_Unit_Action_Type)  // 유닛 행동 구분
+        switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
         {
-            case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
-
-                if (!isSearch)  // 적 탐지 않았을 때만 실행
+            case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
+                holdOb.SetActive(false);
+                navObs.enabled = false;
+                nav.enabled = true;
+                switch (_enum_Unit_Action_Type)     // 현재 유닛 행동
                 {
+                    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
+                        anim.SetBool("isMove", false);
+                        if (!isSearch)  // 적 탐지 않았을 때만 실행
+                        {
 
-                    unitTargetSearchCs.Search_For_Near_Enemy();
-                }
+                            unitTargetSearchCs.Search_For_Near_Enemy();
+                        }
 
-                break;
+                        break;
 
-            case eUnit_Action_States.unit_Move: // 유닛 이동
-                anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-                nav.SetDestination(movePos);
-                float distance = Vector3.Distance(transform.position, movePos);
-                if (distance <= 1.2f)
-                {
-                    anim.SetBool("isMove", false);
+                    case eUnit_Action_States.unit_Move: // 유닛 이동
+                        isSearch = false;
+                        isClick = false;
+                        unitTargetSearchCs._targetUnit = null;
+                        nav.isStopped = false;
+                        anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
+                        nav.SetDestination(movePos);
+                        float distance = Vector3.Distance(transform.position, movePos);
+                        if (distance <= 1.2f)
+                        {
+                            anim.SetBool("isMove", false);
 
-                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-                }
+                            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                        }
 
-                break;
+                        break;
 
-            case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-                                                    //print("타겟 위치"+_targetUnit.position);
-                nav.isStopped = false;
+                    case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
+                                                            //print("타겟 위치"+_targetUnit.position);
+                        nav.isStopped = false;
 
-                distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-                //print("거리 : " + distance);
+                        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+                        //print("거리 : " + distance);
 
-                unitTargetSearchCs.Look_At_The_Target();
+                        unitTargetSearchCs.Look_At_The_Target();
 
-                if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_Outlook)   // 유닛 시야범위보다 작다면
-                {
-                    anim.SetBool("isMove", true);
-                    nav.SetDestination(unitTargetSearchCs._targetUnit.position);
-                }
+                        if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_Outlook)   // 유닛 시야범위보다 작다면
+                        {
+                            anim.SetBool("isMove", true);
+                            nav.SetDestination(unitTargetSearchCs._targetUnit.position);
+                        }
 
-                // 공격 범위에 적이 들어왔을 때
-                else if (distance <= _unitData._unit_Attack_Range)
-                {
-                    print("공격 타입으로 변환");
-                    anim.SetBool("isMove", false);
-                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
-                }
+                        // 공격 범위에 적이 들어왔을 때
+                        else if (distance <= _unitData._unit_Attack_Range)
+                        {
+                            print("공격 타입으로 변환");
+                            anim.SetBool("isMove", false);
+                            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+                        }
 
-                // 시야밖으로 적이 사라졌을 때
-                else if (distance > _unitData._unit_Outlook)
-                {
-                    nav.SetDestination(transform.position);
-                    anim.SetBool("isMove", false);
+                        // 시야밖으로 적이 사라졌을 때
+                        else if (distance > _unitData._unit_Outlook)
+                        {
+                            nav.SetDestination(transform.position);
+                            anim.SetBool("isMove", false);
 
-                    isSearch = false;
-                    unitTargetSearchCs._targetUnit = null;
-                    nav.isStopped = false;
-                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-                }
+                            isSearch = false;
+                            unitTargetSearchCs._targetUnit = null;
+                            nav.isStopped = false;
+                            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                        }
+                        break;
 
-                break;
-            case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-                distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-                if (distance > _unitData._unit_Attack_Range)
-                {
-                    _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
-                }
-                //공격모션을 실행하고
-                unitTargetSearchCs.Look_At_The_Target();
+                    case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
+                        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
 
+                        // 거리가 공격범위보다 크면 유닛 추적
+                        if (distance > _unitData._unit_Attack_Range)
+                        {
+                            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                        }
 
-                break;
+                        //공격모션을 실행하고
+                        unitTargetSearchCs.Look_At_The_Target();
+                        break;
 
-            case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
-
-                distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-                unitTargetSearchCs.Look_At_The_Target();
-                if (distance <= _unitData._unit_Attack_Range)
-                {
-                    print("공격 타입으로 변환");
-                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
-                }
-                // 시야 범위 밖으로 적이 사라졌을 때
-                else if (distance > _unitData._unit_Outlook)
-                {
-                    isSearch = false;
-                    unitTargetSearchCs._targetUnit = null;
-                    _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
                 }
                 break;
 
-            default:
-                print("case 예외 됐음");
+            case eUnit_Action_States.unit_HoldMode:
+
+                holdOb.SetActive(true);
+                navObs.enabled = true;
+                nav.enabled = false;
+                switch (_enum_Unit_Action_Type)
+                {
+                    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
+                        anim.SetBool("isMove", false);
+                        if (!isSearch)  // 적 탐지 않았을 때만 실행
+                        {
+
+                            unitTargetSearchCs.Search_For_Near_Enemy();
+                        }
+
+                        break;
+
+                    case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
+                        float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+                        if (distance > _unitData._unit_Attack_Range)
+                        {
+                            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                        }
+                        //공격모션을 실행하고
+                        unitTargetSearchCs.Look_At_The_Target();
+
+
+                        break;
+
+                    case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
+
+                        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+                        unitTargetSearchCs.Look_At_The_Target();
+                        if (distance <= _unitData._unit_Attack_Range)
+                        {
+                            print("공격 타입으로 변환");
+                            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+                        }
+                        // 시야 범위 밖으로 적이 사라졌을 때
+                        else if (distance > _unitData._unit_Outlook)
+                        {
+                            isSearch = false;
+                            unitTargetSearchCs._targetUnit = null;
+                            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+                        }
+                        break;
+                }
                 break;
         }
+
+        //switch (_enum_Unit_Action_Type)  // 유닛 행동 구분
+        //{
+        //    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
+
+        //        if (!isSearch)  // 적 탐지 않았을 때만 실행
+        //        {
+
+        //            unitTargetSearchCs.Search_For_Near_Enemy();
+        //        }
+
+        //        break;
+
+        //    case eUnit_Action_States.unit_Move: // 유닛 이동
+        //        isSearch = false;
+        //        unitTargetSearchCs._targetUnit = null;
+        //        nav.isStopped = false;
+        //        anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
+        //        nav.SetDestination(movePos);
+        //        float distance = Vector3.Distance(transform.position, movePos);
+        //        if (distance <= 1.2f)
+        //        {
+        //            anim.SetBool("isMove", false);
+
+        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+        //        }
+
+        //        break;
+
+        //    case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
+        //                                            //print("타겟 위치"+_targetUnit.position);
+        //        nav.isStopped = false;
+
+        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+        //        //print("거리 : " + distance);
+
+        //        unitTargetSearchCs.Look_At_The_Target();
+
+        //        if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_Outlook)   // 유닛 시야범위보다 작다면
+        //        {
+        //            anim.SetBool("isMove", true);
+        //            nav.SetDestination(unitTargetSearchCs._targetUnit.position);
+        //        }
+
+        //        // 공격 범위에 적이 들어왔을 때
+        //        else if (distance <= _unitData._unit_Attack_Range)
+        //        {
+        //            print("공격 타입으로 변환");
+        //            anim.SetBool("isMove", false);
+        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+        //        }
+
+        //        // 시야밖으로 적이 사라졌을 때
+        //        else if (distance > _unitData._unit_Outlook)
+        //        {
+        //            nav.SetDestination(transform.position);
+        //            anim.SetBool("isMove", false);
+
+        //            isSearch = false;
+        //            unitTargetSearchCs._targetUnit = null;
+        //            nav.isStopped = false;
+        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+        //        }
+
+        //        break;
+        //    case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
+        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+        //        if (distance > _unitData._unit_Attack_Range)
+        //        {
+        //            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+        //        }
+        //        //공격모션을 실행하고
+        //        unitTargetSearchCs.Look_At_The_Target();
+
+
+        //        break;
+
+        //    case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
+
+        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
+        //        unitTargetSearchCs.Look_At_The_Target();
+        //        if (distance <= _unitData._unit_Attack_Range)
+        //        {
+        //            print("공격 타입으로 변환");
+        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
+        //        }
+        //        // 시야 범위 밖으로 적이 사라졌을 때
+        //        else if (distance > _unitData._unit_Outlook)
+        //        {
+        //            isSearch = false;
+        //            unitTargetSearchCs._targetUnit = null;
+        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
+        //        }
+        //        break;
+
+        //    default:
+        //        print("case 예외 됐음");
+        //        break;
+        //}
     }
 
     #endregion  IActByUnit 함수 
@@ -157,14 +305,6 @@ public class Knight : PlayerUnitClass, IActByUnit
     }
     #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
-
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
-    }
 
     #region # Unit_Attack_Skill_CoolTime() : 유닛 기본공격, 스킬공격 쿨타임 돌려주는 함수
     public override void Unit_Attack_Skill_CoolTime()
@@ -189,4 +329,13 @@ public class Knight : PlayerUnitClass, IActByUnit
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
+    }
 }

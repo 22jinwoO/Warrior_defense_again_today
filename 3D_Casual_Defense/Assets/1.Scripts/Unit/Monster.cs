@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class Monster : MonsterUnitClass
 {
     [SerializeField]
     Text hpText;
+
+    [SerializeField]
+    bool isMove=false;
+
+    [SerializeField]
+    Transform pointTr;
 
     public override void Act_By_Unit()
     {
@@ -19,6 +26,7 @@ public class Monster : MonsterUnitClass
     // Start is called before the first frame update
     void Awake()
     {
+        nav = GetComponent<NavMeshAgent>();
         _this_Unit_Armor_Property = new MailArmor();
         InitUnitInfoSetting();
     }
@@ -26,6 +34,11 @@ public class Monster : MonsterUnitClass
     // Update is called once per frame
     void Update()
     {
+        if (isMove)
+        {
+            nav.SetDestination(pointTr.position);
+        }
+
         hpText.text="몬스터 체력 : "+ Mathf.CeilToInt(_unitData._unit_Health).ToString();
         //Act_By_Unit();
     }

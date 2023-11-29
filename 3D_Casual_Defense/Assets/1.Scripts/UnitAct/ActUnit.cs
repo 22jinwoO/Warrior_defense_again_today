@@ -31,7 +31,10 @@ public class ActUnit : MonoBehaviour
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
     public void Attack_Unit()
     {
-        nav.isStopped = true;
+        if (nav.enabled==true)
+        {
+            nav.isStopped = true;
+        }
         if (unitInfoCs._can_Base_Attack)
         {
             anim.SetTrigger("isAttack");
