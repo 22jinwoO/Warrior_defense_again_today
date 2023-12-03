@@ -5,26 +5,31 @@
  
  */
 
-
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-
+//
 public class ActUnit : MonoBehaviour
 {
+    [SerializeField]
     private NavMeshAgent nav;
+    
+    [SerializeField]
     private UnitInfo unitInfoCs;
+
+    [SerializeField]
     private Animator anim;
+
+    [SerializeField]
     private UnitTargetSearch unitSearchCs;
 
     private void Awake()
     {
-        nav = GetComponent<NavMeshAgent>();
-        unitInfoCs = GetComponent<UnitInfo>();
-        anim = GetComponent<Animator>();
-        unitSearchCs = GetComponent<UnitTargetSearch>();
+        nav = transform.root.GetComponent<NavMeshAgent>();
+        unitInfoCs = transform.root.GetComponent<UnitInfo>();
+        anim = transform.root.GetComponent<Animator>();
+        unitSearchCs = transform.root.GetComponent<UnitTargetSearch>();
     }
 
 
@@ -45,6 +50,11 @@ public class ActUnit : MonoBehaviour
                 {
                     return;
                 }
+                print("48"+ unitSearchCs._targetUnit);
+                print("49"+ unitInfoCs._unitData._unit_Skill_Attack_Damage);
+                print("50"+ unitSearchCs._targetUnit.GetComponent<ActUnit>());  // 오류 x
+                print(unitSearchCs._targetUnit.root.GetComponent<UnitInfo>()._unitData);
+                //print("51"+ unitSearchCs._targetUnit);
                 unitSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitSearchCs._targetUnit, unitInfoCs._unitData._unit_Skill_Attack_Damage);
                 unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
                 unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
@@ -72,42 +82,16 @@ public class ActUnit : MonoBehaviour
     public void BeAttacked_By_OtherUnit(Transform other, float attack_Dmg) // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
     {
         print("충돌했음");
-        unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
+        print(other.gameObject.name);
+        print(other.root.GetComponent<UnitInfo>()._unitData);
+        unit_Data otherUnitData = other.root.GetComponent<UnitInfo>()._unitData;
         print(otherUnitData._eUnit_Defense_Property);
+        print(unitInfoCs._unitData._unit_Health);
         unitInfoCs._unitData._unit_Health -= unitInfoCs._this_Unit_Armor_Property.CalculateDamaged(unitInfoCs._unitData, otherUnitData, attack_Dmg);
         //print(otherUnitData.);
         print(unitInfoCs._this_Unit_Armor_Property);
         print(attack_Dmg);
         print(unitInfoCs._unitData._unit_Health);
-
-
-        // CalculateDamaged 함수에서 이미 방어구 타입별로 구분해줬기 때문에 여기서 스위치문을 사용하지 않아도 됨.
-        //switch (unitInfoCs._unitdata._eunit_defense_property)
-        //{
-        //    case eunit_defense_property_states.default:
-        //        break;
-
-        //    case eunit_defense_property_states.plate_armor:
-
-        //        break;
-
-        //    case eunit_defense_property_states.gambeson_armor:  // 몬스터 방어 타입이 천 갑옷 일 때
-        //        //print(gameobject.name);
-        //        //print(other.name);
-        //        unit_data otherunitdata = other.getcomponent<unitinfo>()._unitdata;
-        //        //print(_this_unit_armor_property.calculatedamaged(_unitdata, otherunitdata, attack_dmg));
-        //        unitinfocs._unitdata._unit_health -= unitinfocs._this_unit_armor_property.calculatedamaged(unitinfocs._unitdata, otherunitdata, attack_dmg);
-        //        //print(gameobject.name + "의 현재 체력" + _unitdata._unit_health);
-        //        break;
-
-        //    case eunit_defense_property_states.mail_armor:
-        //        unit_data mail_armor_unitdata = other.getcomponent<unitinfo>()._unitdata;
-        //        unitinfocs._unitdata._unit_health -= unitinfocs._this_unit_armor_property.calculatedamaged(unitinfocs._unitdata, mail_armor_unitdata, attack_dmg);
-        //        break;
-
-        //    default:
-        //        break;
-        //}
 
     }
     #endregion

@@ -26,7 +26,6 @@ public class Knight : PlayerUnitClass, IActByUnit
     public void Update()
     {
 
-
         if (isClick&&Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -330,12 +329,12 @@ public class Knight : PlayerUnitClass, IActByUnit
 
     #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
-    }
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
+    //}
 }

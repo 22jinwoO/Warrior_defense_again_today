@@ -6612,6 +6612,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7566425961191296874}
   - component: {fileID: 4396742825295895725}
+  - component: {fileID: 248801949066286627}
   m_Layer: 6
   m_Name: BodyColider
   m_TagString: Untagged
@@ -6657,6 +6658,22 @@ CapsuleCollider:
   m_Height: 2.88
   m_Direction: 1
   m_Center: {x: 0, y: 1.34, z: 0}
+--- !u!114 &248801949066286627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3192202286584604406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb09d9275115f149aba55a60d884a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nav: {fileID: 0}
+  unitInfoCs: {fileID: 0}
+  anim: {fileID: 0}
+  unitSearchCs: {fileID: 0}
 --- !u!1 &3276935910214120443
 GameObject:
   m_ObjectHideFlags: 0
@@ -7725,7 +7742,6 @@ GameObject:
   - component: {fileID: 3809936362958328543}
   - component: {fileID: 1100149671020438925}
   - component: {fileID: 5521264825765098813}
-  - component: {fileID: 97938757606567084}
   - component: {fileID: 5692836948082142794}
   - component: {fileID: 591294897169345205}
   - component: {fileID: 4047004346323826099}
@@ -7808,23 +7824,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0275fcd0ca1314e4ab3666896a17e6ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actUnitCs: {fileID: 248801949066286627}
   _layerMask:
     serializedVersion: 2
     m_Bits: 128
   _targetUnit: {fileID: 0}
   isTracking: 0
---- !u!114 &97938757606567084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3783625495759935545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8bb09d9275115f149aba55a60d884a43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &5692836948082142794
 Animator:
   serializedVersion: 5

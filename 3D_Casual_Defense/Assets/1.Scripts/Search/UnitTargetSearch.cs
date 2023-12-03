@@ -5,12 +5,19 @@ using UnityEngine;
 public class UnitTargetSearch : MonoBehaviour
 {
     private UnitInfo unitInfoCs;    // 유닛 인포 스크립트
+
+    [SerializeField]
     private ActUnit actUnitCs;    // 유닛 행동 스크립트
 
     private void Awake()
     {
         unitInfoCs = GetComponent<UnitInfo>();
-        actUnitCs = GetComponent<ActUnit>();
+        //actUnitCs = GetComponent<ActUnit>();
+        if (gameObject.CompareTag("Monster"))
+        {
+            actUnitCs = GetComponent<ActUnit>();
+        }
+        //print(actUnitCs);
     }
 
     // 구조체 필드 이니셜 라이징은 C# 9.0 에서 지원을 하지 않기 때문에 클래스를 따로 만듦

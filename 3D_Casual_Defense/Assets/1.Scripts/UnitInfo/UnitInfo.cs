@@ -53,8 +53,13 @@ public enum eUnit_Action_States           // 유닛 행동
     Default = 0,
     unit_FreeMode,      // 유닛 자유 모드(추격)
     unit_HoldMode,      // 유닛 홀드 모드
+
+    monster_MoveMode,   // 몬스터 이동 모드
+    monster_AttackMode, // 몬스터 공격 모드
+    monster_AttackCastleMode, // 몬스터 성 공격 모드
     unit_Idle,          // 대기
     unit_Move,          // 이동
+    unit_AttackReady,   // 공격 준비
     unit_Tracking,      // 추적
     unit_Attack,        // 공격
     unit_Boundary       // 홀드 후 주변 경계
