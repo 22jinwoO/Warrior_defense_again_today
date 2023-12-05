@@ -87,7 +87,7 @@ public class Warrior : UnitInfo
         // 얘가 가면서 충돌인식을 다 해 근데 충돌한 애들을 리스트에 넣어줘. 유닛인포 타입으로 list.where //
 
 
-        //if (other.CompareTag("Monster"))
+        //if (other.CompareTag("Orc"))
         //{
         //    if (other.name==_targetUnit.name)
         //    {

@@ -9,14 +9,18 @@ public class UnitTargetSearch : MonoBehaviour
     [SerializeField]
     private ActUnit actUnitCs;    // 유닛 행동 스크립트
 
+
+    [SerializeField]
+    private Transform unitModelTr;
+
     private void Awake()
     {
         unitInfoCs = GetComponent<UnitInfo>();
-        //actUnitCs = GetComponent<ActUnit>();
-        if (gameObject.CompareTag("Monster"))
-        {
-            actUnitCs = GetComponent<ActUnit>();
-        }
+        actUnitCs = GetComponent<ActUnit>();
+        //if (gameObject.CompareTag("Monster"))
+        //{
+        //    actUnitCs = GetComponent<ActUnit>();
+        //}
         //print(actUnitCs);
     }
 
@@ -68,20 +72,20 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Look_At_The_Target() : 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     public void Look_At_The_Target()    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     {
-        Vector3 dir = _targetUnit.position - transform.position;
+        Vector3 dir = _targetUnit.position - unitModelTr.position;
         //dir.Normalize();
         //dir.y = 0;
 
         Quaternion _lookRotation = Quaternion.LookRotation(dir.normalized);  // 타겟 쪽으로 바라보는 각도
 
-        Vector3 _euler = Quaternion.RotateTowards(transform.rotation, _lookRotation, 100f * Time.deltaTime).eulerAngles;
+        Vector3 _euler = Quaternion.RotateTowards(unitModelTr.localRotation, _lookRotation, 200f * Time.deltaTime).eulerAngles; //200f는 회전속도
 
-        transform.rotation = Quaternion.Euler(0, _euler.y, 0);
+        unitModelTr.localRotation = Quaternion.Euler(0, _euler.y, 0);
 
         Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // 유닛이 발사할 수 있는 방향의 각도
 
 
-        if (Quaternion.Angle(transform.rotation, _fireRotation) <= 5f)
+        if (Quaternion.Angle(unitModelTr.localRotation, _fireRotation) <= 5f)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
         {
             _euler.y = 0;
             //print("용사와 몬스터의 각도 값 : " + Quaternion.Angle(transform.rotation, _fireRotation));

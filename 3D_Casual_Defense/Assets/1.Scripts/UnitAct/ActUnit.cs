@@ -26,17 +26,17 @@ public class ActUnit : MonoBehaviour
 
     private void Awake()
     {
-        nav = transform.root.GetComponent<NavMeshAgent>();
-        unitInfoCs = transform.root.GetComponent<UnitInfo>();
-        anim = transform.root.GetComponent<Animator>();
-        unitSearchCs = transform.root.GetComponent<UnitTargetSearch>();
+        nav = GetComponent<NavMeshAgent>();
+        unitInfoCs = GetComponent<UnitInfo>();
+        anim = GetComponent<Animator>();
+        unitSearchCs = GetComponent<UnitTargetSearch>();
     }
 
 
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
     public void Attack_Unit()
     {
-        if (nav.enabled==true)
+        if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
             nav.isStopped = true;
         }
@@ -53,7 +53,7 @@ public class ActUnit : MonoBehaviour
                 print("48"+ unitSearchCs._targetUnit);
                 print("49"+ unitInfoCs._unitData._unit_Skill_Attack_Damage);
                 print("50"+ unitSearchCs._targetUnit.GetComponent<ActUnit>());  // 오류 x
-                print(unitSearchCs._targetUnit.root.GetComponent<UnitInfo>()._unitData);
+                print(unitSearchCs._targetUnit.GetComponent<UnitInfo>()._unitData);
                 //print("51"+ unitSearchCs._targetUnit);
                 unitSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitSearchCs._targetUnit, unitInfoCs._unitData._unit_Skill_Attack_Damage);
                 unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
@@ -75,6 +75,11 @@ public class ActUnit : MonoBehaviour
             }
 
         }
+        if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
+        {
+            print(nav.gameObject.name);
+            nav.isStopped = false;
+        }
     }
     #endregion
 
@@ -83,8 +88,8 @@ public class ActUnit : MonoBehaviour
     {
         print("충돌했음");
         print(other.gameObject.name);
-        print(other.root.GetComponent<UnitInfo>()._unitData);
-        unit_Data otherUnitData = other.root.GetComponent<UnitInfo>()._unitData;
+        print(other.GetComponent<UnitInfo>()._unitData);
+        unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
         print(otherUnitData._eUnit_Defense_Property);
         print(unitInfoCs._unitData._unit_Health);
         unitInfoCs._unitData._unit_Health -= unitInfoCs._this_Unit_Armor_Property.CalculateDamaged(unitInfoCs._unitData, otherUnitData, attack_Dmg);

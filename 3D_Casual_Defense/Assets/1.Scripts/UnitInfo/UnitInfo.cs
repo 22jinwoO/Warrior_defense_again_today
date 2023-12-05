@@ -28,6 +28,7 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
     public float _unit_Attack_CoolTime;     // 유닛 기본 공격 쿨타임
     public float _unit_Current_Skill_CoolTime;     // 유닛 현재 스킬 공격 쿨타임
     public float _unit_Skill_CoolTime;     // 유닛 스킬 공격 쿨타임
+
 }
 
 public enum eUnit_Attack_Property_States  // 유닛 공격 타입

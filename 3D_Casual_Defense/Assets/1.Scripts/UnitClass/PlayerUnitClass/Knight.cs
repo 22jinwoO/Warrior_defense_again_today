@@ -12,6 +12,9 @@ public class Knight : PlayerUnitClass, IActByUnit
     [SerializeField]
     NavMeshObstacle navObs;
 
+    [SerializeField]
+    bool isCollision;
+
     private void Awake()
     {
         navObs=GetComponent<NavMeshObstacle>();
@@ -25,6 +28,7 @@ public class Knight : PlayerUnitClass, IActByUnit
 
     public void Update()
     {
+        transform.rotation = Quaternion.identity;
 
         if (isClick&&Input.GetMouseButtonDown(1))
         {
@@ -98,6 +102,7 @@ public class Knight : PlayerUnitClass, IActByUnit
                         else if (distance <= _unitData._unit_Attack_Range)
                         {
                             print("공격 타입으로 변환");
+                            nav.SetDestination(transform.position);
                             anim.SetBool("isMove", false);
                             _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
                         }
@@ -180,105 +185,6 @@ public class Knight : PlayerUnitClass, IActByUnit
                 }
                 break;
         }
-
-        //switch (_enum_Unit_Action_Type)  // 유닛 행동 구분
-        //{
-        //    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
-
-        //        if (!isSearch)  // 적 탐지 않았을 때만 실행
-        //        {
-
-        //            unitTargetSearchCs.Search_For_Near_Enemy();
-        //        }
-
-        //        break;
-
-        //    case eUnit_Action_States.unit_Move: // 유닛 이동
-        //        isSearch = false;
-        //        unitTargetSearchCs._targetUnit = null;
-        //        nav.isStopped = false;
-        //        anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-        //        nav.SetDestination(movePos);
-        //        float distance = Vector3.Distance(transform.position, movePos);
-        //        if (distance <= 1.2f)
-        //        {
-        //            anim.SetBool("isMove", false);
-
-        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-        //        }
-
-        //        break;
-
-        //    case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-        //                                            //print("타겟 위치"+_targetUnit.position);
-        //        nav.isStopped = false;
-
-        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-        //        //print("거리 : " + distance);
-
-        //        unitTargetSearchCs.Look_At_The_Target();
-
-        //        if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_Outlook)   // 유닛 시야범위보다 작다면
-        //        {
-        //            anim.SetBool("isMove", true);
-        //            nav.SetDestination(unitTargetSearchCs._targetUnit.position);
-        //        }
-
-        //        // 공격 범위에 적이 들어왔을 때
-        //        else if (distance <= _unitData._unit_Attack_Range)
-        //        {
-        //            print("공격 타입으로 변환");
-        //            anim.SetBool("isMove", false);
-        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
-        //        }
-
-        //        // 시야밖으로 적이 사라졌을 때
-        //        else if (distance > _unitData._unit_Outlook)
-        //        {
-        //            nav.SetDestination(transform.position);
-        //            anim.SetBool("isMove", false);
-
-        //            isSearch = false;
-        //            unitTargetSearchCs._targetUnit = null;
-        //            nav.isStopped = false;
-        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-        //        }
-
-        //        break;
-        //    case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-        //        if (distance > _unitData._unit_Attack_Range)
-        //        {
-        //            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
-        //        }
-        //        //공격모션을 실행하고
-        //        unitTargetSearchCs.Look_At_The_Target();
-
-
-        //        break;
-
-        //    case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
-
-        //        distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
-        //        unitTargetSearchCs.Look_At_The_Target();
-        //        if (distance <= _unitData._unit_Attack_Range)
-        //        {
-        //            print("공격 타입으로 변환");
-        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Attack;
-        //        }
-        //        // 시야 범위 밖으로 적이 사라졌을 때
-        //        else if (distance > _unitData._unit_Outlook)
-        //        {
-        //            isSearch = false;
-        //            unitTargetSearchCs._targetUnit = null;
-        //            _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-        //        }
-        //        break;
-
-        //    default:
-        //        print("case 예외 됐음");
-        //        break;
-        //}
     }
 
     #endregion  IActByUnit 함수 
@@ -328,6 +234,34 @@ public class Knight : PlayerUnitClass, IActByUnit
     }
 
     #endregion
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.Equals(other))
+        {
+            nav.isStopped = true;
+            //float time = 0f;
+            //while (time<0.3f)
+            //{
+            //    time += Time.deltaTime;
+            //}
+        }
+        print("트리거 콜라이더 충돌");
+        //rgb.angularVelocity = Vector3.zero;
+        //print(rgb.angularVelocity);
+    }
+
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.Equals(other))
+        {
+            nav.isStopped = false;
+
+        }
+        print("트리거 콜라이더 나감");
+
+    }
 
     //private void OnDrawGizmos()
     //{

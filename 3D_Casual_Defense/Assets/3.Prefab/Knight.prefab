@@ -6619,7 +6619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7566425961191296874
 Transform:
   m_ObjectHideFlags: 0
@@ -7746,6 +7746,8 @@ GameObject:
   - component: {fileID: 591294897169345205}
   - component: {fileID: 4047004346323826099}
   - component: {fileID: 8630295707120004685}
+  - component: {fileID: 8948513154581485397}
+  - component: {fileID: 3062027296038334723}
   m_Layer: 6
   m_Name: Knight
   m_TagString: Player
@@ -7801,7 +7803,7 @@ MonoBehaviour:
     _unit_Skill_CoolTime: 0
   _enum_Unit_Action_Mode: 1
   _enum_Unit_Action_Type: 3
-  _enum_Unit_Attack_Type: 5
+  _enum_Unit_Attack_Type: 9
   nav: {fileID: 0}
   anim: {fileID: 0}
   isClick: 0
@@ -7812,6 +7814,7 @@ MonoBehaviour:
   unitTargetSearchCs: {fileID: 0}
   holdOb: {fileID: 4470273444325221490}
   navObs: {fileID: 0}
+  isCollision: 0
 --- !u!114 &5521264825765098813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7825,6 +7828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actUnitCs: {fileID: 248801949066286627}
+  unitModelTr: {fileID: 5356288897712362187}
   _layerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -7916,6 +7920,43 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 1.17, z: 0}
   m_TimeToStationary: 0.5
+--- !u!114 &8948513154581485397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783625495759935545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb09d9275115f149aba55a60d884a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nav: {fileID: 0}
+  unitInfoCs: {fileID: 0}
+  anim: {fileID: 0}
+  unitSearchCs: {fileID: 0}
+--- !u!135 &3062027296038334723
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783625495759935545}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 2.08
+  m_Center: {x: 0, y: 1.21, z: 0}
 --- !u!1 &3865493682636983505
 GameObject:
   m_ObjectHideFlags: 0
@@ -9107,7 +9148,7 @@ GameObject:
   - component: {fileID: 4418372220680252300}
   - component: {fileID: 3952485631713494588}
   - component: {fileID: 7687712162118506802}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
