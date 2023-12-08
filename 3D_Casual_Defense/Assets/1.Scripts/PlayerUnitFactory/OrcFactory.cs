@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static AbsPlayerUnitFactory;
+
 
 public class OrcFactory : AbsMonsterUnitFactory
 {
@@ -10,7 +10,7 @@ public class OrcFactory : AbsMonsterUnitFactory
 
 
 
-    // 기사 클래스마다 생산될 유닛을 결정해주는 구상 생산자
+    // 오크 클래스마다 생산될 유닛을 결정해주는 구상 생산자
     public override MonsterUnitClass CreateMonsterUnit()
     {
         MonsterUnitClass MonsterUnit = null;

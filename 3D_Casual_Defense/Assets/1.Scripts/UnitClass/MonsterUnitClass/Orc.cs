@@ -37,12 +37,19 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     [SerializeField]
     private float timer;
+
+    public Orc MonsterKind  // 몬스터 종류 반환
+    {
+        get { return this; }
+    }
     //[SerializeField]
     //private NavMeshPath path;
 
     // Start is called before the first frame update
     void Awake()
     {
+        
+        print(MonsterKind);
         rgb = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
         _this_Unit_Armor_Property = new MailArmor();
@@ -295,12 +302,12 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
-    }
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
+    //}
 }

@@ -12,6 +12,6 @@ public abstract class AbsMonsterUnitFactory : MonoBehaviour
     }
     public OrcClass orcClass;
 
-    // 플레이어 유닛 생산하는 생성자 함수
+    // 몬스터 유닛 생산하는 생성자 함수
     public abstract MonsterUnitClass CreateMonsterUnit();
 }
