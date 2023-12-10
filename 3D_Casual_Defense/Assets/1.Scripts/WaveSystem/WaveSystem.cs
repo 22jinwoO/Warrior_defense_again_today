@@ -9,84 +9,44 @@ using UnityEngine;
 [System.Serializable]
 public struct Wave
 {
-    [Header("웨이브 이름")]
-    public string wave_Name;    // 몬스터 생성 주기
-
     [Header("몬스터 생성 주기")]
-    public float wave_interval;    // 몬스터 생성 주기
+    public float spawnDelayTime;    // 몬스터 생성 주기
+    [Header("최대 몬스터 생성 수")]
+    public int maxMonsterCount;   // 최대 몬스터 생성 수
 
     [Header("몬스터 종류")]
-    public List<MonsterUnitClass> wave_monsterClasses; // 몬스터 종류
+    public MonsterUnitClass[] monsterClasses; // 몬스터 종류
 
-    //[Header("유닛 종류별 생성 수")]
-    //public int[] wave_monsterKindCount;  // 유닛 종류별 생성 수
+    [Header("유닛 종류별 생성 수")]
+    public int[] monsterKindCount;  // 유닛 종류별 생성 수
+    //[Header("몬스터 딕셔너리 값")]
+    //public SerializableDictionary<MonsterUnitClass, int> spawnMonsterKinds;
+
 
     [Header("유닛 스폰되는 몬스터 종류 리스트 인덱스")]
     public int monsterKindIndex;  // 유닛 스폰되는 몬스터 종류 리스트 인덱스
-
-    [Header("최대 몬스터 생성 수")]
-    public int wave_maxMonsterCount;   // 최대 몬스터 생성 수
-
-    [Header("생성 반복 횟수")]
-    public int wave_RepeatNum;   // 최대 몬스터 생성 수
-
+    //[Header("몬스터 생산자 종류")]
+    //public AbsMonsterUnitFactory[] monsterUnitClassFactorys; // 몬스터 생산자 종류
 }
 
 
 public class WaveSystem : MonoBehaviour
 
 {
-    
-
     [SerializeField]
     private Wave[] waves;   // 현재 스테이지의 모든 웨이브 정보
-    
+
     [SerializeField]
     private MonsterSpawnManager spawnManager;
     private int currentWaveIndex = -1;  // 현재 웨이브 인덱스
 
 
-    private void Awake()
+
+    // Start is called before the first frame update
+    void Start()
     {
         
-        //waves = new Wave[10];
-        //waves = new Wave[spawnManager.datas.waveDatas.Length];
     }
-
-    private void Start()
-    {
-        //waves = new Wave[spawnManager.datas.waveDatas.Length];
-        print(spawnManager.datas.waveDatas.Length);
-        for(int i = 0; i < spawnManager.datas.waveDatas.Length; i++)
-        {
-            print(waves[3].wave_Name);
-            print("i넘버"+i);
-            waves[i].wave_Name = spawnManager.datas.waveDatas[i].waveName;
-            waves[i].wave_interval = spawnManager.datas.waveDatas[i].interval;
-            waves[i].wave_maxMonsterCount = spawnManager.datas.waveDatas[i].maxMonster_Count;
-
-            waves[i].wave_RepeatNum = spawnManager.datas.waveDatas[i].repeatNum;
-
-            print(spawnManager.datas.waveDatas[5].character3);
-
-
-
-            if (!spawnManager.datas.waveDatas[i].character1.Equals("")&& !spawnManager.datas.waveDatas[i].character1.Equals(null))
-                waves[i].wave_monsterClasses.Add(spawnManager.d_FindMonsterList[spawnManager.datas.waveDatas[i].character1]);
-            if (!spawnManager.datas.waveDatas[i].character2.Equals(""))
-                waves[i].wave_monsterClasses.Add(spawnManager.d_FindMonsterList[spawnManager.datas.waveDatas[i].character2]);
-            if (!spawnManager.datas.waveDatas[i].character3.Equals(""))           
-                waves[i].wave_monsterClasses.Add(spawnManager.d_FindMonsterList[spawnManager.datas.waveDatas[i].character3]);
-            
-                
-            if (!spawnManager.datas.waveDatas[i].character4.Equals(""))
-                waves[i].wave_monsterClasses.Add(spawnManager.d_FindMonsterList[spawnManager.datas.waveDatas[i].character4]);
-            if (!spawnManager.datas.waveDatas[i].character5.Equals(""))
-                waves[i].wave_monsterClasses.Add(spawnManager.d_FindMonsterList[spawnManager.datas.waveDatas[i].character5]);
-
-        }
-    }
-    
 
     // Update is called once per frame
     void Update()
@@ -103,7 +63,6 @@ public class WaveSystem : MonoBehaviour
             currentWaveIndex++;
             // SpawnManager의 StartWave() 함수 호출, 현재 웨이브 정보 제공
             spawnManager.StartWave(waves[currentWaveIndex]);
-            print("커렌트웨이브 인덱스 "+currentWaveIndex);
         }
     }
 }

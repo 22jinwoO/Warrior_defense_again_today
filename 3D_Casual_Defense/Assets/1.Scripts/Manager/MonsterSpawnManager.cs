@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class MonsterSpawnManager : MonoBehaviour
 {
-
     [SerializeField]
     Vector3 spawnPoint;
 
@@ -35,36 +34,17 @@ public class MonsterSpawnManager : MonoBehaviour
     // 현재 웨이브에서 생성한 몬스터 숫자
     private int spawnMonsterCount = 0;
 
-
-    [Header("몬스터 종류")]
-    public MonsterUnitClass[] monsters;
-
-    public Dictionary<string, MonsterUnitClass> d_FindMonsterList=new Dictionary<string, MonsterUnitClass>();
-
-    private WaveSystem waveSys;
-
-
-    public TextAsset data;  // Json 데이터 에셋
-    public AllData datas;  // 변환 데이터형
-
-
-
+    WaveSystem waveSys;
     private void Awake()
     {
-        print(monsters[0]);
-        print(d_FindMonsterList);
-        d_FindMonsterList.Add("ORC_war01", monsters[0]);
-
         waveSys=GetComponent<WaveSystem>();
-
-        datas = JsonUtility.FromJson<AllData>(data.text);
-
+        //nms = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<NavMeshSurface>();
     }
-
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(C_DynamicBake());    // 동적 베이크 함수 실행
+        StartCoroutine(C_DynamicBake());
+
     }
 
     // Update is called once per frame
@@ -78,10 +58,8 @@ public class MonsterSpawnManager : MonoBehaviour
     }
 
 
-    public void StartWave(Wave wave)    //웨이브 시작하는 함수
+    public void StartWave(Wave wave)
     {
-        currentWave.wave_monsterClasses.Clear();    // 현재 몬스터 종류 리스트 값 초기화
-
         // 매개변수로 받아온 웨이브 정보 저장
         currentWave = wave;
 
@@ -92,71 +70,51 @@ public class MonsterSpawnManager : MonoBehaviour
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수
     {
 
-        int repeatNum = 0;  //반복 횟수 변수
-
-        spawnMonsterCount = 0;  // 현재 웨이브에서 생성된 몬스터 수
 
 
-        while (repeatNum < currentWave.wave_RepeatNum)  // 현재 웨이브의 반복 횟수만큼 while문 반복
+        // 현재 생성될 몬스터의 숫자
+        //int currentMonsterCount = 0;
+
+        // 현재 몬스터 배열의 인덱스
+        int monsterListIndex = 0;
+
+        // 현재 웨이브에서 생성되어야 하는 몬스터의 숫자만큼 몬스터 생성
+        while (spawnMonsterCount < currentWave.maxMonsterCount)
         {
-            int currentMonsterCount = 0;    // 현재 웨이브에서 생성된 몬스터의 수
+            int currentMonsterCount = 0;
 
-            currentWave.monsterKindIndex = 0;   //현재 웨이브의 몬스터 종류 인덱스 값
-
-            Debug.LogWarning(currentWave.wave_monsterClasses.Count);
-
-            // 현재 웨이브에서 생성되어야 하는 몬스터의 숫자만큼 몬스터 생성
-            while (currentMonsterCount < currentWave.wave_monsterClasses.Count) // 현재 생성된 몬스터의 수가 현재 웨이브의 몬스터 종류 수보다 작을 때 동안 반복
+            //currentMonsterCount = currentWave.monsterKindCount[currentWave.monsterKindIndex];
+            while (currentMonsterCount <= currentWave.monsterKindCount[currentWave.monsterKindIndex]-1)
             {
-                CheckSpawnMonster();    // 어떤 종류의 몬스터인지 체크 후 몬스터 생성
-                currentMonsterCount++;  // 현재 몬스터 수 증가
-                spawnMonsterCount++;    // 현재 웨이브에서 생성된 몬스터의 수 증가
+                //currentWave.monsterUnitClassFactory[monsterListIndex].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
+                Debug.LogWarning(currentWave.monsterKindCount[currentWave.monsterKindIndex]);
+                CheckSpawnMonster();
+                currentMonsterCount++;
+                spawnMonsterCount++;
+                //currentMonsterCount++;
 
-                Debug.LogWarning("currentMonsterCount " + currentMonsterCount);
-                yield return new WaitForSeconds(currentWave.wave_interval); // 현재 웨이브의 몬스터 생성주기만큼 기다림
+                yield return new WaitForSeconds(currentWave.spawnDelayTime);
             }
-            Debug.LogWarning("repeatNum " + repeatNum);
-            repeatNum++;
+            //print("새로운 종류 몬스터 생성");
+            //print("이전 몬스터 종류 수: "+currentWave.monsterKindCount[currentWave.monsterKindIndex]);
+            currentWave.monsterKindIndex++;
+            //print("현재 몬스터 종류 수: " + currentWave.monsterKindCount[currentWave.monsterKindIndex]);
+
+
         }
+
+
         yield return null;
-        currentWave.monsterKindIndex = 0;   //현재 웨이브의 몬스터 종류 인덱스 값 초기화
-
-        orcListIndex = 0;   // 오크 프리팹 리스트 값 초기화
-    }
-
-    IEnumerator C_DynamicBake() // 동적 베이크 실행하는 코루틴 함수
-    {
-        yield return new WaitForSeconds(5f);
-        print("초기화");
-        nms.BuildNavMesh();
-        StartCoroutine(C_DynamicBake());    //재귀함수 실행
-    }
-
-
-
-    private void CheckSpawnMonster()    // 어떤 종류의 몬스터인지 체크하는 함수
-    {
-        List<MonsterUnitClass> monsterSpawnFactorys = currentWave.wave_monsterClasses;
-        int monsterKindsIndex = currentWave.monsterKindIndex;
-
-        switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
-        {
-            case Orc:
-                CreateOrc();
-                break;
-
-        }
-        currentWave.monsterKindIndex++;   // 오크 프리팹 리스트 인덱스 값 증가
+        spawnMonsterCount = 0;
     }
 
     //오크 생산자
     private void CreateOrc()
     {
         GameObject spawnOrc = null;
-
         //  유닛 생산자
         print("스페이스 바 눌림!");
-        if (orcList.Count.Equals(0))    // 오크 프리팹 리스트에 값이 하나도 없다면
+        if (orcList.Count.Equals(0))
         {
             monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
             spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
@@ -165,13 +123,13 @@ public class MonsterSpawnManager : MonoBehaviour
             print("프리팹 생성!");
         }
 
-        else if (!orcList.Count.Equals(0) && !orcList[orcListIndex].gameObject.activeSelf && orcList.Count>spawnMonsterCount)   // orclistIndex 오브젝트가 활성화 상태라면
+        else if (!orcList.Count.Equals(0) && orcList.Count>spawnMonsterCount)
         {
             print(orcList.Count);
             print(spawnMonsterCount);
             orcList[spawnMonsterCount].gameObject.SetActive(true);
             spawnOrc = orcList[orcListIndex].gameObject;
-            orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
+            orcListIndex++;
             print("오브젝트 풀링 활성화");
         }
 
@@ -182,35 +140,72 @@ public class MonsterSpawnManager : MonoBehaviour
             spawnOrc = spawnMonster.gameObject;
             orcList.Add(spawnMonster.GetComponent<Orc>());
             print("프리팹 생성!");
-            orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
         }
 
         spawnOrc.transform.position = spawnPoint;
         spawnOrc.gameObject.name = "오크";
         spawnMonster = null;    //spawnMonster 변수 값 초기화
 
+
+
+        //MonsterUnitClass orc = monsterUnitFactorys[0].CreateMonsterUnit();
+
+        //gameObject.GetComponent<List<orc.GetComponent<Orc>().MonsterKind>>();
+        //orcList.Add();
+
+
+        //switch (spawnMonster.GetComponent<MonsterUnitClass>())
+        //{
+        //    case Orc:
+        //        if (orcList.Count.Equals(0))
+        //        {
+
+        //        }
+
+
+        //        break;
+
+        //}
+
     }
-}
 
-[System.Serializable]
-public class AllData
-{
-    public WaveData[] waveDatas;
-}
+    private void CheckSpawnMonster()
+    {
+        MonsterUnitClass[] monsterSpawnFactorys = currentWave.monsterClasses;
+        int monsterKindsIndex = currentWave.monsterKindIndex;
+
+        switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
+        {
+            case Orc:
+                CreateOrc();
+                break;
+
+        }
+        //currentWave.mon
+        //switch (currentWave.)
+        //{
+        //    default:
+        //        break;
+        //}
+        //AbsMonsterUnitFactory monsterFactory = currentWave.monsterUnitClassFactory;
+        //int monsterListIndex = currentWave.monsterKindIndex;
 
 
-[System.Serializable]
-public class WaveData
-{
-    public int waveNum; // 웨이브 넘버
-    public int waveStartTime;   //  웨이브 시작대기 시간
-    public string waveName; // 웨이브 이름
-    public int interval;    // 웨이브의 몬스터 생성주기
-    public string character1;   // 첫번째 종류 몬스터
-    public string character2;   // 두번째 종류 몬스터
-    public string character3;   // 세번째 종류 몬스터
-    public string character4;   // 네번째 종류 몬스터
-    public string character5;   // 다섯번째 종류 몬스터
-    public int maxMonster_Count;    // 몬스터 최대 생성 수
-    public int repeatNum;   // 몬스터 생성 반복 주기
+        //MonsterUnitClass monsterUnit = monsterFactory[monsterListIndex].CreateMonsterUnit();
+
+        //switch (monsterUnit)
+        //{
+        //    default:
+        //        break;
+        //}
+    }
+    IEnumerator C_DynamicBake() // 동적 베이크 실행하는 코루틴 함수
+    {
+        yield return new WaitForSeconds(5f);
+        print("초기화");
+        nms.BuildNavMesh();
+        StartCoroutine(C_DynamicBake());
+
+
+    }
 }

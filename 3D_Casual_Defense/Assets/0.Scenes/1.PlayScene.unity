@@ -1245,20 +1245,13 @@ MonoBehaviour:
   orcList: []
   spawnMonster: {fileID: 0}
   currentWave:
-    wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
+    spawnDelayTime: 0
+    maxMonsterCount: 0
+    monsterKindCount: 
+    monsterClasses: []
     monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
   currentMonsterIndex: 0
   spawnMonsterCount: 0
-  monsters:
-  - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-  data: {fileID: 4900000, guid: c5756586b662dda43aa45c256b887a80, type: 3}
-  datas:
-    waveDatas: []
 --- !u!114 &594286527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,76 +1265,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
+  - spawnDelayTime: 1
+    maxMonsterCount: 22
+    monsterKindCount: 05000000070000000a000000
+    monsterClasses:
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
     monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
+  - spawnDelayTime: 1
+    maxMonsterCount: 28
+    monsterKindCount: 07000000090000000c000000
+    monsterClasses:
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
     monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
-  - wave_Name: 
-    wave_interval: 0
-    wave_monsterClasses: []
-    wave_monsterKindCount: 
-    monsterKindIndex: 0
-    wave_maxMonsterCount: 0
-    wave_RepeatNum: 0
   spawnManager: {fileID: 594286526}
 --- !u!1 &660997762
 GameObject:

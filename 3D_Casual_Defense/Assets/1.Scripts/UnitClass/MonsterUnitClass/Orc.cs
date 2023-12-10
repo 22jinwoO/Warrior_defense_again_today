@@ -285,7 +285,7 @@ public class Orc : MonsterUnitClass, IActByUnit
             //    time += Time.deltaTime;
             //}
         }
-        //print("트리거 콜라이더 충돌");
+        print("트리거 콜라이더 충돌");
         //rgb.angularVelocity = Vector3.zero;
         //print(rgb.angularVelocity);
     }
@@ -298,7 +298,7 @@ public class Orc : MonsterUnitClass, IActByUnit
             nav.isStopped = false;
 
         }
-        //print("트리거 콜라이더 나감");
+        print("트리거 콜라이더 나감");
 
     }
 
