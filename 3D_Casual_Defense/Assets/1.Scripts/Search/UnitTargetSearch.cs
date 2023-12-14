@@ -63,7 +63,7 @@ public class UnitTargetSearch : MonoBehaviour
 
         //print(_targetUnit.name);
         unitInfoCs.isSearch = true;
-        unitInfoCs._enum_Unit_Action_Type = unitInfoCs._enum_Unit_Attack_Type;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
+        unitInfoCs._enum_Unit_Action_Type = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
 
     }
     #endregion

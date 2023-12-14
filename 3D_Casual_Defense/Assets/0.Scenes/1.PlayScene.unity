@@ -642,8 +642,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
+  _unitData:
+    _unit_Name: 
+    _unit_Health: 0
+    _eUnit_Attack_Property: 0
+    _unit_Attack_Damage: 0
+    _unit_Skill_Attack_Damage: 0
+    _eUnit_Defense_Property: 0
+    _unit_Description: 
+    _unit_Type: 
+    _unit_MoveSpeed: 0
+    _unit_Outlook: 0
+    _unit_Attack_Range: 0
+    _unit_Attack_Speed: 0
+    _unit_Attack_CoolTime: 0
+    _unit_Current_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 0
+  _actionStates: 0
   anim: {fileID: 0}
-  unitSearchCs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
 --- !u!1 &377998579
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,8 +851,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
+  _unitData:
+    _unit_Name: 
+    _unit_Health: 0
+    _eUnit_Attack_Property: 0
+    _unit_Attack_Damage: 0
+    _unit_Skill_Attack_Damage: 0
+    _eUnit_Defense_Property: 0
+    _unit_Description: 
+    _unit_Type: 
+    _unit_MoveSpeed: 0
+    _unit_Outlook: 0
+    _unit_Attack_Range: 0
+    _unit_Attack_Speed: 0
+    _unit_Attack_CoolTime: 0
+    _unit_Current_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 0
+  _actionStates: 0
   anim: {fileID: 0}
-  unitSearchCs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
 --- !u!1 &486916538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1245,13 +1279,20 @@ MonoBehaviour:
   orcList: []
   spawnMonster: {fileID: 0}
   currentWave:
-    spawnDelayTime: 0
-    maxMonsterCount: 0
-    monsterKindCount: 
-    monsterClasses: []
+    wave_Name: 
+    wave_interval: 0
+    wave_monsterClasses: []
     monsterKindIndex: 0
+    wave_maxMonsterCount: 0
+    wave_RepeatNum: 0
   currentMonsterIndex: 0
   spawnMonsterCount: 0
+  monsters:
+  - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+  waveSys: {fileID: 0}
+  data: {fileID: 4900000, guid: c5756586b662dda43aa45c256b887a80, type: 3}
+  datas:
+    waveDatas: []
 --- !u!114 &594286527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1265,22 +1306,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - spawnDelayTime: 1
-    maxMonsterCount: 22
-    monsterKindCount: 05000000070000000a000000
-    monsterClasses:
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+  - wave_Name: 
+    wave_interval: 0
+    wave_monsterClasses: []
     monsterKindIndex: 0
-  - spawnDelayTime: 1
-    maxMonsterCount: 28
-    monsterKindCount: 07000000090000000c000000
-    monsterClasses:
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-    - {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
-    monsterKindIndex: 0
+    wave_maxMonsterCount: 0
+    wave_RepeatNum: 0
   spawnManager: {fileID: 594286526}
 --- !u!1 &660997762
 GameObject:
@@ -3203,8 +3234,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
+  _unitData:
+    _unit_Name: 
+    _unit_Health: 0
+    _eUnit_Attack_Property: 0
+    _unit_Attack_Damage: 0
+    _unit_Skill_Attack_Damage: 0
+    _eUnit_Defense_Property: 0
+    _unit_Description: 
+    _unit_Type: 
+    _unit_MoveSpeed: 0
+    _unit_Outlook: 0
+    _unit_Attack_Range: 0
+    _unit_Attack_Speed: 0
+    _unit_Attack_CoolTime: 0
+    _unit_Current_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 0
+  _actionStates: 0
   anim: {fileID: 0}
-  unitSearchCs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
 --- !u!4 &1628619870 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3809936362958328543, guid: 144078c21bb42904a8bb2a77b6c196e3, type: 3}

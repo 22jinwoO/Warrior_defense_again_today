@@ -56,7 +56,7 @@ public class Knight : PlayerUnitClass, IActByUnit
                 nav.enabled = true;
                 switch (_enum_Unit_Action_Type)     // 현재 유닛 행동
                 {
-                    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
+                    case eUnit_Action_States.unit_Idle: // 유닛 대기 상태(탐지 상태)
                         anim.SetBool("isMove", false);
                         if (!isSearch)  // 적 탐지 않았을 때만 실행
                         {
@@ -126,7 +126,7 @@ public class Knight : PlayerUnitClass, IActByUnit
                         // 거리가 공격범위보다 크면 유닛 추적
                         if (distance > _unitData._unit_Attack_Range)
                         {
-                            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                            _enum_Unit_Action_Type = _enum_Unit_Attack_State;
                         }
 
                         //공격모션을 실행하고
@@ -157,7 +157,7 @@ public class Knight : PlayerUnitClass, IActByUnit
                         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
                         if (distance > _unitData._unit_Attack_Range)
                         {
-                            _enum_Unit_Action_Type = _enum_Unit_Attack_Type;
+                            _enum_Unit_Action_Type = _enum_Unit_Attack_State;
                         }
                         //공격모션을 실행하고
                         unitTargetSearchCs.Look_At_The_Target();

@@ -62,7 +62,7 @@ public class CreatePlayerUnit : MonoBehaviour
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         clikUnitInfo._enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
         clikUnitInfo.isSearch = false;
-        clikUnitInfo._enum_Unit_Attack_Type=eUnit_Action_States.unit_Tracking;
+        clikUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
         clikUnitInfo.isClick = false;
         clikUnitInfo = null;
     }
@@ -77,7 +77,7 @@ public class CreatePlayerUnit : MonoBehaviour
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
         clikUnitInfo._enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
         clikUnitInfo.isSearch = false;
-        clikUnitInfo._enum_Unit_Attack_Type = eUnit_Action_States.unit_Boundary;
+        clikUnitInfo._enum_Unit_Attack_State = eUnit_Action_States.unit_Boundary;
         clikUnitInfo.isClick = false;
         clikUnitInfo = null;
     }

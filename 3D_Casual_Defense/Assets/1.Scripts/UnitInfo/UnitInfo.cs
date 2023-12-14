@@ -63,7 +63,10 @@ public enum eUnit_Action_States           // 유닛 행동
     unit_AttackReady,   // 공격 준비
     unit_Tracking,      // 추적
     unit_Attack,        // 공격
-    unit_Boundary       // 홀드 후 주변 경계
+    unit_Boundary,       // 홀드 후 주변 경계
+
+    close_Range_atk,    // 근거리
+    long_Range_atk      // 원거리
 }
 
 
@@ -73,12 +76,15 @@ public abstract class UnitInfo : MonoBehaviour
     public unit_Data _unitData; // 유닛 데이터 구조체 변수
 
     [Header("유닛 행동 모드 상태 변수")]
-    public eUnit_Action_States _enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;   // 유닛 행동 상태 변수
+    public eUnit_Action_States _enum_Unit_Action_Mode;   // 유닛 행동 상태 변수
 
     [Header("유닛 행동 상태 변수")]
-    public eUnit_Action_States _enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;   // 유닛 행동 상태 변수
+    public eUnit_Action_States _enum_Unit_Action_Type;   // 유닛 행동 상태 변수
 
     [Header("플레이어가 지정해준 현재 유닛 공격 상태 변수")]
+    public eUnit_Action_States _enum_Unit_Attack_State;   // 플레이어가 지정해준 현재 유닛 공격 상태 변수
+
+    [Header("유닛의 공격 상태 (근거리, 원거리)")]
     public eUnit_Action_States _enum_Unit_Attack_Type;   // 플레이어가 지정해준 현재 유닛 공격 상태 변수
 
     [Header("유닛 방어구 속성")]
