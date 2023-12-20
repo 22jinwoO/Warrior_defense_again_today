@@ -28,11 +28,11 @@ public class Player : MonoBehaviour
                 if (hit.transform.tag=="Player")
                 {
                     print("유닛 지정 완료!");
-                    hit.transform.GetComponent<UnitInfo>().isClick = true;
+                    hit.transform.GetComponent<UnitInfo>()._isClick = true;
                     clickUnitCs.clikUnitInfo= hit.transform.GetComponent<UnitInfo>();
                 }
-                //movePos = hit.point;
-                //_enum_Unit_Action_Type = eUnit_Action_States.unit_Move;
+                //_movePos = hit.point;
+                //_enum_Unit_Action_State = eUnit_Action_States.unit_Move;
             }
         }
     }

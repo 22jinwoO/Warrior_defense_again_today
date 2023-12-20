@@ -14,61 +14,25 @@ using UnityEngine.AI;
 public struct unit_Data    // 유닛 데이터 가져오는 구조체
 {
     public string _unit_Name;            // 유닛 이름
-    public float _unit_Health;             // 유닛 체력
-    public eUnit_Attack_Property_States _eUnit_Attack_Property;    // 유닛 공격속성
+    public float _unit_maxHealth;             // 유닛 최대 체력
+    public float _unit_currentHealth;             // 유닛 현재 체력
+    public eUnit_Attack_Property_States _eUnit_genSkill_Property;    // 유닛 일반 스킬속성
     public float _unit_Attack_Damage;    // 유닛 공격 데미지
     public float _unit_Skill_Attack_Damage;    // 유닛 스킬 공격 데미지
     public eUnit_Defense_Property_States _eUnit_Defense_Property; // 유닛 방어속성
     public string _unit_Description;       // 유닛 설명
     public string _unit_Type;              // 유닛 타입
     public float _unit_MoveSpeed;          // 유닛 이동속도
-    public float _unit_Outlook;            // 유닛 시야
+    public float _unit_SightRange;            // 유닛 시야
     public float _unit_Attack_Range;       // 유닛 공격 범위
     public float _unit_Attack_Speed;        // 유닛 공격 속도
     public float _unit_Attack_CoolTime;     // 유닛 기본 공격 쿨타임
     public float _unit_Current_Skill_CoolTime;     // 유닛 현재 스킬 공격 쿨타임
     public float _unit_Skill_CoolTime;     // 유닛 스킬 공격 쿨타임
+    public int _unit_CriticalRate;          // 유닛 크리티컬 확률
+    public eUnit_targetSelectType _unit_targetSelectType;  // 타겟 선정 타입
 
 }
-
-public enum eUnit_Attack_Property_States  // 유닛 공격 타입
-{
-    Default = 0,
-    slash_Attack,       // 베기 공격
-    piercing_Attack,    // 관통 공격
-    crushing_attack     // 분쇄 공격
-}
-
-public enum eUnit_Defense_Property_States // 유닛 방어 타입
-{
-    Default = 0,
-    plate_Armor,       // 판금 갑옷
-    gambeson_Armor,    // 천갑옷
-    mail_Armor         // 쇠사슬 갑옷
-}
-
-// 공격 킬타입에 따른 몬스터 탐지 함수 추상클래스로 생성 후 상속하여 킬타입에 해당하는 몬스터 탐지함수 실행
-
-public enum eUnit_Action_States           // 유닛 행동
-{
-    Default = 0,
-    unit_FreeMode,      // 유닛 자유 모드(추격)
-    unit_HoldMode,      // 유닛 홀드 모드
-
-    monster_MoveMode,   // 몬스터 이동 모드
-    monster_AttackMode, // 몬스터 공격 모드
-    monster_AttackCastleMode, // 몬스터 성 공격 모드
-    unit_Idle,          // 대기
-    unit_Move,          // 이동
-    unit_AttackReady,   // 공격 준비
-    unit_Tracking,      // 추적
-    unit_Attack,        // 공격
-    unit_Boundary,       // 홀드 후 주변 경계
-
-    close_Range_atk,    // 근거리
-    long_Range_atk      // 원거리
-}
-
 
 public abstract class UnitInfo : MonoBehaviour
 {
@@ -76,10 +40,10 @@ public abstract class UnitInfo : MonoBehaviour
     public unit_Data _unitData; // 유닛 데이터 구조체 변수
 
     [Header("유닛 행동 모드 상태 변수")]
-    public eUnit_Action_States _enum_Unit_Action_Mode;   // 유닛 행동 상태 변수
+    public eUnit_Action_States _enum_Unit_Action_Mode;   // 유닛 모드 상태 변수
 
     [Header("유닛 행동 상태 변수")]
-    public eUnit_Action_States _enum_Unit_Action_Type;   // 유닛 행동 상태 변수
+    public eUnit_Action_States _enum_Unit_Action_State;   // 유닛 행동 상태 변수
 
     [Header("플레이어가 지정해준 현재 유닛 공격 상태 변수")]
     public eUnit_Action_States _enum_Unit_Attack_State;   // 플레이어가 지정해준 현재 유닛 공격 상태 변수
@@ -87,26 +51,28 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛의 공격 상태 (근거리, 원거리)")]
     public eUnit_Action_States _enum_Unit_Attack_Type;   // 플레이어가 지정해준 현재 유닛 공격 상태 변수
 
+    [Header("유닛의 타겟 선정 타입")]
+    public eUnit_targetSelectType _eUnit_Target_Search_Type;   // 유닛의 타겟 선정 타입
+
     [Header("유닛 방어구 속성")]
     public ArmorCalculate _this_Unit_Armor_Property;
 
 
     [Header("내비메쉬 에이전트")]
-    public NavMeshAgent nav;    // 내비메쉬
+    public NavMeshAgent _nav;    // 내비메쉬
 
     [Header("애니메이터")]
-    public Animator anim;       // 애니메이터
-
+    public Animator _anim;       // 애니메이터
 
     [Header("유닛을 클릭했는지 확인하는 변수")]
-    public bool isClick;       // 유닛을 클릭했는지 확인하는 변수
+    public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
 
 
     [Header("적을 탐지했는지 확인하는 변수")]
-    public bool isSearch = false;   // 적을 탐지했는지 확인하는 변수
+    public bool _isSearch = false;   // 적을 탐지했는지 확인하는 변수
 
     [Header("유닛이 도착할 위치를 의미하는 벡터변수")]
-    public Vector3 movePos;
+    public Vector3 _movePos;
 
     [Header("기본 공격 가능 불가능 확인하는 변수")]
     public bool _can_Base_Attack;    // 기본 공격 가능 불가능 확인하는 변수
@@ -114,5 +80,55 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("스킬 공격 가능 불가능 확인하는 변수")]
     public bool _can_Skill_Attack;   // 스킬 공격 가능 불가능 확인하는 변수
 
-    
+
+    // 게임 이펙트 부분*********************************
+
+    [Header("베기 공격 피격시 생성되는 이펙트")]
+    public GameObject _hit_Effect_SlashAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("관통 공격 피격 시 생성되는 이펙트")]
+    public GameObject _hit_Effect_PierceAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("분쇄 공격 피격 시 생성되는 이펙트")]
+    public GameObject _hit_Effect_CrushAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    // 게임 이펙트 부분=====================================
+
+    // 발사체 프리팹 *************************
+    [Header("일반스킬 사용할 때의 발사체 게임 오브젝트 프리팹")]
+    public GameObject _projectile_Prefab;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    // 발사체 프리팹 =========================
+
+
+    // 사운드 *************************
+
+    // 사운드 =========================
+
+    // 히트 시 출력되는 텍스트 *************************
+
+    // 히트 시 출력되는 텍스트 =========================
+    #region # Unit_Attack_Skill_CoolTime() : 유닛 기본공격, 스킬공격 쿨타임 돌려주는 함수
+    public void Unit_Attack_Skill_CoolTime()
+    {
+        // 기본 공격이 가능한지 확인
+        _can_Base_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
+
+        // 스킬 공격이 가능한지 확인
+        _can_Skill_Attack = _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
+
+        //현재 스킬 공격 쿨타임이 유닛의 스킬 공격 쿨타임 보다 낮다면 쿨타임 돌려주기
+        if (_unitData._unit_Skill_CoolTime >= _unitData._unit_Current_Skill_CoolTime)
+        {
+            _unitData._unit_Current_Skill_CoolTime += Time.deltaTime;
+        }
+
+        //현재 기본 공격 쿨타임이 유닛의 기본 공격속도 보다 낮다면 쿨타임 돌려주기
+        if (_unitData._unit_Attack_Speed >= _unitData._unit_Attack_CoolTime)
+        {
+            _unitData._unit_Attack_CoolTime += Time.deltaTime;
+        }
+    }
+    #endregion
 }
+

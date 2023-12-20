@@ -60,10 +60,10 @@ public class CreatePlayerUnit : MonoBehaviour
         }
         print("클릭한 유닛 자유모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
-        clikUnitInfo._enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-        clikUnitInfo.isSearch = false;
+        clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+        clikUnitInfo._isSearch = false;
         clikUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
-        clikUnitInfo.isClick = false;
+        clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
 
@@ -75,10 +75,10 @@ public class CreatePlayerUnit : MonoBehaviour
         }
         print("클릭한 유닛 홀드모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
-        clikUnitInfo._enum_Unit_Action_Type = eUnit_Action_States.unit_Idle;
-        clikUnitInfo.isSearch = false;
+        clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+        clikUnitInfo._isSearch = false;
         clikUnitInfo._enum_Unit_Attack_State = eUnit_Action_States.unit_Boundary;
-        clikUnitInfo.isClick = false;
+        clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
 }

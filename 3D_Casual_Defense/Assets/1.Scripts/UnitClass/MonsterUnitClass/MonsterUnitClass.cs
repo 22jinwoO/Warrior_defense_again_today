@@ -4,10 +4,14 @@ using UnityEngine;
 
 public abstract class MonsterUnitClass : UnitInfo
 {
+    [Header("유닛의 타겟 선정 타입마다 필요한 함수들을 구현해놓은 UnitTargetSearch 스크립트")]
     [SerializeField]
     protected UnitTargetSearch unitTargetSearchCs;
 
-    //public abstract void Act_By_Unit(); // 유닛 상태에 따라서 행동하는 동작들을 구현하는 함수
+
+    [Header("유닛의 행동들을 구현해놓은 ActUnit 스크립트")]
+    [SerializeField]
+    protected ActUnit actUnitCs;
 
     public abstract void InitUnitInfoSetting();     // 유닛 정보 초기화 시켜주는 함수
 

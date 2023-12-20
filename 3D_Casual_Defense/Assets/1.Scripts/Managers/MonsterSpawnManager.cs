@@ -39,14 +39,16 @@ public class MonsterSpawnManager : MonoBehaviour
     [Header("몬스터 종류")]
     public MonsterUnitClass[] monsters;
 
-    public Dictionary<string, MonsterUnitClass> d_MonsterDictonary=new Dictionary<string, MonsterUnitClass>();
+    [Header("몬스터 종류 딕셔너리 (Key :string / Value : MonsterUnitClass)")]
+    public SerializableDictionary<string, MonsterUnitClass> d_MonsterDictonary=new SerializableDictionary<string, MonsterUnitClass>();
 
     [SerializeField]
     private WaveSystem waveSys;
 
 
     public TextAsset data;  // Json 데이터 에셋  이 파일은 유니티 상에서 드래그해서 넣어줍니다.
-    public AllData datas;  // 변환 데이터형   이게 문제 아니였나요
+
+    public AllData datas;  // 변환 데이터형
 
 
 
@@ -96,59 +98,69 @@ public class MonsterSpawnManager : MonoBehaviour
 
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수
     {
-
-
-
-        // 현재 생성될 몬스터의 숫자
-        //int currentMonsterCount = 0;
-
-        // 현재 몬스터 배열의 인덱스
-        int monsterListIndex = 0;
         int repeatNum = 0;
-
-        
 
         while (repeatNum<currentWave.wave_RepeatNum)
         {
             int currentMonsterCount = 0;
-            // 현재 웨이브에서 생성되어야 하는 몬스터의 숫자만큼 몬스터 생성
-            //while (spawnMonsterCount < currentWave.wave_maxMonsterCount)
-            //{
-            //    
+
             Debug.LogWarning(currentWave.wave_monsterClasses.Count);
-            //currentMonsterCount = currentWave.wave_monsterKindCount[currentWave.monsterKindIndex];
+
+            // 현재 웨이브에서 생성되어야 하는 몬스터의 숫자만큼 몬스터 생성
             while (currentMonsterCount < currentWave.wave_monsterClasses.Count)
                 {
-                    //currentWave.monsterUnitClassFactory[monsterListIndex].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
-                    //Debug.LogWarning(currentWave.wave_monsterKindCount[currentWave.monsterKindIndex]);
+
                     CheckSpawnMonster();
                     currentMonsterCount++;
                     spawnMonsterCount++;
-                //currentMonsterCount++;
 
-                Debug.LogWarning("currentMonsterCount " + currentMonsterCount);
-                yield return new WaitForSeconds(currentWave.wave_interval);
+                    Debug.LogWarning("currentMonsterCount " + currentMonsterCount);
+                    yield return new WaitForSeconds(currentWave.wave_interval);
                 }
-            //print("새로운 종류 몬스터 생성");
-            //print("이전 몬스터 종류 수: "+currentWave.wave_monsterKindCount[currentWave.monsterKindIndex]);
-            //currentWave.monsterKindIndex++;
-            //print("현재 몬스터 종류 수: " + currentWave.wave_monsterKindCount[currentWave.monsterKindIndex]);
 
             Debug.LogWarning("repeatNum " + repeatNum);
-            //}
-
-
             repeatNum++;
         }
         yield return null;
         orcListIndex = 0;
         spawnMonsterCount = 0;
     }
+    private void CheckSpawnMonster()
+    {
+        List<MonsterUnitClass> monsterSpawnFactorys = currentWave.wave_monsterClasses;
+        int monsterKindsIndex = currentWave.monsterKindIndex;
+
+        switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
+        {
+            case Orc:
+                CreateOrc();
+                break;
+
+        }
+        //currentWave.mon
+        //switch (currentWave.)
+        //{
+        //    default:
+        //        break;
+        //}
+        //AbsMonsterUnitFactory monsterFactory = currentWave.monsterUnitClassFactory;
+        //int monsterListIndex = currentWave.monsterKindIndex;
+
+
+        //MonsterUnitClass monsterUnit = monsterFactory[monsterListIndex].CreateMonsterUnit();
+
+        //switch (monsterUnit)
+        //{
+        //    default:
+        //        break;
+        //}
+    }
 
     //오크 생산자
     private void CreateOrc()
     {
         GameObject spawnOrc = null;
+
         //  유닛 생산자
         print("스페이스 바 눌림!");
         if (orcList.Count.Equals(0))
@@ -207,36 +219,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     }
 
-    private void CheckSpawnMonster()
-    {
-        List<MonsterUnitClass> monsterSpawnFactorys = currentWave.wave_monsterClasses;
-        int monsterKindsIndex = currentWave.monsterKindIndex;
 
-        switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
-        {
-            case Orc:
-                CreateOrc();
-                break;
-
-        }
-        //currentWave.mon
-        //switch (currentWave.)
-        //{
-        //    default:
-        //        break;
-        //}
-        //AbsMonsterUnitFactory monsterFactory = currentWave.monsterUnitClassFactory;
-        //int monsterListIndex = currentWave.monsterKindIndex;
-
-
-        //MonsterUnitClass monsterUnit = monsterFactory[monsterListIndex].CreateMonsterUnit();
-
-        //switch (monsterUnit)
-        //{
-        //    default:
-        //        break;
-        //}
-    }
     IEnumerator C_DynamicBake() // 동적 베이크 실행하는 코루틴 함수
     {
         yield return new WaitForSeconds(5f);
@@ -249,31 +232,26 @@ public class MonsterSpawnManager : MonoBehaviour
 }
 
 [System.Serializable]
-public class AllData    // 그럼 이걸 지워볼까요??
+public class AllData
 {
-    public WaveData[] waveDatas;    // 그리고 waveDatas 이름은 시트 이름이랑 같아야해서 이렇게 했구요
+    public WaveData[] waveDatas;    // waveDatas 이름은 시트 이름이랑 같아야 함
 }
 
 
 [System.Serializable]
-public class WaveData   // 이게 구글 시트에 해당하는 값을 갖오기 위한 클래스에요 
+public class WaveData   // WaveDatas 구글 시트에 해당하는 값을 갖고오기 위한 클래스
 {
-    public int waveNum;
-    public int waveStartTime;
-    public string waveName;
-    public int interval;
-    public string character1;
-    //public int character1_rank;
-    public string character2;
-    //public int character2_rank;
-    public string character3;
-    //public int character3_rank;
-    public string character4;
-    //public int character4_rank;
-    public string character5;
-    //public int character5_rank;
-    public int maxMonster_Count;
-    public int repeatNum;
+    public int waveNum; // 웨이브 단계
+    public int waveStartTime;   // 웨이브 대기 시간
+    public string waveName; // 웨이브 이름
+    public int interval;    // 몬스터 생성 주기
+    public string character1;   // 첫번째 종류 몬스터
+    public string character2;   // 두번째 종류 몬스터
+    public string character3;   // 세번째 종류 몬스터
+    public string character4;   // 네번째 종류 몬스터
+    public string character5;   // 다섯번째 종류 몬스터
+    public int maxMonster_Count;    // 최대 생성되는 몬스터 수
+    public int repeatNum;   // 생성주기 반복 횟수
     
 
 }

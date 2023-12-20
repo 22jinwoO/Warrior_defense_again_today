@@ -10,9 +10,9 @@ public class Warrior : UnitInfo
 {
     private void Awake()
     {
-        anim=GetComponent<Animator>();
+        _anim=GetComponent<Animator>();
         _this_Unit_Armor_Property = new GambesonArmor();
-        nav = GetComponent<NavMeshAgent>();
+        _nav = GetComponent<NavMeshAgent>();
         //InitUnitInfoSetting();
 
     }
@@ -20,19 +20,19 @@ public class Warrior : UnitInfo
     private void Update()
     {
 
-        // ±âº» °ø°İÀÌ °¡´ÉÇÑÁö È®ÀÎ
+        // ê¸°ë³¸ ê³µê²©ì´ ê°€ëŠ¥í•œì§€ í™•ì¸
         _can_Base_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
 
-        // ½ºÅ³ °ø°İÀÌ °¡´ÉÇÑÁö È®ÀÎ
+        // ìŠ¤í‚¬ ê³µê²©ì´ ê°€ëŠ¥í•œì§€ í™•ì¸
         _can_Skill_Attack =  _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
 
-        //ÇöÀç ½ºÅ³ °ø°İ ÄğÅ¸ÀÓÀÌ À¯´ÖÀÇ ½ºÅ³ °ø°İ ÄğÅ¸ÀÓ º¸´Ù ³·´Ù¸é ÄğÅ¸ÀÓ µ¹·ÁÁÖ±â
+        //í˜„ì¬ ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„ì´ ìœ ë‹›ì˜ ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„ ë³´ë‹¤ ë‚®ë‹¤ë©´ ì¿¨íƒ€ì„ ëŒë ¤ì£¼ê¸°
         if (_unitData._unit_Skill_CoolTime>= _unitData._unit_Current_Skill_CoolTime)
         {
             _unitData._unit_Current_Skill_CoolTime += Time.deltaTime;
         }
 
-        //ÇöÀç ±âº» °ø°İ ÄğÅ¸ÀÓÀÌ À¯´ÖÀÇ ±âº» °ø°İ¼Óµµ º¸´Ù ³·´Ù¸é ÄğÅ¸ÀÓ µ¹·ÁÁÖ±â
+        //í˜„ì¬ ê¸°ë³¸ ê³µê²© ì¿¨íƒ€ì„ì´ ìœ ë‹›ì˜ ê¸°ë³¸ ê³µê²©ì†ë„ ë³´ë‹¤ ë‚®ë‹¤ë©´ ì¿¨íƒ€ì„ ëŒë ¤ì£¼ê¸°
         if (_unitData._unit_Attack_Speed>=_unitData._unit_Attack_CoolTime)
         {
             _unitData._unit_Attack_CoolTime += Time.deltaTime;
@@ -44,8 +44,8 @@ public class Warrior : UnitInfo
 
             if (Physics.Raycast(ray,out RaycastHit hit))
             {
-                movePos = hit.point;
-                _enum_Unit_Action_Type = eUnit_Action_States.unit_Move;
+                _movePos = hit.point;
+                _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
             }
         }
         //Act_By_Unit();
@@ -55,27 +55,27 @@ public class Warrior : UnitInfo
 //    public override void InitUnitInfoSetting()
 //    {
 
-//        _unitData._unit_Name = "¿ë»ç";            // À¯´Ö ÀÌ¸§
-//        _unitData._unit_Health = 200f;             // À¯´Ö Ã¼·Â
-//        _unitData._eUnit_Attack_Property = eUnit_Attack_Property_States.slash_Attack;    // À¯´Ö °ø°İ¼Ó¼º
-//        _unitData._unit_Attack_Damage = 1f;    // À¯´Ö °ø°İ µ¥¹ÌÁö
-//        _unitData._unit_Skill_Attack_Damage = 6f;    // À¯´Ö °ø°İ µ¥¹ÌÁö
-//        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;   // À¯´Ö ¹æ¾î¼Ó¼º
-//        _unitData._unit_Description = "¿ë»çÀÔ´Ï´Ù";     // À¯´Ö ¼³¸í
-//        _unitData._unit_Type = "¿ë»ç";            // À¯´Ö Å¸ÀÔ
-//        _unitData._unit_MoveSpeed = 1f;        // À¯´Ö ÀÌµ¿¼Óµµ
-//        _unitData._unit_Outlook = 8f;          // À¯´Ö ½Ã¾ß
-//        _unitData._unit_Attack_Range = 4f;     // À¯´Ö °ø°İ ¹üÀ§
-//        _unitData._unit_Attack_Speed=3f;        // À¯´Ö °ø°İ ¼Óµµ
-//        _unitData._unit_Attack_CoolTime = 0f;     // À¯´Ö ±âº» °ø°İ ÄğÅ¸ÀÓ
-//        _unitData._unit_Skill_CoolTime = 8f;     // À¯´Ö ½ºÅ³ °ø°İ ÄğÅ¸ÀÓ
+//        _unitData._unit_Name = "ìš©ì‚¬";            // ìœ ë‹› ì´ë¦„
+//        _unitData._unit_maxHealth = 200f;             // ìœ ë‹› ì²´ë ¥
+//        _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;    // ìœ ë‹› ê³µê²©ì†ì„±
+//        _unitData._unit_Attack_Damage = 1f;    // ìœ ë‹› ê³µê²© ë°ë¯¸ì§€
+//        _unitData._unit_Skill_Attack_Damage = 6f;    // ìœ ë‹› ê³µê²© ë°ë¯¸ì§€
+//        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;   // ìœ ë‹› ë°©ì–´ì†ì„±
+//        _unitData._unit_Description = "ìš©ì‚¬ì…ë‹ˆë‹¤";     // ìœ ë‹› ì„¤ëª…
+//        _unitData._unit_Type = "ìš©ì‚¬";            // ìœ ë‹› íƒ€ì…
+//        _unitData._unit_MoveSpeed = 1f;        // ìœ ë‹› ì´ë™ì†ë„
+//        _unitData._unit_SightRange = 8f;          // ìœ ë‹› ì‹œì•¼
+//        _unitData._unit_Attack_Range = 4f;     // ìœ ë‹› ê³µê²© ë²”ìœ„
+//        _unitData._unit_Attack_Speed=3f;        // ìœ ë‹› ê³µê²© ì†ë„
+//        _unitData._unit_Attack_CoolTime = 0f;     // ìœ ë‹› ê¸°ë³¸ ê³µê²© ì¿¨íƒ€ì„
+//        _unitData._unit_Skill_CoolTime = 8f;     // ìœ ë‹› ìŠ¤í‚¬ ê³µê²© ì¿¨íƒ€ì„
 //}
 
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData._unit_Outlook);
+        Gizmos.DrawWireSphere(transform.position, _unitData._unit_SightRange);
 
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
@@ -83,15 +83,15 @@ public class Warrior : UnitInfo
     private void OnTriggerEnter(Collider other)
     {
 
-        // Å¸°Ù °ªÀÌ ÀÕÀ¸´Ï±î Å¸°Ù ÀÌ¸§ ºñ±³ÇÏ´Â°Å
-        // ¾ê°¡ °¡¸é¼­ Ãæµ¹ÀÎ½ÄÀ» ´Ù ÇØ ±Ùµ¥ Ãæµ¹ÇÑ ¾ÖµéÀ» ¸®½ºÆ®¿¡ ³Ö¾îÁà. À¯´ÖÀÎÆ÷ Å¸ÀÔÀ¸·Î list.where //
+        // íƒ€ê²Ÿ ê°’ì´ ì‡ìœ¼ë‹ˆê¹Œ íƒ€ê²Ÿ ì´ë¦„ ë¹„êµí•˜ëŠ”ê±°
+        // ì–˜ê°€ ê°€ë©´ì„œ ì¶©ëŒì¸ì‹ì„ ë‹¤ í•´ ê·¼ë° ì¶©ëŒí•œ ì• ë“¤ì„ ë¦¬ìŠ¤íŠ¸ì— ë„£ì–´ì¤˜. ìœ ë‹›ì¸í¬ íƒ€ì…ìœ¼ë¡œ list.where //
 
 
         //if (other.CompareTag("Orc"))
         //{
         //    if (other.name==_targetUnit.name)
         //    {
-        //        //dd À¯´Ö ÀÎÆ÷ Å¸ÀÔÀÌÀÜ¤·ÇÏ. 
+        //        //dd ìœ ë‹› ì¸í¬ íƒ€ì…ì´ì”ã…‡í•˜. 
         //        other.GetComponent<UnitInfo>().BeAttacked_By_OtherUnit(transform);
         //    }
 

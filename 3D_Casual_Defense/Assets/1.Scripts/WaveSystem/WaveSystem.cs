@@ -18,102 +18,100 @@ public class WaveSystem : MonoBehaviour
     
 
     [SerializeField]
-    private Wave[] waves;   // 현재 스테이지의 모든 웨이브 정보
-    
+    private Wave[] waves;   // 현재 스테이지의 모든 웨이브 정보를 갖고 있는 wave 구조체 배열
+
     [SerializeField]
     private MonsterSpawnManager spawnManager;
+
     private int currentWaveIndex = -1;  // 현재 웨이브 인덱스
 
 
     private void Awake()
     {
-
-        //waves = new Wave[10];
-        //waves = new Wave[spawnManager.datas.waveDatas.Length];
-        //for (int i = 0; i < spawnManager.datas.waveDatas.Length; i++)
-        //{
-        //    print(waves[3].wave_Name);
-        //    print("i넘버" + i);
-        //    waves[i].wave_Name = spawnManager.datas.waveDatas[i].waveName;
-        //    waves[i].wave_interval = spawnManager.datas.waveDatas[i].interval;
-        //    waves[i].wave_maxMonsterCount = spawnManager.datas.waveDatas[i].maxMonster_Count;
-
-        //    waves[i].wave_RepeatNum = spawnManager.datas.waveDatas[i].repeatNum;
-
-        //    print(spawnManager.datas.waveDatas[5].character3);
-
-
-
-        //    if (!spawnManager.datas.waveDatas[i].character1.Equals("") && !spawnManager.datas.waveDatas[i].character1.Equals(null))
-        //        waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character1]);
-        //    if (!spawnManager.datas.waveDatas[i].character2.Equals(""))
-        //        waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character2]);
-        //    if (!spawnManager.datas.waveDatas[i].character3.Equals(""))
-        //        waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character3]);
-
-
-        //    if (!spawnManager.datas.waveDatas[i].character4.Equals(""))
-        //        waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character4]);
-        //    if (!spawnManager.datas.waveDatas[i].character5.Equals(""))
-        //        waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character5]);
-
-        //}
+        LoadWaveData();
     }
 
-    private void Start()
+    #region # LoadWaveData() : WaveDatas 구글 시트를 Json 파일로 변환한 값을 불러와 WaveSystem.cs의 Waves[]배열에 Json파일의 i번째 Wave데이터들을 넣어줌
+    private void LoadWaveData()
     {
-        // 이거요?? ㅅ순서 말씀하시는 거 아닌가요 위에서부터 아래로 한다는 가정하에
-        waves = new Wave[spawnManager.datas.waveDatas.Length]; //여기 식으로 해줬었는데, spawnManager.datas.waveDatas.Length 이 부분의 값이 잘 들어오는데
-        print(spawnManager.datas.waveDatas.Length);
-        // 여기서 넣어줘요 네 길이를 값 넣어주고 나서 여기 부분이 지금은 초기화 해주는 분이 없어요,, 네 그거때메 그런건가
-        // 맞아요,,, 원래 위에꺼 대로 한번 실행하는거 한번 보여드릴까요
-        for (int i = 0; i < spawnManager.datas.waveDatas.Length; i++)   // 이게 datas 배열 길이만큼 반복하여 값을 넣어주는 구문입니다
+        // waves : 현재 스테이지의 모든 웨이브 정보를 갖고 있는 wave 구조체 배열 길이 = Json 텍스트 파일의 배열 크기
+        waves = new Wave[spawnManager.datas.waveDatas.Length];
+
+        // WaveDatas 구글시트 Json 파일을 텍스트로 변환한 datas 배열 길이만큼 반복하여 값을 넣어줌
+        for (int i = 0; i < spawnManager.datas.waveDatas.Length; i++)
         {
-            print(waves[3].wave_Name);
-            print("i넘버" + i);           // 네네네
+            // waves[i]의 웨이브 이름 = 웨이브 데이터 Json파일 배열 i번째 값의 웨이브 이름
             waves[i].wave_Name = spawnManager.datas.waveDatas[i].waveName;
+
+            // waves[i]의 몬스터 생성주기 = 웨이브 데이터 Json파일 배열 i번째 값의 몬스터 생성주기
             waves[i].wave_interval = spawnManager.datas.waveDatas[i].interval;
+
+            // waves[i]의 몬스터 최대 생성 수 = 웨이브 데이터 Json파일 배열 i번째 값의 최대 생성 수
             waves[i].wave_maxMonsterCount = spawnManager.datas.waveDatas[i].maxMonster_Count;
 
+            // waves[i]의 생성 반복 횟수 = 웨이브 데이터 Json파일 배열 i번째 값의 생성 반복 횟수
             waves[i].wave_RepeatNum = spawnManager.datas.waveDatas[i].repeatNum;
 
-            print(spawnManager.datas.waveDatas[5].character3);
-            // 이 오류가 인스펙터 창 관련된 거라는 그 유니티 글도 봤엉써요
-            // 이게 웃긴게 될 때도 있고 안될 떄도 있어서 뭐가 문젠지 좀 찾기 힘드네요 지금 독서실 와서 한번도 안떴어요;;;
-            // 그래서 오류가 났을 땐 네네 같은 노트북이에요 그 오류가 났을 땐 제이슨 파일 불러오는 부분이 오류가 나서 Datas 부분에 값이 하나도 안들어가더라구요
-            // 넵 오오오오,, 네 아 근데 제 스프레드 시트에 있는걸 엑스포트해서 값을 미리 저장해서 가져오는거라 수정부분은 상관이 없을 것 같아요
-            // 지금 오류가 너무 안나서 한번 껏다가 킬께요
+            // 몬스터 종류 리스트 초기화
+            waves[i].wave_monsterClasses = new List<MonsterUnitClass>();
 
-            waves[i].wave_monsterClasses = new List<MonsterUnitClass>();    // 이거 맞나요??
-
+            // 웨이브 데이터 Json파일 배열 i번째 값의 첫번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character1.Equals("") && !spawnManager.datas.waveDatas[i].character1.Equals(null))
-            {
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character1]);
-            }
 
+                // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 첫번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
+                // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
+                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character1]);
+
+            // 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character2.Equals("") && !spawnManager.datas.waveDatas[i].character2.Equals(null))
+
+                // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
+                // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
                 waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character2]);
 
+            // 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
+            // for문의 다음 i번째 값을 실행하도록 함
+            else
+                continue;
+
+            // 웨이브 데이터 Json파일 배열 i번째 값의 세번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character3.Equals("") && !spawnManager.datas.waveDatas[i].character3.Equals(null))
+
+                // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 세번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
+                // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
                 waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character3]);
 
+            // 웨이브 데이터 Json파일 배열 i번째 값의 세번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
+            // for문의 다음 i번째 값을 실행하도록 함
+            else
+                continue;
 
+            // 웨이브 데이터 Json파일 배열 i번째 값의 네번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character4.Equals("") && !spawnManager.datas.waveDatas[i].character4.Equals(null))
+
+                // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 네번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
+                // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
                 waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character4]);
 
+            // 웨이브 데이터 Json파일 배열 i번째 값의 네번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
+            // for문의 다음 i번째 값을 실행하도록 함
+            else
+                continue;
+
+            // 웨이브 데이터 Json파일 배열 i번째 값의 다섯번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character5.Equals("") && !spawnManager.datas.waveDatas[i].character5.Equals(null))
+
+                // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 다섯번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
+                // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
                 waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character5]);
 
+            // 웨이브 데이터 Json파일 배열 i번째 값의 다섯번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
+            // for문의 다음 i번째 값을 실행하도록 함
+            else
+                continue;
         }
     }
-    
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    #endregion
     public void StartWave()
     {
         // 현재 맵에 적이 없고, Wave가 남아있다면
@@ -129,7 +127,7 @@ public class WaveSystem : MonoBehaviour
 }
 
 [System.Serializable]
-public struct Wave
+public struct Wave  // Wave 구조체
 {
     [Header("웨이브 이름")]
     public string wave_Name;    // 몬스터 생성 주기
@@ -139,9 +137,6 @@ public struct Wave
 
     [Header("몬스터 종류")]
     public List<MonsterUnitClass> wave_monsterClasses; // 몬스터 종류
-
-    //[Header("유닛 종류별 생성 수")]
-    //public int[] wave_monsterKindCount;  // 유닛 종류별 생성 수
 
     [Header("유닛 스폰되는 몬스터 종류 리스트 인덱스")]
     public int monsterKindIndex;  // 유닛 스폰되는 몬스터 종류 리스트 인덱스

@@ -6672,8 +6672,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
+  _unitData:
+    _unit_Name: 
+    _unit_maxHealth: 0
+    _unit_currentHealth: 0
+    _eUnit_genSkill_Property: 0
+    _unit_Attack_Damage: 0
+    _unit_Skill_Attack_Damage: 0
+    _eUnit_Defense_Property: 0
+    _unit_Description: 
+    _unit_Type: 
+    _unit_MoveSpeed: 0
+    _unit_SightRange: 0
+    _unit_Attack_Range: 0
+    _unit_Attack_Speed: 0
+    _unit_Attack_CoolTime: 0
+    _unit_Current_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 0
+    _unit_CriticalRate: 0
+    _unit_targetSelectType: 0
   anim: {fileID: 0}
-  unitSearchCs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
 --- !u!1 &3276935910214120443
 GameObject:
   m_ObjectHideFlags: 0
@@ -7787,33 +7806,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitData:
     _unit_Name: 
-    _unit_Health: 0
-    _eUnit_Attack_Property: 0
+    _unit_maxHealth: 0
+    _unit_currentHealth: 0
+    _eUnit_genSkill_Property: 0
     _unit_Attack_Damage: 0
     _unit_Skill_Attack_Damage: 0
     _eUnit_Defense_Property: 0
     _unit_Description: 
     _unit_Type: 
     _unit_MoveSpeed: 0
-    _unit_Outlook: 0
+    _unit_SightRange: 0
     _unit_Attack_Range: 0
     _unit_Attack_Speed: 0
     _unit_Attack_CoolTime: 0
     _unit_Current_Skill_CoolTime: 0
     _unit_Skill_CoolTime: 0
+    _unit_CriticalRate: 0
+    _unit_targetSelectType: 0
   _enum_Unit_Action_Mode: 1
-  _enum_Unit_Action_Type: 3
-  _enum_Unit_Attack_Type: 9
-  nav: {fileID: 0}
-  anim: {fileID: 0}
-  isClick: 0
-  isSearch: 0
-  movePos: {x: 0, y: 0, z: 0}
+  _enum_Unit_Action_State: 6
+  _enum_Unit_Attack_State: 9
+  _enum_Unit_Attack_Type: 12
+  _eUnit_Target_Search_Type: 1
+  _nav: {fileID: 0}
+  _anim: {fileID: 0}
+  _isClick: 0
+  _isSearch: 0
+  _movePos: {x: 0, y: 0, z: 0}
   _can_Base_Attack: 0
   _can_Skill_Attack: 0
-  unitTargetSearchCs: {fileID: 0}
+  _hit_Effect_SlashAtk: {fileID: 0}
+  _hit_Effect_PierceAtk: {fileID: 0}
+  _hit_Effect_CrushAtk: {fileID: 0}
+  _projectile_Prefab: {fileID: 0}
   holdOb: {fileID: 4470273444325221490}
   navObs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
+  actUnitCs: {fileID: 0}
   isCollision: 0
 --- !u!114 &5521264825765098813
 MonoBehaviour:
@@ -7827,8 +7856,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0275fcd0ca1314e4ab3666896a17e6ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actUnitCs: {fileID: 248801949066286627}
-  unitModelTr: {fileID: 5356288897712362187}
+  actUnitCs: {fileID: 8948513154581485397}
+  _unitModelTr: {fileID: 5356288897712362187}
   _layerMask:
     serializedVersion: 2
     m_Bits: 128
@@ -7874,7 +7903,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 1
+  m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &4047004346323826099
@@ -7934,8 +7963,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
+  _unitData:
+    _unit_Name: 
+    _unit_maxHealth: 0
+    _unit_currentHealth: 0
+    _eUnit_genSkill_Property: 0
+    _unit_Attack_Damage: 0
+    _unit_Skill_Attack_Damage: 0
+    _eUnit_Defense_Property: 0
+    _unit_Description: 
+    _unit_Type: 
+    _unit_MoveSpeed: 0
+    _unit_SightRange: 0
+    _unit_Attack_Range: 0
+    _unit_Attack_Speed: 0
+    _unit_Attack_CoolTime: 0
+    _unit_Current_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 0
+    _unit_CriticalRate: 0
+    _unit_targetSelectType: 0
   anim: {fileID: 0}
-  unitSearchCs: {fileID: 0}
+  unitTargetSearchCs: {fileID: 0}
 --- !u!135 &3062027296038334723
 SphereCollider:
   m_ObjectHideFlags: 0
