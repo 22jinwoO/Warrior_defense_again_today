@@ -24,7 +24,7 @@ public class Knight : PlayerUnitClass
 
     public void Update()
     {
-        transform.eulerAngles = Vector3.zero;
+        //transform.eulerAngles = Vector3.zero;
 
         if (_isClick&&Input.GetMouseButtonDown(1))
         {
@@ -49,7 +49,7 @@ public class Knight : PlayerUnitClass
     //    switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
     //    {
     //        case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
-    //            holdOb.SetActive(false);
+    //            holdObPref.SetActive(false);
     //            navObs.enabled = false;
     //            _nav.enabled = true;
     //            switch (_enum_Unit_Action_State)     // 현재 유닛 행동
@@ -84,7 +84,7 @@ public class Knight : PlayerUnitClass
 
     //        case eUnit_Action_States.unit_HoldMode:
 
-    //            holdOb.SetActive(true);
+    //            holdObPref.SetActive(true);
     //            navObs.enabled = true;
     //            _nav.enabled = false;
     //            switch (_enum_Unit_Action_State)

@@ -7,6 +7,12 @@ public abstract class Abs_Bullet : MonoBehaviour
     // 타겟 유닛
     public Transform _target_Unit;
 
+    // 타겟 유닛
+    public Transform _target_BodyTr;
+
+    //타겟을 바라보는 방향
+    public Vector3 _target_Direction;
+
     // 생성 위치
     public Transform _start_Pos;
 

@@ -27,8 +27,14 @@ public class Archor : PlayerUnitClass
 
     private void Start()
     {
-        transform.eulerAngles = Vector3.zero;
+        //transform.eulerAngles = Vector3.zero;
+        //_nav.SetDestination(Castle.Instance.transform.position);
 
+        //Instantiate(_projectile_Prefab);
+    }
+    // Update is called once per frame
+    void Update()
+    {
         if (_isClick && Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -39,11 +45,7 @@ public class Archor : PlayerUnitClass
                 _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
             }
         }
-        //Instantiate(_projectile_Prefab);
-    }
-    // Update is called once per frame
-    void Update()
-    {
+
         //Instantiate(_projectile_Prefab);
         Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
 
@@ -65,8 +67,8 @@ public class Archor : PlayerUnitClass
         _unitData._unit_Description = "궁수입니다";                                           // 유닛 설명
         _unitData._unit_Type = "궁수";                                                       // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;                                                      // 유닛 이동속도
-        _unitData._unit_SightRange = 8f;                                                     // 유닛 시야
-        _unitData._unit_Attack_Range = 8f;                                                   // 유닛 공격 범위
+        _unitData._unit_SightRange = 15f;                                                     // 유닛 시야
+        _unitData._unit_Attack_Range = 10f;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
         _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임

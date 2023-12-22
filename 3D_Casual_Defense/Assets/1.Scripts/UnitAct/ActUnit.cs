@@ -44,6 +44,8 @@ public class ActUnit : MonoBehaviour
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
     public void Attack_Unit(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)   // 매개변수로 공격 후 다음에 어떤상태로 변환할지 넣어주기
     {
+        anim.ResetTrigger("isAttack");
+
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
             nav.isStopped = true;
@@ -60,22 +62,17 @@ public class ActUnit : MonoBehaviour
                 switch (unitInfoCs._enum_Unit_Attack_Type)
                 {
                     case eUnit_Action_States.close_Range_Atk:   // 근거리 공격일 때
-                        anim.SetTrigger("isAttack");
-                        unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Skill_Attack_Damage);
                         unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-                        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+                        anim.SetTrigger("isAttack");
+                        //anim.SetTrigger("isAttack");
+
                         //unitInfoCs._enum_Unit_Action_State = next_Action_State;
 
                         break;
 
                     case eUnit_Action_States.long_Range_Atk:
-                        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_Unit = unitTargetSearchCs._targetUnit;
-                        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = unitTargetSearchCs._unitModelTr;
+                        anim.SetTrigger("isAttack");
 
-                        Instantiate(unitInfoCs._projectile_Prefab);
-                        print("공격 실행");
-                        unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-                        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
                         break;
                 }
 
@@ -104,16 +101,11 @@ public class ActUnit : MonoBehaviour
                 {
                     case eUnit_Action_States.close_Range_Atk:
                         anim.SetTrigger("isAttack");
-                        unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Attack_Damage);
-                        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+                        print("애니메이션 실행");
                         break;
 
                     case eUnit_Action_States.long_Range_Atk:
-                        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_Unit = unitTargetSearchCs._targetUnit;
-                        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = unitTargetSearchCs._unitModelTr;
-
-                        Instantiate(unitInfoCs._projectile_Prefab);
-                        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+                        anim.SetTrigger("isAttack");
                         print("기본공격 실행");
                         break;
                 }
@@ -128,6 +120,7 @@ public class ActUnit : MonoBehaviour
                     unitInfoCs._enum_Unit_Action_State = next_Action_State;
 
             }
+            anim.ResetTrigger("isAttack");
 
         }
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
@@ -137,6 +130,32 @@ public class ActUnit : MonoBehaviour
         }
     }
     #endregion
+
+    public void Anim_LongRangAtk()
+    {
+        //anim.SetTrigger("isAttack");
+
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_Unit = unitTargetSearchCs._targetUnit;
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_BodyTr = unitTargetSearchCs._target_Body;
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = unitInfoCs._projectile_startPos;
+
+        Instantiate(unitInfoCs._projectile_Prefab);
+        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+    }
+
+    public void Anim_LongRang_Skill_Atk()
+    {
+        //anim.SetTrigger("isAttack");
+
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_Unit = unitTargetSearchCs._targetUnit;
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._target_BodyTr = unitTargetSearchCs._target_Body;
+        unitInfoCs._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = unitInfoCs._projectile_startPos;
+
+        Instantiate(unitInfoCs._projectile_Prefab);
+        print("공격 실행");
+        unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
+        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+    }
 
     #region # Change_MonsterState(eUnit_Action_States next_Action_State) : 몬스터가 공격 후 다음 상태로 변환 시 딜레이를 주기 호출되는 함수
     IEnumerator Change_MonsterState(eUnit_Action_States next_Action_State)
@@ -156,10 +175,16 @@ public class ActUnit : MonoBehaviour
     {
         if (!unitInfoCs._enum_Unit_Attack_Type.Equals(eUnit_Action_States.close_Range_Atk))
             return;
-
+        print("애니메이션 호출 함수");
         unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Attack_Damage);
         unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
-        unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
+        unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
+
+
+        // 스킬 공격
+        //unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Skill_Attack_Damage);
+        //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
+        //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
     }
     #endregion
 

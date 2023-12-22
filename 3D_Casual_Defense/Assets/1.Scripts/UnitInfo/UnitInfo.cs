@@ -58,6 +58,9 @@ public abstract class UnitInfo : MonoBehaviour
     public ArmorCalculate _this_Unit_Armor_Property;
 
 
+    [Header("유닛 바디 트랜스폼")]
+    public Transform body_Tr;    // 유닛 바디 트랜스폼
+
     [Header("내비메쉬 에이전트")]
     public NavMeshAgent _nav;    // 내비메쉬
 
@@ -99,7 +102,8 @@ public abstract class UnitInfo : MonoBehaviour
     public GameObject _projectile_Prefab;   // 스킬 공격 가능 불가능 확인하는 변수
 
     // 발사체 프리팹 =========================
-
+    [Header("일반스킬 사용할 때의 발사체 게임 오브젝트 프리팹 생성 위치")]
+    public Transform _projectile_startPos;   // 스킬 공격 가능 불가능 확인하는 변수
 
     // 사운드 *************************
 

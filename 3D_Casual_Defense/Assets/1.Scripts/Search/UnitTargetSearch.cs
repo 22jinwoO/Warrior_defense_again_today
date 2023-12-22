@@ -29,6 +29,8 @@ public class UnitTargetSearch : MonoBehaviour
 
     public Transform _targetUnit = null;   // 유닛이 타겟으로 할 대상
 
+    public Transform _target_Body = null;   // 유닛이 타겟으로 할 대상
+
     public bool isTracking; // 추적 확인 변수
 
     #region # Search_For_Near_Enemy() : 가장 가까운 거리의 적을 고정으로 탐지하는 함수 , 시야 범위에서 적 인식
@@ -55,10 +57,12 @@ public class UnitTargetSearch : MonoBehaviour
             {
                 _shortestDistance = _distance;
                 _shortestTarget = _colTarget.transform;
+
             }
         }
         //
         _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
+        _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
 
         //print(_targetUnit.name);
         unitInfoCs._isSearch = true;
@@ -95,7 +99,7 @@ public class UnitTargetSearch : MonoBehaviour
         }
         //
         _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
-
+        _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
         //print(_targetUnit.name);
         unitInfoCs._isSearch = true;
         unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
@@ -130,6 +134,7 @@ public class UnitTargetSearch : MonoBehaviour
         }
         //
         _targetUnit = _lowHeatlh_Target; // 가장 체력이 낮은 타겟을 _targetUnit 변수에 할당
+        _target_Body = _lowHeatlh_Target.GetComponent<UnitInfo>().body_Tr;
 
         //print(_targetUnit.name);
         unitInfoCs._isSearch = true;
@@ -144,20 +149,20 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Look_At_The_Target() : 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     public void Look_At_The_Target(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     {
-        Vector3 dir = _targetUnit.position - _unitModelTr.position;
+        Vector3 dir = _targetUnit.position - transform.position;
         //dir.Normalize();
         //dir.y = 0;
 
         Quaternion _lookRotation = Quaternion.LookRotation(dir.normalized);  // 타겟 쪽으로 바라보는 각도
 
-        Vector3 _euler = Quaternion.RotateTowards(_unitModelTr.localRotation, _lookRotation, 200f * Time.deltaTime).eulerAngles; //200f는 회전속도
+        Vector3 _euler = Quaternion.RotateTowards(transform.localRotation, _lookRotation, 200f * Time.deltaTime).eulerAngles; //200f는 회전속도
 
-        _unitModelTr.localRotation = Quaternion.Euler(0, _euler.y, 0);
+        transform.localRotation = Quaternion.Euler(0, _euler.y, 0);
 
         Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // 유닛이 발사할 수 있는 방향의 각도
 
 
-        if (Quaternion.Angle(_unitModelTr.localRotation, _fireRotation) <= 5f)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
+        if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 5f)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
         {
             _euler.y = 0;
             //print("용사와 몬스터의 각도 값 : " + Quaternion.Angle(transform.rotation, _fireRotation));

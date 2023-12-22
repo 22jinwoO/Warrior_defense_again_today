@@ -12,6 +12,9 @@ public class CreatePlayerUnit : MonoBehaviour
     Button clickKnightBtn;
 
     [SerializeField]
+    Button clickArcherBtn;
+
+    [SerializeField]
     Button clickUnitFreeBtn;
 
     [SerializeField]
@@ -24,6 +27,7 @@ public class CreatePlayerUnit : MonoBehaviour
     void Start()
     {
         clickKnightBtn.onClick.AddListener(CreateKnight);
+        clickArcherBtn.onClick.AddListener(CreateArcher);
         clickUnitFreeBtn.onClick.AddListener(ClickUnitFree);
         clickUnitHoldBtn.onClick.AddListener(ClickUnitHold);
     }
@@ -44,12 +48,23 @@ public class CreatePlayerUnit : MonoBehaviour
 
     private void CreateKnight()
     {
+        print("기사생산");
+
+
         // 기사 유닛 생산자
-        print("스페이스 바 눌림!");
         playerUnitFactorys[0].knightClass = AbsPlayerUnitFactory.KnightClass.Knight;
         PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "기사";
+    }
+    private void CreateArcher()
+    {
+        print("궁수생산");
+        // 궁수 유닛 생산자
+        playerUnitFactorys[1].archerClass = AbsPlayerUnitFactory.ArcherClass.Archer;
+        PlayerUnitClass knight = playerUnitFactorys[1].CreatePlayerUnit();
+        knight.transform.position = Vector3.zero;
+        knight.gameObject.name = "궁수";
     }
 
     private void ClickUnitFree()
@@ -61,8 +76,11 @@ public class CreatePlayerUnit : MonoBehaviour
         print("클릭한 유닛 자유모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+        //likUnitInfo.transform.position = initPos;
         clikUnitInfo._isSearch = false;
         clikUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
+        //clikUnitInfo.transform.position = initPos;
+
         clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
@@ -78,6 +96,8 @@ public class CreatePlayerUnit : MonoBehaviour
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
         clikUnitInfo._isSearch = false;
         clikUnitInfo._enum_Unit_Attack_State = eUnit_Action_States.unit_Boundary;
+        //initPos = clikUnitInfo.transform.position;
+
         clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }

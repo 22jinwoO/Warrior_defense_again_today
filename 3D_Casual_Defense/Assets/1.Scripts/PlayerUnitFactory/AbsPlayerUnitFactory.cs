@@ -10,7 +10,16 @@ public abstract class AbsPlayerUnitFactory : MonoBehaviour
         Knight
 
     }
+
+    public enum ArcherClass
+    {
+        Default = 0,
+        Archer
+
+    }
     public KnightClass knightClass;
+
+    public ArcherClass archerClass;
 
     // 플레이어 유닛 생산하는 생성자 함수
     public abstract PlayerUnitClass CreatePlayerUnit();

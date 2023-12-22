@@ -6,8 +6,11 @@ using UnityEngine.AI;
 
 public abstract class PlayerUnitClass : UnitInfo
 {
-    [Header("플레이어 유닛 홀드 상태 시 활성화되는 네모박스 오브젝트")]
-    public GameObject holdOb;
+    [Header("플레이어 유닛 홀드 상태 시 활성화되는 네모박스 프리팹")]
+    public GameObject holdObPref;
+
+    [Header("플레이어 유닛 홀드 상태 시 활성화되는 네모박스 게임 오브젝트")]
+    public GameObject holdOb=null;
 
     [Header("플레이어 유닛 홀드 상태 시 필요한 네비메쉬 옵스태클")]
     public NavMeshObstacle navObs;
@@ -19,6 +22,9 @@ public abstract class PlayerUnitClass : UnitInfo
     [Header("유닛의 행동들을 구현해놓은 ActUnit 스크립트")]
     [SerializeField]
     protected ActUnit actUnitCs;
+
+    public Transform initPos; // 오브젝트 원래 위치
+    public Vector3 initPos2; // 오브젝트 원래 위치
 
     public abstract void InitUnitInfoSetting();     // 유닛 정보 초기화 시켜주는 함수
 
@@ -43,9 +49,14 @@ public abstract class PlayerUnitClass : UnitInfo
     #region # Act_FreeMode() : 플레이어 유닛이 자유모드일 때 호출되는 함수, 구현된 행동 : 대기(탐지), 이동, 추적, 공격
     private void Act_FreeMode()
     {
-        holdOb.SetActive(false);
         navObs.enabled = false;
         _nav.enabled = true;
+
+        if (!holdOb.Equals(null))
+            holdOb.SetActive(false);
+
+
+
         switch (_enum_Unit_Action_State)     // 현재 유닛 행동
         {
             case eUnit_Action_States.unit_Idle: // 유닛 대기 상태(탐지 상태)
@@ -53,6 +64,12 @@ public abstract class PlayerUnitClass : UnitInfo
                 if (!_isSearch)  // 적 탐지 못했을 때만 실행
                 {
                     actUnitCs.SearchTarget(target_Search_Type: _eUnit_Target_Search_Type);
+                }
+                if (initPos != null)
+                {
+                    print(initPos2);
+                    transform.position = initPos2;
+                    initPos = null;
                 }
                 break;
 
@@ -81,10 +98,23 @@ public abstract class PlayerUnitClass : UnitInfo
     #region # Act_HoldMode() : 플레이어 유닛이 홀드모드일 때 호출되는 함수, 구현된 행동 : 대기(탐지), 공격, 홀드(제자리 경계)
     private void Act_HoldMode()
     {
-        holdOb.SetActive(true);
-        //holdOb.transform.localRotation = Quaternion.Euler(Vector3.zero);
         navObs.enabled = true;
         _nav.enabled = false;
+        if (holdOb.Equals(null))
+        {
+            holdOb=Instantiate(holdObPref,transform.position,Quaternion.identity);
+            holdOb.transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
+            holdOb.gameObject.name = "홀드발판";
+        }
+        else
+        {
+            holdOb.SetActive(true);
+            holdOb.transform.position = new Vector3(transform.position.x,0.27f,transform.position.z);
+        }
+        initPos = transform;
+        initPos2 = transform.position;
+        //holdObPref.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
 
         switch (_enum_Unit_Action_State)
         {

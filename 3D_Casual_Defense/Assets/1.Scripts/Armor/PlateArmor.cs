@@ -14,7 +14,6 @@ public class PlateArmor : ArmorCalculate
         if (ArmorType._eUnit_Defense_Property != eUnit_Defense_Property_States.mail_Armor) // 방어 타입이 판금 갑옷이 아니면
         {
             return 0f;
-            return 0f;
 
 
 
