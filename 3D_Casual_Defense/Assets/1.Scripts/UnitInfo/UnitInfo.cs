@@ -13,25 +13,25 @@ using UnityEngine.AI;
 [Serializable]
 public struct unit_Data    // 유닛 데이터 가져오는 구조체
 {
-    public string _unit_Name;            // 유닛 이름
-    public float _unit_maxHealth;             // 유닛 최대 체력
-    public float _unit_currentHealth;             // 유닛 현재 체력
+    public string _unit_Name;                           // 유닛 이름
+    public float _unit_maxHealth;                       // 유닛 최대 체력
+    public float _unit_currentHealth;                   // 유닛 현재 체력 유닛 최대체력 넣어주기
     public eUnit_Attack_Property_States _eUnit_genSkill_Property;    // 유닛 일반 스킬속성
-    public float _unit_Attack_Damage;    // 유닛 공격 데미지
-    public float _unit_Skill_Attack_Damage;    // 유닛 스킬 공격 데미지
+    public float _unit_General_Skill_Dmg;                   // 유닛 일반 스킬 데미지
+    public float _unit_Special_Skill_Dmg;                   // 유닛 특수 스킬 데미지
     public eUnit_Defense_Property_States _eUnit_Defense_Property; // 유닛 방어속성
-    public string _unit_Description;       // 유닛 설명
-    public string _unit_Type;              // 유닛 타입
-    public float _unit_MoveSpeed;          // 유닛 이동속도
-    public float _unit_SightRange;            // 유닛 시야
-    public float _unit_Attack_Range;       // 유닛 공격 범위
-    public float _unit_Attack_Speed;        // 유닛 공격 속도
-    public float _unit_Attack_CoolTime;     // 유닛 기본 공격 쿨타임
-    public float _unit_Current_Skill_CoolTime;     // 유닛 현재 스킬 공격 쿨타임
-    public float _unit_Skill_CoolTime;     // 유닛 스킬 공격 쿨타임
-    public int _unit_CriticalRate;          // 유닛 크리티컬 확률
-    public eUnit_targetSelectType _unit_targetSelectType;  // 타겟 선정 타입
-
+    public string _unit_Description;                        // 유닛 설명
+    public string _unit_Type;                               // 유닛 타입
+    public float _unit_MoveSpeed;                           // 유닛 이동속도
+    public float _unit_SightRange;                          // 유닛 시야
+    public float _unit_Attack_Range;                        // 유닛 공격 범위
+    public float _unit_Attack_Speed;                        // 유닛 공격 속도
+    public float _unit_Attack_CoolTime;                     // 유닛 기본 공격 쿨타임
+    public float _unit_Current_Skill_CoolTime;              // 유닛 현재 스킬 공격 쿨타임
+    public float _unit_Skill_CoolTime;                      // 유닛 스킬 공격 쿨타임
+    public int _unit_CriticalRate;                          // 유닛 크리티컬 확률
+    public eUnit_targetSelectType _unit_targetSelectType;   // 타겟 선정 타입
+    public string unit_Id;                                  // 유닛 Id
 }
 
 public abstract class UnitInfo : MonoBehaviour
@@ -104,6 +104,18 @@ public abstract class UnitInfo : MonoBehaviour
     // 발사체 프리팹 =========================
     [Header("일반스킬 사용할 때의 발사체 게임 오브젝트 프리팹 생성 위치")]
     public Transform _projectile_startPos;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    // 스킬 1,2 ===============================
+
+    [Header("일반 스킬")]
+    public Abs_Skill gen_skill;
+
+    [Header("특수 스킬 - 1")]
+    public Abs_Skill spe_skill_1;
+
+    [Header("특수 스킬 - 2")]
+    public Abs_Skill spe_skill_2;
+
 
     // 사운드 *************************
 

@@ -59,22 +59,8 @@ public class ActUnit : MonoBehaviour
                 {
                     return;
                 }
-                switch (unitInfoCs._enum_Unit_Attack_Type)
-                {
-                    case eUnit_Action_States.close_Range_Atk:   // 근거리 공격일 때
-                        unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-                        anim.SetTrigger("isAttack");
-                        //anim.SetTrigger("isAttack");
-
-                        //unitInfoCs._enum_Unit_Action_State = next_Action_State;
-
-                        break;
-
-                    case eUnit_Action_States.long_Range_Atk:
-                        anim.SetTrigger("isAttack");
-
-                        break;
-                }
+                anim.SetTrigger("isAttack");
+                unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
 
                 // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
                 if (gameObject.CompareTag("Monster")&&unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalMode))
@@ -97,18 +83,9 @@ public class ActUnit : MonoBehaviour
                 {
                     return;
                 }
-                switch (unitInfoCs._enum_Unit_Attack_Type)
-                {
-                    case eUnit_Action_States.close_Range_Atk:
-                        anim.SetTrigger("isAttack");
-                        print("애니메이션 실행");
-                        break;
+                anim.SetTrigger("isAttack");
+                unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
 
-                    case eUnit_Action_States.long_Range_Atk:
-                        anim.SetTrigger("isAttack");
-                        print("기본공격 실행");
-                        break;
-                }
 
                 // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
                 if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalMode))
@@ -120,7 +97,7 @@ public class ActUnit : MonoBehaviour
                     unitInfoCs._enum_Unit_Action_State = next_Action_State;
 
             }
-            anim.ResetTrigger("isAttack");
+            //anim.ResetTrigger("isAttack");
 
         }
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
@@ -170,26 +147,29 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    #region # AnimEvent_Normal_Atk() : 기본공격 애니메이션 동작 시 호출되는 애니메이션 이벤트 함수
-    public void AnimEvent_Normal_Atk()  // 기본공격 시 호출되는 애니메이션
+    #region # AnimEvent_Normal_Atk() : 일반 스킬 애니메이션 동작 시 호출되는 애니메이션 이벤트 함수
+    public void AnimEvent_Normal_Atk()  // 일반 스킬 사용 시 호출되는 애니메이션
     {
-        if (!unitInfoCs._enum_Unit_Attack_Type.Equals(eUnit_Action_States.close_Range_Atk))
-            return;
+        //if (!unitInfoCs._enum_Unit_Attack_Type.Equals(eUnit_Action_States.close_Range_Atk))
+        //    return;
         print("애니메이션 호출 함수");
-        unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Attack_Damage);
-        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
-        unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
+        unitInfoCs.gen_skill.unitInfoCs = unitInfoCs;   // 나중에 유닛 awake 문에서 한번만 실행하도록 변경하기
+        unitInfoCs.gen_skill.unitTargetSearchCs = unitTargetSearchCs;
+        unitInfoCs.gen_skill.Attack_Skill();
+        ////unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(,unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_General_Skill_Dmg);
+        //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+        //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
 
 
         // 스킬 공격
-        //unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Skill_Attack_Damage);
+        //unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Special_Skill_Dmg);
         //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
         //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
     }
     #endregion
 
     #region # BeAttacked_By_OtherUnit(Transform other,float attack_Dmg) : 다른 유닛으로부터의 공격으로 피해를 입을 때 호출되는 함수
-    public void BeAttacked_By_OtherUnit(Transform other, float attack_Dmg) // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
+    public void BeAttacked_By_OtherUnit(eUnit_Attack_Property_States myAtkType, Transform other, float attack_Dmg) // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
     {
         print("충돌했음");
         print(other.gameObject.name);
@@ -197,7 +177,7 @@ public class ActUnit : MonoBehaviour
         unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
         print(otherUnitData._eUnit_Defense_Property);
         print(unitInfoCs._unitData._unit_maxHealth);
-        unitInfoCs._unitData._unit_maxHealth -= unitInfoCs._this_Unit_Armor_Property.CalculateDamaged(unitInfoCs._unitData, otherUnitData, attack_Dmg);
+        unitInfoCs._unitData._unit_maxHealth -= unitInfoCs._this_Unit_Armor_Property.CalculateDamaged(attackType : myAtkType, ArmorType : otherUnitData, attack_Dmg : attack_Dmg);
         //print(otherUnitData.);
         print(unitInfoCs._this_Unit_Armor_Property);
         print(attack_Dmg);

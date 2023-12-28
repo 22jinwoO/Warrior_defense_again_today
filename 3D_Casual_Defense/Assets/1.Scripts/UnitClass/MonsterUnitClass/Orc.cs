@@ -49,10 +49,15 @@ public class Orc : MonsterUnitClass, IActByUnit
     // Start is called before the first frame update
     void Awake()
     {
-        
+
         print(MonsterKind);
         rgb = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
+        print(_nav.obstacleAvoidanceType);
+        //ObstacleAvoidanceType obstacleAvoidanceType = ;
+        //obstacleAvoidanceType.
+        //print(_nav.obstacleAvoidanceType.);
+
         _this_Unit_Armor_Property = new MailArmor();
         _enum_Unit_Action_Mode = eUnit_Action_States.monster_NormalMode;
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
@@ -63,6 +68,8 @@ public class Orc : MonsterUnitClass, IActByUnit
 
         //NavMeshPath path = new NavMeshPath();
         //_nav.CalculatePath(castleTr.position, path);
+        //print(_nav.CalculatePath(castleTr.position, path));
+        //print(path.corners.Length);
         //_nav.SetPath(path);
         //_nav.SetDestination(castleTr.position); // 성으로 이동
     }
@@ -70,10 +77,21 @@ public class Orc : MonsterUnitClass, IActByUnit
     // Update is called once per frame
     void Update()
     {
-        transform.rotation = Quaternion.identity;
+        //transform.rotation = Quaternion.identity;
 
         Unit_Attack_Skill_CoolTime();
 
+        //if (Input.GetMouseButtonDown(1))
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        //    if (Physics.Raycast(ray, out RaycastHit hit))
+        //    {
+        //        _nav.SetDestination(hit.point);
+        //        //_movePos = hit.point;
+        //        //_enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+        //    }
+        //}
         //hpText.text="몬스터 체력 : "+ Mathf.CeilToInt(_unitData._unit_maxHealth).ToString();
     }
 
@@ -88,9 +106,9 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData._unit_Name = "오크";            // 유닛 이름
         _unitData._unit_maxHealth = 200f;             // 유닛 체력
         _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;    // 유닛 공격속성
-        _unitData._unit_Attack_Damage = 1f;    // 유닛 공격 데미지
-        _unitData._unit_Skill_Attack_Damage = 1f;    // 유닛 스킬 공격 데미지
-        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.mail_Armor;   // 유닛 방어속성
+        _unitData._unit_General_Skill_Dmg = 1f;    // 유닛 공격 데미지
+        _unitData._unit_Special_Skill_Dmg = 1f;    // 유닛 스킬 공격 데미지
+        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.chain_Armor;   // 유닛 방어속성
         _unitData._unit_Description = "오크입니다";     // 유닛 설명
         _unitData._unit_Type = "근거리";            // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;        // 유닛 이동속도
@@ -140,7 +158,9 @@ public class Orc : MonsterUnitClass, IActByUnit
                 if (isChangeState)  // 상태가 변환됐을 때
                 {
                     _isSearch = false;
+                    _nav.SetDestination(castleTr.position); // 성으로 이동
 
+                    //StartCoroutine(Test());
                     unitTargetSearchCs._targetUnit = null;
                     print("애니메이션 실행");
                     float time = 0f;
@@ -151,7 +171,7 @@ public class Orc : MonsterUnitClass, IActByUnit
                     }
                     isChangeState = false;
                 }
-                _nav.SetDestination(castleTr.position); // 성으로 이동
+
                 unitTargetSearchCs._unitModelTr.LookAt(castleTr.position);
                 unitTargetSearchCs._unitModelTr.localRotation = Quaternion.Euler(0f, transform.rotation.y, transform.rotation.z);
                 _nav.isStopped = false;
@@ -190,6 +210,15 @@ public class Orc : MonsterUnitClass, IActByUnit
         }
     }
     #endregion
+
+    IEnumerator Test()
+    {
+        print("오크 길변환");
+        _nav.ResetPath();
+        yield return new WaitForSeconds(5f);
+        Test();
+    }
+
 
     private void OnTriggerEnter(Collider other)
     {

@@ -58,9 +58,9 @@ public class Warrior : UnitInfo
 //        _unitData._unit_Name = "용사";            // 유닛 이름
 //        _unitData._unit_maxHealth = 200f;             // 유닛 체력
 //        _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;    // 유닛 공격속성
-//        _unitData._unit_Attack_Damage = 1f;    // 유닛 공격 데미지
-//        _unitData._unit_Skill_Attack_Damage = 6f;    // 유닛 공격 데미지
-//        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;   // 유닛 방어속성
+//        _unitData._unit_General_Skill_Dmg = 1f;    // 유닛 공격 데미지
+//        _unitData._unit_Special_Skill_Dmg = 6f;    // 유닛 공격 데미지
+//        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;   // 유닛 방어속성
 //        _unitData._unit_Description = "용사입니다";     // 유닛 설명
 //        _unitData._unit_Type = "용사";            // 유닛 타입
 //        _unitData._unit_MoveSpeed = 1f;        // 유닛 이동속도

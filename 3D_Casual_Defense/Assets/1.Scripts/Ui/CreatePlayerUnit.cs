@@ -53,7 +53,10 @@ public class CreatePlayerUnit : MonoBehaviour
 
         // 기사 유닛 생산자
         playerUnitFactorys[0].knightClass = AbsPlayerUnitFactory.KnightClass.Knight;
+
+        // 생산자 실행
         PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
+        print(UnitDataManager.Instance._unitInfo_Dictionary[knight._unitData.unit_Id]);
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "기사";
     }
@@ -62,6 +65,8 @@ public class CreatePlayerUnit : MonoBehaviour
         print("궁수생산");
         // 궁수 유닛 생산자
         playerUnitFactorys[1].archerClass = AbsPlayerUnitFactory.ArcherClass.Archer;
+
+        // 생산자 실행
         PlayerUnitClass knight = playerUnitFactorys[1].CreatePlayerUnit();
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "궁수";

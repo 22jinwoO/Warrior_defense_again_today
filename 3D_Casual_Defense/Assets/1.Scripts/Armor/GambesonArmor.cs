@@ -8,14 +8,14 @@ using UnityEngine;
 
 public class GambesonArmor : ArmorCalculate
 {
-    public override float CalculateDamaged(unit_Data attackType, unit_Data ArmorType, float attack_Dmg)  // 공격당했을 때 호출하는걸 전제로 함 
+    public override float CalculateDamaged(eUnit_Attack_Property_States attackType, unit_Data ArmorType, float attack_Dmg)  // 공격당했을 때 호출하는걸 전제로 함 
     {
-        if (ArmorType._eUnit_Defense_Property != eUnit_Defense_Property_States.gambeson_Armor) // 방어 타입이 천갑옷이 아니면 일 때
+        if (ArmorType._eUnit_Defense_Property != eUnit_Defense_Property_States.padding_Armor) // 방어 타입이 천갑옷이 아니면 일 때
         {
             return 0f;
         }
 
-        switch (attackType._eUnit_genSkill_Property)  // 공격 타입 구분
+        switch (attackType)  // 공격 타입 구분
         {
             case eUnit_Attack_Property_States.slash_Attack: // 베기 공격 일 때
                 attack_Dmg *= 1.5f;

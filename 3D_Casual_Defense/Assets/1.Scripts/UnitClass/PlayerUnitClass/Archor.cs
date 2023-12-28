@@ -21,7 +21,7 @@ public class Archor : PlayerUnitClass
         InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
 
         // 발사체 값 넣어주기
-        _projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_Attack_Damage;
+        _projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_General_Skill_Dmg;
         _projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = GetComponent<UnitInfo>();
     }
 
@@ -61,14 +61,14 @@ public class Archor : PlayerUnitClass
         _unitData._unit_Name = "궁수";                                                        // 유닛 이름
         _unitData._unit_maxHealth = 200f;                                                       // 유닛 체력
         _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;      // 유닛 공격속성
-        _unitData._unit_Attack_Damage = 1f;                                                  // 유닛 공격 데미지
-        _unitData._unit_Skill_Attack_Damage = 6f;                                            // 유닛 공격 데미지
-        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;    // 유닛 방어속성
+        _unitData._unit_General_Skill_Dmg = 1f;                                                  // 유닛 공격 데미지
+        _unitData._unit_Special_Skill_Dmg = 6f;                                            // 유닛 공격 데미지
+        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;    // 유닛 방어속성
         _unitData._unit_Description = "궁수입니다";                                           // 유닛 설명
         _unitData._unit_Type = "궁수";                                                       // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;                                                      // 유닛 이동속도
-        _unitData._unit_SightRange = 15f;                                                     // 유닛 시야
-        _unitData._unit_Attack_Range = 10f;                                                   // 유닛 공격 범위
+        _unitData._unit_SightRange = 40f;                                                     // 유닛 시야
+        _unitData._unit_Attack_Range = 35f;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
         _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임

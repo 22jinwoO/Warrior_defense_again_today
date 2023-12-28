@@ -135,6 +135,12 @@ MonoBehaviour:
   _start_Pos: {fileID: 0}
   unitInfoCs: {fileID: 0}
   atkDmg: 1
+  startPosition: {x: 0, y: 0, z: 0}
+  endPosition: {x: 0, y: 0, z: 0}
+  center: {x: 0, y: 0, z: 0}
+  t: 0
+  slerpValue: 0
+  lerpValue: 0
 --- !u!135 &1651557652269902787
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -1,0 +1,161 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using static UnitDataManager;
+
+public class UnitDataManager : Singleton<UnitDataManager>
+{
+    // 제이슨=====================================================
+
+    [Header("Json 데이터 에셋")]
+    public TextAsset character_Json_Data;  // Json 데이터 에셋 이 파일은 유니티 상에서 드래그해서 넣어줍니다.
+
+    [Header("제이슨 파일 변환 데이터형")]
+    public All_Character_Data All_character_Datas;  // 변환 데이터형
+
+    // =====================================================제이슨
+
+
+    // 스킬 데이터 매니저 =====================================================
+    [Header("스킬 데이터 매니저")]
+    [SerializeField]
+    private SkillDataManager skillDataManagerCs;
+
+    // ===================================================== 스킬 데이터 매니저
+
+
+    // 플레이어 유닛 팩토리 =====================================================
+
+    [Header("스톰윈드 기사 팩토리")]
+    [SerializeField]
+    private KnightFactory knight_Factory;
+
+    [Header("스톰윈드 궁수 팩토리")]
+    [SerializeField]
+    private ArcherFactory archer_Factory;
+
+    // =====================================================플레이어 유닛 팩토리 
+
+
+    // 딕셔너리=====================================================
+
+    [Header("스킬 딕셔너리")]
+    public SerializableDictionary<string,Abs_Skill> _skill_Dictionary;
+
+    [Header("방어 속성 딕셔너리")]
+    public SerializableDictionary<string, eUnit_Defense_Property_States> _armor_Dictionary;
+
+    [Header("타겟 선정 딕셔너리")]
+    public SerializableDictionary<string, eUnit_targetSelectType> _targetSelect_Dictionary;
+
+    [Header("플레이어 유닛 데이터 딕셔너리")]
+    public SerializableDictionary<string, CharacterData> _unitInfo_Dictionary;
+
+    // ===================================================== 딕셔너리
+
+
+
+    private void Awake()
+    {
+        All_character_Datas = JsonUtility.FromJson<All_Character_Data>(character_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
+
+        Add_Skill_Dictionary(); // 스킬 딕셔너리에 키, 값 할당하는 함수
+
+        Add_Armor_Dictionary(); // 아머 속성 딕셔너리에 키, 값 할당하는 함수
+
+        Add_TargetSelect_Dictionary();  //타겟 선정 딕셔너리에 키, 값 할당하는 함수
+
+
+        Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
+        //foreach (var item in All_character_Datas.CharacterDatas)
+        //{
+        //    print(item.unit_class);
+        //}
+
+        //Instantiate(skillDataManagerCs.genral_Skills[0]);
+    }
+
+    [System.Serializable]
+    public class All_Character_Data
+    {
+        public CharacterData[] CharacterDatas;    // CharacterDatas 이름은 시트 이름이랑 같아야 함
+    }
+
+
+    [System.Serializable]
+    public class CharacterData   // CharacterDatas 구글 시트에 해당하는 값을 갖고오기 위한 클래스
+    {
+        public int no; // 캐릭터 넘버
+        public string char_id;   // 캐릭터 id
+        public string unit_class; // 유닛 클래스
+        public int level;    // 레벨
+        public int hp;   // 체력
+        public string defenseType;   // 방어 타입
+        public string moveSpeed;   // 이동속도
+        public string sightRange;   // 시야 범위
+        public string attackRange;   // 공격 범위
+        public int criticRate;    // 크리티컬 확률
+        public string generalSkill;   // 일반스킬
+        public string generalSkillName;   // 일반스킬 이름
+        public string specialSkill1;   // 특수 스킬 , 자유모드 일 때 사용하는 스킬
+        public string specialSkill1Name;   // 특수 스킬 1 이름
+        public string specialSkill2;   // 특수 스킬 , 홀드모드 일 때 사용하는 스킬
+        public string specialSkill2Name;   // 특수 스킬 2 이름
+        public string targetSelectType;   // 유닛 설정 타입
+
+
+    }
+
+
+    #region # Add_Armor_Dictionary() : 방어속성 딕셔너리에 키, 값 추가해주는 함수
+    private void Add_Armor_Dictionary()
+    {
+        // 패딩 갑옷 키, 값 추가
+        _armor_Dictionary.Add(key : "padd", value : eUnit_Defense_Property_States.padding_Armor);
+
+        // 판금 갑옷 아머 키, 값 추가
+        _armor_Dictionary.Add(key : "plate", value : eUnit_Defense_Property_States.plate_Armor);
+
+        // 쇠사슬 갑옷 키, 값 추가
+        _armor_Dictionary.Add(key : "chain", value : eUnit_Defense_Property_States.chain_Armor);
+
+
+    }
+    #endregion
+
+    #region # Add_TargetSelect_Dictionary() : 타겟 선정 딕셔너리에 키, 값 추가해주는 함수
+    private void Add_TargetSelect_Dictionary()
+    {
+        // 타겟 고정 타겟 선정 타입 키, 값 할당
+        _targetSelect_Dictionary.Add(key : "타겟 고정", value : eUnit_targetSelectType.fixed_Target);
+
+        // 낮은 체력 타겟 선정 타입 키, 값 할당
+        _targetSelect_Dictionary.Add(key : "낮은 체력", value : eUnit_targetSelectType.low_Health_Target);
+
+        // 가까운 적 타겟 선정 타입 키, 값 할당
+        _targetSelect_Dictionary.Add(key : "가까운 적", value : eUnit_targetSelectType.nearest_Target);
+
+    }
+    #endregion
+
+    #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
+    private void Add_Skill_Dictionary()
+    {
+        _skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+
+    }
+    #endregion
+
+    #region # Add_UnitData_Dictionary() : 유닛 데이터 딕셔너리에 키, 값 추가해주는 함수
+    private void Add_UnitData_Dictionary()
+    {
+        
+        // 궁수 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[0].char_id, value : All_character_Datas.CharacterDatas[0]);
+
+        // 기사 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[1].char_id, value : All_character_Datas.CharacterDatas[1]);
+    }
+    #endregion
+
+}

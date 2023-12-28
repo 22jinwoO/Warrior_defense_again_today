@@ -660,6 +660,9 @@ MonoBehaviour:
   _hit_Effect_CrushAtk: {fileID: 0}
   _projectile_Prefab: {fileID: 0}
   _projectile_startPos: {fileID: 0}
+  gen_skill: {fileID: 0}
+  spe_skill_1: {fileID: 0}
+  spe_skill_2: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
   actUnitCs: {fileID: 0}
   hpText: {fileID: 6775984549753675466}
@@ -734,7 +737,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3658949938990387124}
   m_Enabled: 1
   m_AgentTypeID: -1372625422
-  m_Radius: 1.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50

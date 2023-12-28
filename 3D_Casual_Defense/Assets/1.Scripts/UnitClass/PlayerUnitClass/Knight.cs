@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnitDataManager;
 
 public class Knight : PlayerUnitClass
 {
@@ -19,6 +20,7 @@ public class Knight : PlayerUnitClass
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs=GetComponent<ActUnit>();
         _isClick = false;
+
         InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
     }
 
@@ -42,75 +44,6 @@ public class Knight : PlayerUnitClass
     {
         Act_By_Unit();  // 유닛 행동 함수
     }
-    //#region # Act_By_Unit() : 유닛 행동 구분지어주는 함수, IActByUnit 인터페이스 함수 정의
-
-    //public void Act_By_Unit()  // 유닛 행동 구분지어주는 함수
-    //{
-    //    switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
-    //    {
-    //        case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
-    //            holdObPref.SetActive(false);
-    //            navObs.enabled = false;
-    //            _nav.enabled = true;
-    //            switch (_enum_Unit_Action_State)     // 현재 유닛 행동
-    //            {
-    //                case eUnit_Action_States.unit_Idle: // 유닛 대기 상태(탐지 상태)
-    //                    _anim.SetBool("isMove", false);
-    //                    if (!_isSearch)  // 적 탐지 못했을 때만 실행
-    //                    {
-    //                        actUnitCs.SearchTarget(target_Search_Type : _eUnit_Target_Search_Type);
-    //                    }
-    //                    break;
-
-    //                case eUnit_Action_States.unit_Move: // 유닛 이동
-    //                    _isSearch = false;
-    //                    _isClick = false;
-    //                    unitTargetSearchCs._targetUnit = null;
-    //                    _nav.isStopped = false;
-    //                    _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-    //                    actUnitCs.MoveUnit(_movePos);
-    //                    break;
-
-    //                case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-    //                    actUnitCs.TrackingTarget();
-    //                    break;
-
-    //                case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-    //                    actUnitCs.ReadyForAttack(unit_Atk_State : eUnit_Action_States.unit_Tracking);
-    //                    break;
-
-    //            }
-    //            break;
-
-    //        case eUnit_Action_States.unit_HoldMode:
-
-    //            holdObPref.SetActive(true);
-    //            navObs.enabled = true;
-    //            _nav.enabled = false;
-    //            switch (_enum_Unit_Action_State)
-    //            {
-    //                case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
-    //                    _anim.SetBool("isMove", false);
-    //                    if (!_isSearch)  // 적 탐지 못했을 때만 실행
-    //                    {
-    //                        actUnitCs.SearchTarget(_eUnit_Target_Search_Type);
-    //                    }
-
-    //                    break;
-
-    //                case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-    //                    actUnitCs.ReadyForAttack(unit_Atk_State : eUnit_Action_States.unit_Boundary);
-    //                    break;
-
-    //                case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
-    //                    actUnitCs.Boundary();
-    //                    break;
-    //            }
-    //            break;
-    //    }
-    //}
-
-    //#endregion  IActByUnit 함수 
 
 
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
@@ -119,9 +52,9 @@ public class Knight : PlayerUnitClass
         _unitData._unit_Name = "용사";                                                        // 유닛 이름
         _unitData._unit_maxHealth = 200f;                                                       // 유닛 체력
         _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;      // 유닛 공격속성
-        _unitData._unit_Attack_Damage = 1f;                                                  // 유닛 공격 데미지
-        _unitData._unit_Skill_Attack_Damage = 6f;                                            // 유닛 공격 데미지
-        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.gambeson_Armor;    // 유닛 방어속성
+        _unitData._unit_General_Skill_Dmg = 1f;                                                  // 유닛 공격 데미지
+        _unitData._unit_Special_Skill_Dmg = 6f;                                            // 유닛 공격 데미지
+        _unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;    // 유닛 방어속성
         _unitData._unit_Description = "용사입니다";                                           // 유닛 설명
         _unitData._unit_Type = "용사";                                                       // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;                                                      // 유닛 이동속도
@@ -130,6 +63,8 @@ public class Knight : PlayerUnitClass
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
         _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
+
+        _unitData.unit_Id = "hum_warr01";
     }
     #endregion
 
@@ -140,9 +75,16 @@ public class Knight : PlayerUnitClass
         {
             _nav.isStopped = true;
             print("트리거 콜라이더 충돌");
-
         }
 
+        // 돌격 스킬 사용중일 때
+        //if (spe_skill_1.isRush.Equals(true)&& unitTargetSearchCs._targetUnit.Equals(other))
+        //{
+        //    _nav.isStopped = true;
+        //    unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(spe_skill_1._skill_AtkType, unitTargetSearchCs._targetUnit, spe_skill_1._base_Value);
+        //    _unitData._unit_Attack_CoolTime = 0f;
+        //    _unitData._unit_Current_Skill_CoolTime = 0f;
+        //}
     }
 
 

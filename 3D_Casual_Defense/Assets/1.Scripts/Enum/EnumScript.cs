@@ -16,8 +16,8 @@ public enum eUnit_Defense_Property_States // 유닛 방어 타입
 {
     Default = 0,
     plate_Armor,       // 판금 갑옷
-    gambeson_Armor,    // 천갑옷
-    mail_Armor,        // 쇠사슬 갑옷
+    padding_Armor,    // 천갑옷
+    chain_Armor,        // 쇠사슬 갑옷
     Length
 }
 

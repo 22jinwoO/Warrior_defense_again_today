@@ -34,9 +34,15 @@ public class Bullet_Arrow : Abs_Bullet
         print(_start_Pos.rotation);
         //transform.SetParent(_start_Pos.transform.parent);
         transform.position = _start_Pos.position;
+        transform.rotation = unitInfoCs.transform.rotation;
+        //_target_Direction = _target_BodyTr.position - transform.position;
+        //print(_target_Direction.normalized);
+        //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
+        //transform.rotation = rot;
+
         print(_start_Pos.localRotation.y);
         //transform.rotation = UnityEngine.Quaternion.Euler(-90, _start_Pos.transform.eulerAngles.y, _start_Pos.transform.eulerAngles.z);
-        StartCoroutine(Test());
+        StartCoroutine(Move_Slerp());
         lr = GetComponent<LineRenderer>();
     }
 
@@ -52,78 +58,26 @@ public class Bullet_Arrow : Abs_Bullet
             transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
 
         }
-        //_target_Direction = _target_BodyTr.position-transform.position;
-        //print(_target_Direction.normalized);
-        //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
-        //transform.rotation = rot;
-        //transform.position=Vector3.Lerp(transform.position,_target_BodyTr.position,Time.deltaTime*4f);
 
-
-
-        //startPosition = _start_Pos.position;  //오브젝트 자신의 위치
-        //endPosition = _target_BodyTr.position;
-
-        //center = (startPosition + endPosition) * 0.5f;
-        //center.y -= 50;
-        //startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-        //endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-
-        //for (t = 0; t < 1; t += Time.deltaTime * 0.1f)
-        //{
-        //    Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
-        //    point += center;
-        //    _target_Direction = point - transform.position;
-        //    print(_target_Direction.normalized);
-        //    Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
-        //    transform.rotation = rot;
-        //    transform.position = point;
-        //    print(transform.position);
-        //}
-
-        //for (int i = 0; i < lr.positionCount; i++)
-        //{
-        //    Vector3 point = Vector3.Slerp(startPosition, endPosition, i / (float)(lr.positionCount - 1));
-        //    point += center;
-        //    transform.position = point;
-        //    lr.SetPosition(i, point);
-        //}
-
-
-        //center = (startPosition + endPosition) * 0.5f;
-        //center.y -= 3;
-        //startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-        //endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-
-        //for (t = 0; t < 1; t += Time.deltaTime*0.1f)
-        //{
-        //    Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
-        //    point += center;
-        //    _target_Direction = point - transform.position;
-        //    print(_target_Direction.normalized);
-        //    Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
-        //    transform.rotation = rot;
-        //    transform.position = point;
-        //    print(transform.position);
-        //}
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.Equals(_target_Unit))
         {
-            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(other.transform, atkDmg);
+            //other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(other.transform, atkDmg);
             Destroy(gameObject);
         }
     }
 
-    IEnumerator Test()
+    IEnumerator Move_Slerp()
     {
         startPosition = _start_Pos.position;    // 발사체 시작 위치
         endPosition = _target_BodyTr.position;  // 발사체 도착 위치
 
         center = (startPosition + endPosition) * 0.5f;  // 시작위치와 도착위치를 합한 값 /2 를 하여 중간 위치값 구하기
 
-        center.y -= 30; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
+        center.y -= 15; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
 
         startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
