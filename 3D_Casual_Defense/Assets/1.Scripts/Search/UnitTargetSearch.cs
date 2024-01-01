@@ -36,8 +36,15 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Search_For_Near_Enemy() : 가장 가까운 거리의 적을 고정으로 탐지하는 함수 , 시야 범위에서 적 인식
     public void Search_For_Fixed_Target() // 고정 타겟을 탐지하는 함수 , 시야 범위에서 적 인식
     {
-        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData._unit_SightRange, _layerMask); // 오버랩 스피어 생성
+        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
+        //print(gameObject.name + " : " + unitInfoCs._unitData.sightRange);
+        foreach (var item in _cols)
+        {
+            print(item.gameObject.name);
+        }
         Transform _shortestTarget = null;  // 가장 가까운 적을 의미하는 변수
+
+
 
         //print(_cols.Length);  
         if (_cols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출
@@ -52,7 +59,8 @@ public class UnitTargetSearch : MonoBehaviour
 
         foreach (var _colTarget in _cols)
         {
-            float _distance = Vector3.SqrMagnitude(transform.position - _colTarget.transform.position);
+            //Vector3.sqrMagnitude 를 Vector3.Distance로 바꿈
+            float _distance = Vector3.Distance(transform.position, _colTarget.transform.position);
             if (_shortestDistance > _distance)
             {
                 _shortestDistance = _distance;
@@ -60,12 +68,22 @@ public class UnitTargetSearch : MonoBehaviour
 
             }
         }
-        //
+
+        //시야범위 밖의 타겟인데 자꾸 타겟을 인식해서 예외처리 구문 추가해봄
+        //if (_shortestDistance > unitInfoCs._unitData.sightRange)
+        //{
+        //    unitInfoCs._isSearch = false;
+        //    print(gameObject.name + " : " + _shortestDistance + "예외처리 실행");
+        //    return;
+        //}
+
         _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
         _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
 
         //print(_targetUnit.name);
         unitInfoCs._isSearch = true;
+
+        // 타겟 바라보는 상태로 변환 (추격)
         unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
 
     }
@@ -74,7 +92,7 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Search_For_Nearest_Target() : 가장 가까운 적 탐지하는 함수 , 시야 범위에서 적 인식
     public void Search_For_Nearest_Target() // 가장 가까운 적 탐지하는 함수 , 시야 범위에서 적 인식
     {
-        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData._unit_SightRange, _layerMask); // 오버랩 스피어 생성
+        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
         Transform _shortestTarget = null;  // 가장 가까운 적을 의미하는 변수
 
         //print(_cols.Length);  
@@ -110,7 +128,7 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Search_For_Lowhealth_Target() : 가장 낮은 체력의 타겟을 탐지하는 함수 , 시야 범위에서 적 인식
     public void Search_For_Lowhealth_Target() // 가장 체력이 낮은 적을 탐지하는 함수 , 시야 범위에서 적 인식
     {
-        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData._unit_SightRange, _layerMask); // 오버랩 스피어 생성
+        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
         Transform _lowHeatlh_Target = null;  // 가장 가까운 적을 의미하는 변수
 
         if (_cols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출

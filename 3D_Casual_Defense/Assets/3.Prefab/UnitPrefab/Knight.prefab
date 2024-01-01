@@ -6676,9 +6676,27 @@ MonoBehaviour:
     _unit_Name: 
     _unit_maxHealth: 0
     _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 
+    sightRange: 
+    attackRange: 
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
-    _unit_Attack_Damage: 0
-    _unit_Skill_Attack_Damage: 0
+    _unit_General_Skill_Dmg: 0
+    _unit_Special_Skill_Dmg: 0
     _eUnit_Defense_Property: 0
     _unit_Description: 
     _unit_Type: 
@@ -6691,6 +6709,7 @@ MonoBehaviour:
     _unit_Skill_CoolTime: 0
     _unit_CriticalRate: 0
     _unit_targetSelectType: 0
+    unit_Id: 
   anim: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
 --- !u!1 &3276935910214120443
@@ -7806,21 +7825,40 @@ MonoBehaviour:
     _unit_Name: 
     _unit_maxHealth: 0
     _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 
+    sightRange: 
+    attackRange: 
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
-    _unit_Attack_Damage: 0
-    _unit_Skill_Attack_Damage: 0
-    _eUnit_Defense_Property: 0
+    _unit_General_Skill_Dmg: 1
+    _unit_Special_Skill_Dmg: 6
+    _eUnit_Defense_Property: 1
     _unit_Description: 
     _unit_Type: 
-    _unit_MoveSpeed: 0
-    _unit_SightRange: 0
-    _unit_Attack_Range: 0
-    _unit_Attack_Speed: 0
-    _unit_Attack_CoolTime: 0
+    _unit_MoveSpeed: 1
+    _unit_SightRange: 8
+    _unit_Attack_Range: 4
+    _unit_Attack_Speed: 3
+    _unit_Attack_CoolTime: 5
     _unit_Current_Skill_CoolTime: 0
-    _unit_Skill_CoolTime: 0
+    _unit_Skill_CoolTime: 8
     _unit_CriticalRate: 0
-    _unit_targetSelectType: 0
+    _unit_targetSelectType: 1
+    unit_Id: 
   _enum_Unit_Action_Mode: 1
   _enum_Unit_Action_State: 6
   _enum_Unit_Attack_State: 9
@@ -7888,9 +7926,27 @@ MonoBehaviour:
     _unit_Name: 
     _unit_maxHealth: 0
     _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 
+    sightRange: 
+    attackRange: 
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
-    _unit_Attack_Damage: 0
-    _unit_Skill_Attack_Damage: 0
+    _unit_General_Skill_Dmg: 0
+    _unit_Special_Skill_Dmg: 0
     _eUnit_Defense_Property: 0
     _unit_Description: 
     _unit_Type: 
@@ -7903,6 +7959,7 @@ MonoBehaviour:
     _unit_Skill_CoolTime: 0
     _unit_CriticalRate: 0
     _unit_targetSelectType: 0
+    unit_Id: 
   anim: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
 --- !u!95 &5692836948082142794

@@ -13,9 +13,32 @@ using UnityEngine.AI;
 [Serializable]
 public struct unit_Data    // 유닛 데이터 가져오는 구조체
 {
+    [Header("유닛 이름")]
     public string _unit_Name;                           // 유닛 이름
     public float _unit_maxHealth;                       // 유닛 최대 체력
     public float _unit_currentHealth;                   // 유닛 현재 체력 유닛 최대체력 넣어주기
+    public int _unit_Level;                             // 유닛 레벨
+
+    public int no; // 캐릭터 넘버
+    public string char_id;   // 캐릭터 id
+    public string unit_class; // 유닛 클래스
+    public int level;    // 레벨
+    public int hp;   // 체력
+    public string defenseType;   // 방어 타입
+    public int moveSpeed;   // 이동속도
+
+    //public int sightRange;   // 시야 범위
+    //public int attackRange;   // 공격 범위
+
+    public int criticRate;    // 크리티컬 확률
+    public string generalSkill;   // 일반스킬
+    public string generalSkillName;   // 일반스킬 이름
+    public string specialSkill1;   // 특수 스킬 , 자유모드 일 때 사용하는 스킬
+    public string specialSkill1Name;   // 특수 스킬 1 이름
+    public string specialSkill2;   // 특수 스킬 , 홀드모드 일 때 사용하는 스킬
+    public string specialSkill2Name;   // 특수 스킬 2 이름
+    public string targetSelectType;   // 유닛 설정 타입
+
     public eUnit_Attack_Property_States _eUnit_genSkill_Property;    // 유닛 일반 스킬속성
     public float _unit_General_Skill_Dmg;                   // 유닛 일반 스킬 데미지
     public float _unit_Special_Skill_Dmg;                   // 유닛 특수 스킬 데미지
@@ -23,8 +46,8 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
     public string _unit_Description;                        // 유닛 설명
     public string _unit_Type;                               // 유닛 타입
     public float _unit_MoveSpeed;                           // 유닛 이동속도
-    public float _unit_SightRange;                          // 유닛 시야
-    public float _unit_Attack_Range;                        // 유닛 공격 범위
+    public float sightRange;                          // 유닛 시야
+    public float attackRange;                        // 유닛 공격 범위
     public float _unit_Attack_Speed;                        // 유닛 공격 속도
     public float _unit_Attack_CoolTime;                     // 유닛 기본 공격 쿨타임
     public float _unit_Current_Skill_CoolTime;              // 유닛 현재 스킬 공격 쿨타임

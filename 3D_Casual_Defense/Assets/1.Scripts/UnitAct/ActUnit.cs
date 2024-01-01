@@ -34,12 +34,16 @@ public class ActUnit : MonoBehaviour
     {
         nav = GetComponent<NavMeshAgent>();
         unitInfoCs = GetComponent<UnitInfo>();
-        _unitData = unitInfoCs._unitData;
-        print(_unitData._unit_Attack_CoolTime);
+        //print(_unitData._unit_Attack_CoolTime);
         anim = GetComponent<Animator>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
-    }
 
+    }
+    private void Start()
+    {
+        _unitData = unitInfoCs._unitData;
+
+    }
 
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
     public void Attack_Unit(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)   // 매개변수로 공격 후 다음에 어떤상태로 변환할지 넣어주기
@@ -229,16 +233,18 @@ public class ActUnit : MonoBehaviour
         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
         //print("거리 : " + distance);
 
+        //print(distance);
         unitTargetSearchCs.Look_At_The_Target(next_ActionState);
 
-        if (distance >= _unitData._unit_Attack_Range && distance <= _unitData._unit_SightRange)   // 유닛 시야범위보다 작다면
+        if (distance >= _unitData.attackRange && distance <= _unitData.sightRange)   // 유닛 시야범위보다 작다면
         {
+            print(240);
             anim.SetBool("isMove", true);
             nav.SetDestination(unitTargetSearchCs._targetUnit.position);
         }
 
         // 공격 범위에 적이 들어왔을 때
-        else if (distance <= _unitData._unit_Attack_Range)
+        else if (distance <= _unitData.attackRange)
         {
             print("공격 타입으로 변환");
             nav.SetDestination(transform.position);
@@ -247,13 +253,14 @@ public class ActUnit : MonoBehaviour
         }
 
         // 시야밖으로 적이 사라졌을 때
-        else if (distance > _unitData._unit_SightRange)
+        else if (distance > _unitData.sightRange)
         {
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
 
             unitInfoCs._isSearch = false;
             unitTargetSearchCs._targetUnit = null;
+            unitTargetSearchCs._target_Body = null;
             nav.isStopped = false;
             unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
         }
@@ -267,7 +274,7 @@ public class ActUnit : MonoBehaviour
         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
 
         // 거리가 공격범위보다 크면 유닛 추적
-        if (distance > _unitData._unit_Attack_Range)
+        if (distance > _unitData.attackRange)
         {
             unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
         }
@@ -283,13 +290,13 @@ public class ActUnit : MonoBehaviour
         print("호출");
         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
         unitTargetSearchCs.Look_At_The_Target(next_Action_State : eUnit_Action_States.unit_Boundary);
-        if (distance <= _unitData._unit_Attack_Range)
+        if (distance <= _unitData.attackRange)
         {
             print("공격 타입으로 변환");
             unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
         // 시야 범위 밖으로 적이 사라졌을 때
-        else if (distance > _unitData._unit_SightRange)
+        else if (distance > _unitData.sightRange)
         {
             unitInfoCs._isSearch = false;
             unitTargetSearchCs._targetUnit = null;

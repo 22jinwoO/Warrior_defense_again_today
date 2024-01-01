@@ -24,10 +24,10 @@ public abstract class PlayerUnitClass : UnitInfo
     [SerializeField]
     protected ActUnit actUnitCs;
 
-    public Transform initPos; // 오브젝트 원래 위치
-    public Vector3 initPos2; // 오브젝트 원래 위치
+    public Transform initPos;   // 오브젝트 원래 위치
+    public Vector3 initPos2;    // 오브젝트 원래 위치
 
-    public abstract void InitUnitInfoSetting();     // 유닛 정보 초기화 시켜주는 함수
+    public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수, IActByUnit 인터페이스 함수 정의
 

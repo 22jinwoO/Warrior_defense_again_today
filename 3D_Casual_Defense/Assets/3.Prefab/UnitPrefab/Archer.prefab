@@ -5095,7 +5095,7 @@ GameObject:
   - component: {fileID: 6945482738867827838}
   - component: {fileID: 950506606877909200}
   m_Layer: 0
-  m_Name: Archor
+  m_Name: Archer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5126,13 +5126,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 2613167071705132096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3e9b00819b5b954a8dff26ceec0d784, type: 3}
+  m_Script: {fileID: 11500000, guid: edce841982b25fe46bb962f3ad143cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _unitData:
     _unit_Name: 
     _unit_maxHealth: 0
     _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 0
+    sightRange: 0
+    attackRange: 0
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
     _unit_General_Skill_Dmg: 0
     _unit_Special_Skill_Dmg: 0
@@ -5167,11 +5185,11 @@ MonoBehaviour:
   _hit_Effect_CrushAtk: {fileID: 0}
   _projectile_Prefab: {fileID: 6721835609700710605, guid: 37811021cdfa76d4583cfcd3c04b9eb4, type: 3}
   _projectile_startPos: {fileID: 684569035261544743}
-  gen_skill: {fileID: -8724978611186274115, guid: 82e25b354af1c9e44a97cc3755bb18aa, type: 3}
+  gen_skill: {fileID: 0}
   spe_skill_1: {fileID: 0}
   spe_skill_2: {fileID: 0}
-  holdObPref: {fileID: 3462556803876994634, guid: 97209c46dff9ee845a27e20365814fff, type: 3}
-  holdOb: {fileID: 0}
+  holdObPref: {fileID: 0}
+  holdOb: {fileID: 3462556803876994634, guid: 97209c46dff9ee845a27e20365814fff, type: 3}
   navObs: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
   actUnitCs: {fileID: 0}
@@ -5196,6 +5214,24 @@ MonoBehaviour:
     _unit_Name: 
     _unit_maxHealth: 0
     _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 0
+    sightRange: 0
+    attackRange: 0
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
     _unit_General_Skill_Dmg: 0
     _unit_Special_Skill_Dmg: 0

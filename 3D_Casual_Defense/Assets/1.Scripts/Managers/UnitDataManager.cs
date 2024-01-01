@@ -45,6 +45,11 @@ public class UnitDataManager : Singleton<UnitDataManager>
     [Header("방어 속성 딕셔너리")]
     public SerializableDictionary<string, eUnit_Defense_Property_States> _armor_Dictionary;
 
+
+    [Header("방어 속성에 따른 스크립트 딕셔너리")]
+    public SerializableDictionary<eUnit_Defense_Property_States,ArmorCalculate> _armorCs_Dictionary;
+
+
     [Header("타겟 선정 딕셔너리")]
     public SerializableDictionary<string, eUnit_targetSelectType> _targetSelect_Dictionary;
 
@@ -65,8 +70,10 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Add_TargetSelect_Dictionary();  //타겟 선정 딕셔너리에 키, 값 할당하는 함수
 
+        Add_ArmorScript_Dictionary(); // 아머 속성에 해당하는 스크립트 추가해주는 함수
 
         Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
+
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
         //    print(item.unit_class);
@@ -91,9 +98,9 @@ public class UnitDataManager : Singleton<UnitDataManager>
         public int level;    // 레벨
         public int hp;   // 체력
         public string defenseType;   // 방어 타입
-        public string moveSpeed;   // 이동속도
-        public string sightRange;   // 시야 범위
-        public string attackRange;   // 공격 범위
+        public int moveSpeed;   // 이동속도
+        public int sightRange;   // 시야 범위
+        public int attackRange;   // 공격 범위
         public int criticRate;    // 크리티컬 확률
         public string generalSkill;   // 일반스킬
         public string generalSkillName;   // 일반스킬 이름
@@ -141,7 +148,9 @@ public class UnitDataManager : Singleton<UnitDataManager>
     #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
     private void Add_Skill_Dictionary()
     {
-        _skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+        //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+        _skill_Dictionary.Add(key : "1_101", value : skillDataManagerCs.genral_Skills[0]);
+        _skill_Dictionary.Add(key : "1_201", value : skillDataManagerCs.genral_Skills[1]);
 
     }
     #endregion
@@ -157,5 +166,15 @@ public class UnitDataManager : Singleton<UnitDataManager>
         _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[1].char_id, value : All_character_Datas.CharacterDatas[1]);
     }
     #endregion
+
+    #region # Add_ArmorScript_Dictionary() : 방어구 속성에 따른 스크립트 키, 값 추가해주는 함수
+    private void Add_ArmorScript_Dictionary()
+    {
+        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.plate_Armor, new PlateArmor());
+        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.chain_Armor, new MailArmor());
+        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.padding_Armor, new GambesonArmor());
+    }
+    #endregion
+
 
 }

@@ -6,19 +6,19 @@ using UnityEngine.UI;
 public class CreatePlayerUnit : MonoBehaviour
 {
     [SerializeField]
-    AbsPlayerUnitFactory[] playerUnitFactorys;
+    private AbsPlayerUnitFactory[] playerUnitFactorys;
 
     [SerializeField]
-    Button clickKnightBtn;
+    private Button clickKnightBtn;
 
     [SerializeField]
-    Button clickArcherBtn;
+    private Button clickArcherBtn;
 
     [SerializeField]
-    Button clickUnitFreeBtn;
+    private Button clickUnitFreeBtn;
 
     [SerializeField]
-    Button clickUnitHoldBtn;
+    private Button clickUnitHoldBtn;
 
 
     public UnitInfo clikUnitInfo;
@@ -56,7 +56,7 @@ public class CreatePlayerUnit : MonoBehaviour
 
         // 생산자 실행
         PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
-        print(UnitDataManager.Instance._unitInfo_Dictionary[knight._unitData.unit_Id]);
+        //print(UnitDataManager.Instance._unitInfo_Dictionary[knight._unitData.unit_Id]);
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "기사";
     }

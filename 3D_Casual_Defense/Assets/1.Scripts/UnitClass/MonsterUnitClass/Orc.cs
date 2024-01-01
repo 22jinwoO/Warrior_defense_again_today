@@ -112,8 +112,8 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData._unit_Description = "오크입니다";     // 유닛 설명
         _unitData._unit_Type = "근거리";            // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;        // 유닛 이동속도
-        _unitData._unit_SightRange = 20f;          // 유닛 시야
-        _unitData._unit_Attack_Range = 3.5f;     // 유닛 공격 범위
+        _unitData.sightRange = 20f;          // 유닛 시야
+        _unitData.attackRange = 3.5f;     // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;        // 유닛 공격 속도
         _unitData._unit_Attack_CoolTime = 3f;     // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;     // 유닛 스킬 공격 쿨타임
@@ -244,9 +244,9 @@ public class Orc : MonsterUnitClass, IActByUnit
     //private void OnDrawGizmos()
     //{
     //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_SightRange);
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
 
     //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawWireSphere(transform.position, _unitData._unit_Attack_Range);
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
     //}
 }
