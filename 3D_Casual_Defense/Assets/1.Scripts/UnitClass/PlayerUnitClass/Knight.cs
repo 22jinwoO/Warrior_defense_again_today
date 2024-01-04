@@ -9,7 +9,8 @@ public class Knight : PlayerUnitClass
 {
     [SerializeField]
     private bool isCollision;
-
+    //StatusEffect asd = new StatusEffect();
+    StatusEffect asd = new PoisonStatus();
     private void Awake()
     {
         
@@ -20,13 +21,64 @@ public class Knight : PlayerUnitClass
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs=GetComponent<ActUnit>();
         _isClick = false;
-
+        //Rigidbody asd = GetComponent<Rigidbody>();
         //InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
+
     }
 
+    private void Start()
+    {
+
+        //asd.unit_Data = _unitData;
+        StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
+
+        //CDF(_unitData);
+    }
+
+    //public IEnumerator Get_Posion(int thisUnit, string linkId, int statusValue, int duration)
+    //{
+    //    yield return new WaitForSeconds(1f);
+    //    //isPoison = false;
+
+    //    int times = 0;
+
+    //    while (times < duration)
+    //    {
+    //        //if (isPoison)
+    //        //{
+    //        //    yield return null;
+
+    //        //    break;
+    //        //}
+    //        _unitData.hp -= statusValue;
+    //        //print(thisUnit);
+    //        //unit_Data.hp = thisUnit;
+    //        //print("유닛hp : "+unit_Data.hp);
+
+    //        times++;
+    //        yield return new WaitForSeconds(1f);
+    //    }
+    //}
     public void Update()
     {
+        //_unitData = asd.unit_Data;
+
         //transform.eulerAngles = Vector3.zero;
+        //print(_nav.velocity.magnitude);
+        //print(_nav.desiredVelocity.magnitude);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            asd.isStatusApply = true;
+            StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
+
+            //_nav.velocity = new Vector3(_nav.velocity.x / 2, _nav.velocity.y / 2, _nav.velocity.z / 2);
+        }
+        //_nav.velocity.magnitude /= 2f;
+        //if (_nav.velocity!=Vector3.zero)
+        //{
+        //            _nav.velocity = new Vector3(_nav.velocity.x/2, _nav.velocity.y/2, _nav.velocity.z/2);
+
+        //}
 
         if (_isClick&&Input.GetMouseButtonDown(1))
         {

@@ -92,6 +92,8 @@ public class Archer : PlayerUnitClass
         // 크리티컬 확률
         _unitData.criticRate = character_Data.criticRate;
 
+        print(character_Data.criticRate);
+
         // 일반스킬
         _unitData.generalSkill = character_Data.generalSkill;
 

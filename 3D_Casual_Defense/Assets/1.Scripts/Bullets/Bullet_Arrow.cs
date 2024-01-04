@@ -31,7 +31,7 @@ public class Bullet_Arrow : Abs_Bullet
     {
         slerpValue = 4f;
         lerpValue = 8f;
-        print(_start_Pos.rotation);
+        //print(_start_Pos.rotation);
         //transform.SetParent(_start_Pos.transform.parent);
         transform.position = _start_Pos.position;
         transform.rotation = unitInfoCs.transform.rotation;
@@ -40,7 +40,7 @@ public class Bullet_Arrow : Abs_Bullet
         //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
         //transform.rotation = rot;
 
-        print(_start_Pos.localRotation.y);
+        //print(_start_Pos.localRotation.y);
         //transform.rotation = UnityEngine.Quaternion.Euler(-90, _start_Pos.transform.eulerAngles.y, _start_Pos.transform.eulerAngles.z);
         StartCoroutine(Move_Slerp());
         lr = GetComponent<LineRenderer>();
@@ -65,7 +65,7 @@ public class Bullet_Arrow : Abs_Bullet
     {
         if (other.transform.Equals(_target_Unit))
         {
-            //other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(other.transform, atkDmg);
+            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,other.transform, _skill._base_Value);
             Destroy(gameObject);
         }
     }

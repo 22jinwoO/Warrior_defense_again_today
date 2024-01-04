@@ -26,6 +26,7 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
     public int hp;   // 체력
     public string defenseType;   // 방어 타입
     public int moveSpeed;   // 이동속도
+    public int moveAcc;   // 이동 가속도
 
     //public int sightRange;   // 시야 범위
     //public int attackRange;   // 공격 범위
@@ -169,5 +170,8 @@ public abstract class UnitInfo : MonoBehaviour
         }
     }
     #endregion
+
+
+
 }
 

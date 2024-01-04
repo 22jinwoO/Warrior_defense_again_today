@@ -1448,6 +1448,63 @@ MonoBehaviour:
   - {fileID: 4153666595965432161, guid: d1109a157a2a0ee418dfac0bd7da13d2, type: 3}
   - {fileID: -8724978611186274115, guid: 82e25b354af1c9e44a97cc3755bb18aa, type: 3}
   special_Skills: []
+  _skill_Link_Dictionary:
+    keys: []
+  stunStatus:
+    link_id: 
+    link_name: 
+    link_script: 
+    linkValue_ps: 0
+    duration_s: 0
+    moveSpeedreduce: 0
+    linkVfx: {fileID: 0}
+    linkSfx: {fileID: 0}
+    icon: {fileID: 0}
+    isStatusApply: 0
+  bleedingStatus:
+    link_id: 
+    link_name: 
+    link_script: 
+    linkValue_ps: 0
+    duration_s: 0
+    moveSpeedreduce: 0
+    linkVfx: {fileID: 0}
+    linkSfx: {fileID: 0}
+    icon: {fileID: 0}
+    isStatusApply: 0
+  poisonStatus:
+    link_id: 
+    link_name: 
+    link_script: 
+    linkValue_ps: 0
+    duration_s: 0
+    moveSpeedreduce: 0
+    linkVfx: {fileID: 0}
+    linkSfx: {fileID: 0}
+    icon: {fileID: 0}
+    isStatusApply: 0
+  burningStatus:
+    link_id: 
+    link_name: 
+    link_script: 
+    linkValue_ps: 0
+    duration_s: 0
+    moveSpeedreduce: 0
+    linkVfx: {fileID: 0}
+    linkSfx: {fileID: 0}
+    icon: {fileID: 0}
+    isStatusApply: 0
+  slowStatus:
+    link_id: 
+    link_name: 
+    link_script: 
+    linkValue_ps: 0
+    duration_s: 0
+    moveSpeedreduce: 0
+    linkVfx: {fileID: 0}
+    linkSfx: {fileID: 0}
+    icon: {fileID: 0}
+    isStatusApply: 0
 --- !u!1 &660783163
 GameObject:
   m_ObjectHideFlags: 0
@@ -2528,6 +2585,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6833099824280438778, guid: 771b0840162892a41a9869ef085c558c, type: 3}
   m_PrefabInstance: {fileID: 1112112526}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1024106144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1024106146}
+  - component: {fileID: 1024106145}
+  m_Layer: 0
+  m_Name: Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1024106145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024106144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de41f02c782f46640a82370988b15bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  speed: 0
+  isStart: 0
+  hp: 0
+  isReStart: 0
+--- !u!4 &1024106146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1024106144}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.05416, y: 8.754539, z: 2.4661736}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1112112526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2595,6 +2701,14 @@ PrefabInstance:
     - target: {fileID: 3658949938990387124, guid: 771b0840162892a41a9869ef085c558c, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+      propertyPath: _unitData.moveAcc
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5753357597203244576, guid: 771b0840162892a41a9869ef085c558c, type: 3}
+      propertyPath: _unitData.moveSpeed
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3110,7 +3224,7 @@ GameObject:
   - component: {fileID: 1270617919}
   - component: {fileID: 1270617918}
   m_Layer: 0
-  m_Name: =====UnitDataManasger=====
+  m_Name: =====UnitDataManager=====
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3128,7 +3242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9da5f5154f93194eac74f570c4f8662, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character_Json_Data: {fileID: 4900000, guid: 520ec38ba5c716344b4a5451faca450f, type: 3}
+  character_Json_Data: {fileID: 4900000, guid: caf3ebd99bd222b40a568145b3958b75, type: 3}
   All_character_Datas:
     CharacterDatas: []
   skillDataManagerCs: {fileID: 633954135}
@@ -3413,6 +3527,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 917968377}
+  speed: 0
+  isStart: 0
+  hp: 0
+  isReStart: 0
 --- !u!65 &1410495813
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3511,6 +3629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9666958957ae7d740b28f01a9c7a783b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skill: {fileID: 0}
   _target_Unit: {fileID: 0}
   _target_BodyTr: {fileID: 0}
   _target_Direction: {x: 0, y: 0, z: 0}
@@ -4721,3 +4840,4 @@ SceneRoots:
   - {fileID: 836266098}
   - {fileID: 1351476317}
   - {fileID: 96682489}
+  - {fileID: 1024106146}

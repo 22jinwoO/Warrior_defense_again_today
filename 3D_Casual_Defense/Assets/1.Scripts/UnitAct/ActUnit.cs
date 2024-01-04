@@ -19,8 +19,8 @@ public class ActUnit : MonoBehaviour
     [SerializeField]
     private UnitInfo unitInfoCs;
 
-    [SerializeField]
-    private unit_Data _unitData;
+    //[SerializeField]
+    //private unit_Data _unitData;
 
 
     [SerializeField]
@@ -33,16 +33,18 @@ public class ActUnit : MonoBehaviour
     private void Awake()
     {
         nav = GetComponent<NavMeshAgent>();
-        unitInfoCs = GetComponent<UnitInfo>();
         //print(_unitData._unit_Attack_CoolTime);
         anim = GetComponent<Animator>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
+        unitInfoCs = GetComponent<UnitInfo>();
+
 
     }
     private void Start()
     {
-        _unitData = unitInfoCs._unitData;
-
+        //unitInfoCs._unitData = unitInfoCs._unitData;
+        print(unitInfoCs._unitData.criticRate);
+        print(unitInfoCs.gameObject.name);
     }
 
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
@@ -83,6 +85,8 @@ public class ActUnit : MonoBehaviour
             else
             {
                 Debug.Log("기본공격!!!");
+                print("88크리티컬 확률 " + unitInfoCs._unitData.criticRate);
+
                 if (unitTargetSearchCs._targetUnit == null)
                 {
                     return;
@@ -106,7 +110,7 @@ public class ActUnit : MonoBehaviour
         }
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
-            print(nav.gameObject.name);
+            //print(nav.gameObject.name);
             nav.isStopped = false;  // 이동 가능 상태로 변환
         }
     }
@@ -172,23 +176,70 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    #region # BeAttacked_By_OtherUnit(Transform other,float attack_Dmg) : 다른 유닛으로부터의 공격으로 피해를 입을 때 호출되는 함수
-    public void BeAttacked_By_OtherUnit(eUnit_Attack_Property_States myAtkType, Transform other, float attack_Dmg) // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
+    #region # float CheckCritical(Abs_Skill skill, float atkDmg) : 크리티컬 확률 체크하는 함수
+    private float CheckCritical(Abs_Skill skill, float atkDmg)
     {
-        print("충돌했음");
-        print(other.gameObject.name);
-        print(other.GetComponent<UnitInfo>()._unitData);
-        unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
-        print(otherUnitData._eUnit_Defense_Property);
-        print(unitInfoCs._unitData._unit_maxHealth);
-        unitInfoCs._unitData._unit_maxHealth -= unitInfoCs._this_Unit_Armor_Property.CalculateDamaged(attackType : myAtkType, ArmorType : otherUnitData, attack_Dmg : attack_Dmg);
-        //print(otherUnitData.);
-        print(unitInfoCs._this_Unit_Armor_Property);
-        print(attack_Dmg);
-        print(unitInfoCs._unitData._unit_maxHealth);
+        // int 범위를 구할때는 최대값이 제외된다. (크리티컬 확률에 해당하는지 체크)
+        int randNum = Random.Range(1, 101);
+        print("크리티컬 확률 " + unitInfoCs._unitData.criticRate);
+        unitInfoCs._unitData.criticRate = 50;
+        print(unitInfoCs._unitData.criticRate);
+
+        print("크리티컬 랜덤 숫자 " + randNum);
+
+        // 크리티컬 확률에 해당한다면
+        if (randNum <= unitInfoCs._unitData.criticRate)
+        {
+            print("크리티컬 공격!!");
+            //
+            skill._link_Skill.isStatusApply = true;
+
+            UnitInfo targetUnitInfo = unitTargetSearchCs.GetComponent<UnitInfo>();
+
+            string link_Id = skill._link_Id;
+            int link_value = skill._link_Skill.linkValue_ps;
+            print(link_value);
+            int duration_s = skill._link_Skill.duration_s;
+            print(duration_s);
+
+            StartCoroutine(skill._link_Skill.Apply_Status_Effect(unitTargetSearchCs.GetComponent<UnitInfo>(), link_Id, link_value, duration_s));
+            atkDmg = skill._base_Value + skill._base_Value * skill._critical_Dmg;
+        }
+        print("공격 데미지 "+ atkDmg);
+        return atkDmg;
 
     }
     #endregion
+    #region # BeAttacked_By_OtherUnit(Transform other,float attack_Dmg) : 다른 유닛으로부터의 공격으로 피해를 입을 때 호출되는 함수
+    // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
+    public void BeAttacked_By_OtherUnit(Abs_Skill skill, eUnit_Attack_Property_States myAtkType, Transform other, float attack_Dmg)
+    {
+        print("215크리티컬 확률 " + unitInfoCs._unitData.criticRate);
+
+        // 타겟의 유닛 데이터 가져오기
+        unit_Data otherUnitData = other.GetComponent<UnitInfo>()._unitData;
+
+        // 데미지 계산하는 함수 실행
+        unitInfoCs._unitData._unit_maxHealth -= unitInfoCs._this_Unit_Armor_Property
+            .CalculateDamaged(attackType: myAtkType, ArmorType: otherUnitData, attack_Dmg: CheckCritical(skill, attack_Dmg));
+
+        //StatusEffect asd = new PoisonStatus();
+        //StartCoroutine(asd.Get_Posion(other.GetComponent<UnitInfo>(), "", 2, 5));
+
+        //print("충돌했음");
+        //print(other.gameObject.name);
+        //print(other.GetComponent<UnitInfo>()._unitData);
+        //print(otherUnitData._eUnit_Defense_Property);
+        //print(unitInfoCs._unitData._unit_maxHealth);
+        //print(otherUnitData.);
+        //print(unitInfoCs._this_Unit_Armor_Property);
+        //print(attack_Dmg);
+        //print(unitInfoCs._unitData._unit_maxHealth);
+
+    }
+    #endregion
+
+
 
     #region # SearchTarget(매개변수 : 유닛 탐지 타입) : 유닛이 Idle 상태일 때 타겟 탐지 시 호출되는 함수
     public void SearchTarget(eUnit_targetSelectType target_Search_Type = eUnit_targetSelectType.Default)  // 유닛 탐지
@@ -236,7 +287,7 @@ public class ActUnit : MonoBehaviour
         //print(distance);
         unitTargetSearchCs.Look_At_The_Target(next_ActionState);
 
-        if (distance >= _unitData.attackRange && distance <= _unitData.sightRange)   // 유닛 시야범위보다 작다면
+        if (distance >= unitInfoCs._unitData.attackRange && distance <= unitInfoCs._unitData.sightRange)   // 유닛 시야범위보다 작다면
         {
             print(240);
             anim.SetBool("isMove", true);
@@ -244,7 +295,7 @@ public class ActUnit : MonoBehaviour
         }
 
         // 공격 범위에 적이 들어왔을 때
-        else if (distance <= _unitData.attackRange)
+        else if (distance <= unitInfoCs._unitData.attackRange)
         {
             print("공격 타입으로 변환");
             nav.SetDestination(transform.position);
@@ -253,7 +304,7 @@ public class ActUnit : MonoBehaviour
         }
 
         // 시야밖으로 적이 사라졌을 때
-        else if (distance > _unitData.sightRange)
+        else if (distance > unitInfoCs._unitData.sightRange)
         {
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
@@ -274,7 +325,7 @@ public class ActUnit : MonoBehaviour
         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
 
         // 거리가 공격범위보다 크면 유닛 추적
-        if (distance > _unitData.attackRange)
+        if (distance > unitInfoCs._unitData.attackRange)
         {
             unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
         }
@@ -290,13 +341,13 @@ public class ActUnit : MonoBehaviour
         print("호출");
         float distance = Vector3.Distance(transform.position, unitTargetSearchCs._targetUnit.position);
         unitTargetSearchCs.Look_At_The_Target(next_Action_State : eUnit_Action_States.unit_Boundary);
-        if (distance <= _unitData.attackRange)
+        if (distance <= unitInfoCs._unitData.attackRange)
         {
             print("공격 타입으로 변환");
             unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
         // 시야 범위 밖으로 적이 사라졌을 때
-        else if (distance > _unitData.sightRange)
+        else if (distance > unitInfoCs._unitData.sightRange)
         {
             unitInfoCs._isSearch = false;
             unitTargetSearchCs._targetUnit = null;

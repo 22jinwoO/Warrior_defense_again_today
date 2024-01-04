@@ -6,6 +6,7 @@ public class SniperArrow : GeneralSkill
 {
     public override void Attack_Skill()
     {
+        _projectile_Prefab.GetComponent<Abs_Bullet>()._skill = unitInfoCs.gen_skill;
         _projectile_Prefab.GetComponent<Abs_Bullet>()._target_Unit = unitTargetSearchCs._targetUnit;
         _projectile_Prefab.GetComponent<Abs_Bullet>()._target_BodyTr = unitTargetSearchCs._target_Body;
         _projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = unitInfoCs._projectile_startPos;

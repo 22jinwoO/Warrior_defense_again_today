@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering.VirtualTexturing;
 
 
 public abstract class Abs_Skill : MonoBehaviour
@@ -8,7 +10,6 @@ public abstract class Abs_Skill : MonoBehaviour
     public string skill_Id;
     public string skill_Name;
     public string skill_Description;
-
 
     // 시전 / 사용 조건
     public int _skill_CoolTm;
@@ -27,6 +28,10 @@ public abstract class Abs_Skill : MonoBehaviour
     public int _base_Value;
     public float _critical_Dmg;
     public string _link_Id;
+    //
+
+    public StatusEffect _link_Skill;
+
 
     public GameObject _projectile_Prefab;
 
@@ -38,4 +43,6 @@ public abstract class Abs_Skill : MonoBehaviour
 
     public abstract void Attack_Skill();
 
+
 }
+

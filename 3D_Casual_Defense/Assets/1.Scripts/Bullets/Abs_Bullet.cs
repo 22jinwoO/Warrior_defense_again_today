@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class Abs_Bullet : MonoBehaviour
 {
+    // 스킬
+    public Abs_Skill _skill;
+
     // 타겟 유닛
     public Transform _target_Unit;
 

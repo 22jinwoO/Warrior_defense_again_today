@@ -56,9 +56,9 @@ MonoBehaviour:
   _area_Length: 0
   _area_Width: 0
   _skill_AtkType: 2
-  _base_Value: 0
-  _critical_Dmg: 0
-  _link_Id: 
+  _base_Value: 10
+  _critical_Dmg: 1.5
+  _link_Id: bleed01
   _projectile_Prefab: {fileID: 6721835609700710605, guid: 37811021cdfa76d4583cfcd3c04b9eb4, type: 3}
   unitInfoCs: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
