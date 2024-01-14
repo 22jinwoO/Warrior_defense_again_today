@@ -11,7 +11,7 @@ public class Warrior : UnitInfo
     private void Awake()
     {
         _anim=GetComponent<Animator>();
-        _this_Unit_Armor_Property = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new GambesonArmor();
         _nav = GetComponent<NavMeshAgent>();
         //InitUnitInfoSetting();
 
@@ -21,10 +21,10 @@ public class Warrior : UnitInfo
     {
 
         // 기본 공격이 가능한지 확인
-        _can_Base_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
+        _can_genSkill_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
 
         // 스킬 공격이 가능한지 확인
-        _can_Skill_Attack =  _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
+        _can_SpcSkill_Attack =  _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
 
         //현재 스킬 공격 쿨타임이 유닛의 스킬 공격 쿨타임 보다 낮다면 쿨타임 돌려주기
         if (_unitData._unit_Skill_CoolTime>= _unitData._unit_Current_Skill_CoolTime)

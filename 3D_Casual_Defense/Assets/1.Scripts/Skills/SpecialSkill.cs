@@ -9,4 +9,7 @@ public abstract class SpecialSkill : Abs_Skill
     {
         throw new System.NotImplementedException();
     }
+
+
+
 }

@@ -625,23 +625,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitData:
     _unit_Name: 
-    _unit_maxHealth: 0
-    _unit_currentHealth: 0
+    _unit_Level: 0
+    no: 0
+    char_id: 
+    unit_class: 
+    level: 0
+    maxHp: 0
+    hp: 0
+    defenseType: 
+    moveSpeed: 0
+    moveAcc: 0
+    criticRate: 0
+    generalSkill: 
+    generalSkillName: 
+    specialSkill1: 
+    specialSkill1Name: 
+    specialSkill2: 
+    specialSkill2Name: 
+    targetSelectType: 
     _eUnit_genSkill_Property: 0
-    _unit_Attack_Damage: 0
-    _unit_Skill_Attack_Damage: 0
+    _unit_General_Skill_Dmg: 0
+    _unit_Special_Skill_Dmg: 0
     _eUnit_Defense_Property: 0
     _unit_Description: 
     _unit_Type: 
     _unit_MoveSpeed: 0
-    _unit_SightRange: 0
-    _unit_Attack_Range: 0
+    sightRange: 0
+    attackRange: 0
     _unit_Attack_Speed: 0
     _unit_Attack_CoolTime: 0
     _unit_Current_Skill_CoolTime: 0
     _unit_Skill_CoolTime: 0
     _unit_CriticalRate: 0
     _unit_targetSelectType: 1
+    unit_Id: 
   _enum_Unit_Action_Mode: 3
   _enum_Unit_Action_State: 7
   _enum_Unit_Attack_State: 9
@@ -653,8 +670,8 @@ MonoBehaviour:
   _isClick: 0
   _isSearch: 0
   _movePos: {x: 0, y: 0, z: 0}
-  _can_Base_Attack: 0
-  _can_Skill_Attack: 0
+  _can_genSkill_Attack: 0
+  _can_SpcSkill_Attack: 0
   _hit_Effect_SlashAtk: {fileID: 0}
   _hit_Effect_PierceAtk: {fileID: 0}
   _hit_Effect_CrushAtk: {fileID: 0}
@@ -663,6 +680,11 @@ MonoBehaviour:
   gen_skill: {fileID: 0}
   spe_skill_1: {fileID: 0}
   spe_skill_2: {fileID: 0}
+  canAct: 0
+  playerUnitMtr: {fileID: 0}
+  mosterUnitMtr: {fileID: 2100000, guid: ca75a69e74ff489bb381553a79a5a187, type: 2}
+  someMeshReners: []
+  bodyMeshRener: {fileID: 8221089018039814748}
   unitTargetSearchCs: {fileID: 0}
   actUnitCs: {fileID: 0}
   hpText: {fileID: 6775984549753675466}
@@ -707,25 +729,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
-  _unitData:
-    _unit_Name: 
-    _unit_maxHealth: 0
-    _unit_currentHealth: 0
-    _eUnit_genSkill_Property: 0
-    _unit_Attack_Damage: 0
-    _unit_Skill_Attack_Damage: 0
-    _eUnit_Defense_Property: 0
-    _unit_Description: 
-    _unit_Type: 
-    _unit_MoveSpeed: 0
-    _unit_SightRange: 0
-    _unit_Attack_Range: 0
-    _unit_Attack_Speed: 0
-    _unit_Attack_CoolTime: 0
-    _unit_Current_Skill_CoolTime: 0
-    _unit_Skill_CoolTime: 0
-    _unit_CriticalRate: 0
-    _unit_targetSelectType: 0
   anim: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
 --- !u!195 &1156929292511289352

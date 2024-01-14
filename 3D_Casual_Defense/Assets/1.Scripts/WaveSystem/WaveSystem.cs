@@ -197,6 +197,11 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
         }
         return default(T);
     }
+
+    internal Abs_Skill TryGetValue()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public abstract class StatusEffect 
+public abstract class Abs_StatusEffect 
 {
     // 상태이상 객체마다 갖고 있어야 함..
     public string link_id;

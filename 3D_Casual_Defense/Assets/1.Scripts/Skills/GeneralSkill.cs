@@ -8,4 +8,6 @@ public abstract class GeneralSkill : Abs_Skill
     {
         throw new System.NotImplementedException();
     }
+
+
 }

@@ -21,6 +21,10 @@ public class MonsterSpawnManager : MonoBehaviour
     [Header("오크 프리팹 리스트")]
     public List<Orc> orcList = new List<Orc>();
 
+    [Header("오크 프리팹 넣어놓는 오브젝트")]
+    [SerializeField]
+    private Transform orcPrefab_Objects;
+    //====================================================
 
     [SerializeField]
     private MonsterUnitClass spawnMonster;  //스폰된 몬스터
@@ -125,6 +129,7 @@ public class MonsterSpawnManager : MonoBehaviour
         orcListIndex = 0;
         spawnMonsterCount = 0;
     }
+
     private void CheckSpawnMonster()
     {
         List<MonsterUnitClass> monsterSpawnFactorys = currentWave.wave_monsterClasses;
@@ -159,41 +164,59 @@ public class MonsterSpawnManager : MonoBehaviour
     //오크 생산자
     private void CreateOrc()
     {
-        GameObject spawnOrc = null;
-
+        //GameObject spawnOrc = null;
+        bool cantSetActive=false;
         //  유닛 생산자
         print("스페이스 바 눌림!");
-        if (orcList.Count.Equals(0))
+
+        if (!orcList.Count.Equals(0))
+        {
+            foreach (var item in orcList)
+            {
+                if (!item.gameObject.activeSelf)
+                {
+                    print("여기 나오면 안됨");
+                    item.gameObject.SetActive(true);
+                    spawnMonster = item;
+                    //spawnOrc = item.gameObject;
+                    cantSetActive = true;
+                    break;
+                }
+            }
+        }
+
+        if (orcList.Count.Equals(0) || !cantSetActive)
         {
             monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
             spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
-            spawnOrc = spawnMonster.gameObject;
+            //spawnOrc = spawnMonster.gameObject;
             orcList.Add(spawnMonster.GetComponent<Orc>());
             print("프리팹 생성!");
         }
+        //else if (!orcList.Count.Equals(0) && !orcList[orcListIndex].gameObject.activeSelf && orcList.Count>spawnMonsterCount)   // orclistIndex 오브젝트가 활성화 상태라면
+        //{
+        //    print(orcList.Count);
+        //    print(spawnMonsterCount);
+        //    orcList[spawnMonsterCount].gameObject.SetActive(true);
+        //    spawnOrc = orcList[orcListIndex].gameObject;
+        //    orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
+        //    print("오브젝트 풀링 활성화");
+        //}
 
-        else if (!orcList.Count.Equals(0) && !orcList[orcListIndex].gameObject.activeSelf && orcList.Count>spawnMonsterCount)   // orclistIndex 오브젝트가 활성화 상태라면
-        {
-            print(orcList.Count);
-            print(spawnMonsterCount);
-            orcList[spawnMonsterCount].gameObject.SetActive(true);
-            spawnOrc = orcList[orcListIndex].gameObject;
-            orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
-            print("오브젝트 풀링 활성화");
-        }
-
-        else
-        {
-            monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
-            spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
-            spawnOrc = spawnMonster.gameObject;
-            orcList.Add(spawnMonster.GetComponent<Orc>());
-            print("프리팹 생성!");
-            orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
-        }
-
-        spawnOrc.transform.position = spawnPoint;
-        spawnOrc.gameObject.name = "오크";
+        //else
+        //{
+        //    monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
+        //    spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
+        //    spawnOrc = spawnMonster.gameObject;
+        //    orcList.Add(spawnMonster.GetComponent<Orc>());
+        //    print("프리팹 생성!");
+        //    orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
+        //}
+        //print(spawnOrc.name);
+       // print(spawnOrc.transform.position);
+        spawnMonster.transform.position = spawnPoint;
+        spawnMonster.gameObject.name = "오크";
+        spawnMonster.transform.SetParent(orcPrefab_Objects);
         spawnMonster = null;    //spawnMonster 변수 값 초기화
 
 

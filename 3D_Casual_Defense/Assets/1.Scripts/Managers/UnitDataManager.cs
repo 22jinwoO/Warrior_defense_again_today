@@ -39,8 +39,8 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
     // 딕셔너리=====================================================
 
-    [Header("스킬 딕셔너리")]
-    public SerializableDictionary<string,Abs_Skill> _skill_Dictionary;
+    //[Header("스킬 딕셔너리")]
+    //public SerializableDictionary<string,Abs_Skill> _skill_Dictionary;
 
     [Header("방어 속성 딕셔너리")]
     public SerializableDictionary<string, eUnit_Defense_Property_States> _armor_Dictionary;
@@ -64,7 +64,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
     {
         All_character_Datas = JsonUtility.FromJson<All_Character_Data>(character_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
 
-        Add_Skill_Dictionary(); // 스킬 딕셔너리에 키, 값 할당하는 함수
+        //Add_Skill_Dictionary(); // 스킬 딕셔너리에 키, 값 할당하는 함수 (스킬데이터 매니저로 옮겨줘서 삭제할 에정)
 
         Add_Armor_Dictionary(); // 아머 속성 딕셔너리에 키, 값 할당하는 함수
 
@@ -73,6 +73,10 @@ public class UnitDataManager : Singleton<UnitDataManager>
         Add_ArmorScript_Dictionary(); // 아머 속성에 해당하는 스크립트 추가해주는 함수
 
         Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
+
+
+        Set_UnitData("hum_warr01");
+        Set_UnitData("hum_arch01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
@@ -110,6 +114,38 @@ public class UnitDataManager : Singleton<UnitDataManager>
         public string specialSkill2Name;   // 특수 스킬 2 이름
         public string targetSelectType;   // 유닛 설정 타입
 
+        public Abs_Skill unit_Gen_Skill;
+        public Abs_Skill unit_Spc_Skill;
+        public eUnit_Defense_Property_States unit_Armor_property;
+        public ArmorCalculate unit_ArmorCalculateCs;
+        public eUnit_targetSelectType unit_targetSelectType;
+
+        //= Instance._skill_Dictionary.TryGetValue();
+
+        //public eUnit_Defense_Property_States unit_Armor_property;
+        //public armor
+
+        //_unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
+
+        //// 유닛 방어구 속성 데미지 계산을 위한 스크립트 할당
+        //_this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
+
+        //// 유닛 타겟 설정 타입 할당
+        //_unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
+
+        //_eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
+
+
+    }
+
+    public void Set_UnitData(string unit_ID)
+    {
+        Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[Instance._unitInfo_Dictionary[unit_ID].generalSkill];
+        print(Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Id);
+        print(Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
+        Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[Instance._unitInfo_Dictionary[unit_ID].defenseType];
+        Instance._unitInfo_Dictionary[unit_ID].unit_ArmorCalculateCs = Instance._armorCs_Dictionary[Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property];
+        Instance._unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[Instance._unitInfo_Dictionary[unit_ID].targetSelectType];
 
     }
 
@@ -145,15 +181,15 @@ public class UnitDataManager : Singleton<UnitDataManager>
     }
     #endregion
 
-    #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
-    private void Add_Skill_Dictionary()
-    {
-        //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
-        _skill_Dictionary.Add(key : "1_101", value : skillDataManagerCs.genral_Skills[0]);
-        _skill_Dictionary.Add(key : "1_201", value : skillDataManagerCs.genral_Skills[1]);
+    //#region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
+    //private void Add_Skill_Dictionary()
+    //{
+    //    //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+    //    _skill_Dictionary.Add(key : "1_101", value : skillDataManagerCs.genral_Skills[0]);
+    //    _skill_Dictionary.Add(key : "1_201", value : skillDataManagerCs.genral_Skills[1]);
 
-    }
-    #endregion
+    //}
+    //#endregion
 
     #region # Add_UnitData_Dictionary() : 유닛 데이터 딕셔너리에 키, 값 추가해주는 함수
     private void Add_UnitData_Dictionary()
@@ -164,6 +200,9 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         // 기사 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[1].char_id, value : All_character_Datas.CharacterDatas[1]);
+
+        // 오크 전사 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[5].char_id, value: All_character_Datas.CharacterDatas[5]);
     }
     #endregion
 

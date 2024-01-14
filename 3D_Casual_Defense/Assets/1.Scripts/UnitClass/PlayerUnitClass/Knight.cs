@@ -9,18 +9,26 @@ public class Knight : PlayerUnitClass
 {
     [SerializeField]
     private bool isCollision;
-    //StatusEffect asd = new StatusEffect();
-    StatusEffect asd = new PoisonStatus();
+    //Abs_StatusEffect asd = new Abs_StatusEffect();
+    Abs_StatusEffect asd = new PoisonStatus();
     private void Awake()
     {
         
         navObs=GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
-        _this_Unit_Armor_Property = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new GambesonArmor();
         _nav = GetComponent<NavMeshAgent>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs=GetComponent<ActUnit>();
         _isClick = false;
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            someMeshReners[i].material = Instantiate(playerUnitMtr);
+
+        }
+        bodyMeshRener.material = Instantiate(playerUnitMtr);
+
         //Rigidbody asd = GetComponent<Rigidbody>();
         //InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
 
@@ -30,7 +38,7 @@ public class Knight : PlayerUnitClass
     {
 
         //asd.unit_Data = _unitData;
-        StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
+        //StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
 
         //CDF(_unitData);
     }
@@ -66,19 +74,25 @@ public class Knight : PlayerUnitClass
         //transform.eulerAngles = Vector3.zero;
         //print(_nav.velocity.magnitude);
         //print(_nav.desiredVelocity.magnitude);
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            asd.isStatusApply = true;
-            StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    asd.isStatusApply = true;
+        //    StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
 
-            //_nav.velocity = new Vector3(_nav.velocity.x / 2, _nav.velocity.y / 2, _nav.velocity.z / 2);
+        //    //_nav.velocity = new Vector3(_nav.velocity.x / 2, _nav.velocity.y / 2, _nav.velocity.z / 2);
+        //}
+        if (_can_SpcSkill_Attack)
+        {
+            _unitData.attackRange = _unitData.sightRange;
         }
+        else
+            _unitData.attackRange = 5f;
         //_nav.velocity.magnitude /= 2f;
         //if (_nav.velocity!=Vector3.zero)
         //{
         //            _nav.velocity = new Vector3(_nav.velocity.x/2, _nav.velocity.y/2, _nav.velocity.z/2);
 
-        //}
+            //}
 
         if (_isClick&&Input.GetMouseButtonDown(1))
         {
@@ -118,6 +132,7 @@ public class Knight : PlayerUnitClass
         _unitData.level = character_Data.level;
 
         // 체력
+        _unitData.maxHp = character_Data.hp;
         _unitData.hp = character_Data.hp;
 
         // 방어 타입
@@ -127,7 +142,7 @@ public class Knight : PlayerUnitClass
         _unitData.moveSpeed = character_Data.moveSpeed;
 
         // 시야 범위
-        _unitData.sightRange = 8f;
+        _unitData.sightRange = 24f;
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
@@ -135,7 +150,9 @@ public class Knight : PlayerUnitClass
         //_unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
-        _unitData.criticRate = character_Data.criticRate;
+        //_unitData.criticRate = character_Data.criticRate;
+        _unitData.criticRate = 50;
+
 
         // 일반스킬
         _unitData.generalSkill = character_Data.generalSkill;
@@ -156,21 +173,24 @@ public class Knight : PlayerUnitClass
         _unitData.specialSkill2Name = character_Data.specialSkill2Name;
 
         // 유닛 타겟 설정 타입
-        _unitData.targetSelectType = character_Data.targetSelectType;   
+        _unitData.targetSelectType = character_Data.targetSelectType;
 
         // 일반스킬 할당
-        gen_skill = UnitDataManager.Instance._skill_Dictionary[_unitData.generalSkill];
+        gen_skill = character_Data.unit_Gen_Skill;
+        gen_skill.unitInfoCs = this;
+
+        // 특수 스킬 할당
+        //gen_skill = character_Data.unit_Spc_Skill;
+        //unit_Spc_Skill.unitInfoCs = this;
 
         // 유닛 방어구 속성 할당
-        _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
+        _unitData._eUnit_Defense_Property = character_Data.unit_Armor_property;
 
-        // 유닛 방어구 속성 데미지 계산을 위한 스크립트 할당
-        _this_Unit_Armor_Property = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
+        // 유닛 방어구 속성에 따른 계산을 위한 스크립트 할당
+        _this_Unit_ArmorCalculateCs = character_Data.unit_ArmorCalculateCs;
 
         // 유닛 타겟 설정 타입 할당
-        _unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
-
-        _eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
+        _unitData._unit_targetSelectType = character_Data.unit_targetSelectType;
 
         // 유닛 자유 모드
         _enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
@@ -231,7 +251,6 @@ public class Knight : PlayerUnitClass
         {
             _nav.isStopped = false;
             print("트리거 콜라이더 나감");
-
         }
 
     }

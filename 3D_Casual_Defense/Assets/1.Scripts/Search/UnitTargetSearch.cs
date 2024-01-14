@@ -144,9 +144,9 @@ public class UnitTargetSearch : MonoBehaviour
         {
             unitData = _colTarget.GetComponent<unit_Data>();
 
-            if (low_health > unitData._unit_currentHealth)
+            if (low_health > unitData.hp)
             {
-                low_health = unitData._unit_currentHealth;
+                low_health = unitData.hp;
                 _lowHeatlh_Target = _colTarget.transform;
             }
         }

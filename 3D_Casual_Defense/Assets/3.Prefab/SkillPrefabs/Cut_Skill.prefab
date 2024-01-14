@@ -58,6 +58,8 @@ MonoBehaviour:
   _skill_AtkType: 1
   _base_Value: 5
   _critical_Dmg: 0
-  _link_Id: 
+  _link_Id: bleed01
+  _projectile_Prefab: {fileID: 0}
   unitInfoCs: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
+  isRush: 0

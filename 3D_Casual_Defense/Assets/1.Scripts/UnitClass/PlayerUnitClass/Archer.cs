@@ -10,11 +10,30 @@ public class Archer : PlayerUnitClass
     [SerializeField]
     private bool isCollision;
 
+    //[SerializeField]
+    //Material aaa;
+
+    //[SerializeField]
+    //private MeshRenderer[] someMaterials;
+
+    //[SerializeField]
+    //private SkinnedMeshRenderer bodyMaterials;
+
+
     private void Awake()
     {
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            someMeshReners[i].material = Instantiate(playerUnitMtr);
+
+        }
+        bodyMeshRener.material = Instantiate(playerUnitMtr);
+
+        //aaa = GetComponent<Material>();
         navObs = GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
-        _this_Unit_Armor_Property = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new GambesonArmor();
         _nav = GetComponent<NavMeshAgent>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs = GetComponent<ActUnit>();
@@ -28,6 +47,7 @@ public class Archer : PlayerUnitClass
 
     private void Start()
     {
+
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
         //print(_unitData.sightRange);
@@ -36,6 +56,8 @@ public class Archer : PlayerUnitClass
     // Update is called once per frame
     void Update()
     {
+
+
         if (_isClick && Input.GetMouseButtonDown(1))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -52,10 +74,37 @@ public class Archer : PlayerUnitClass
 
     }
 
+    //IEnumerator Get_DamagedBody()
+    //{
+    //    print("V키 눌림");
+    //    //Material asdf = GetComponentInChildren<Material>();
+
+    //    //Material asdfd= aaa;
+    //    for (int i = 0; i < someMaterials.Length; i++)
+    //    {
+    //        someMaterials[i].material.color = Color.gray;
+
+    //    }
+    //    bodyMaterials.material.color = Color.gray;
+
+    //    // aaa = asdf;
+    //    yield return new WaitForSeconds(0.1f);
+    //    for (int i = 0; i < someMaterials.Length; i++)
+    //    {
+    //        someMaterials[i].material.color = Color.white;
+    //        someMaterials[i].material.color = Color.white;
+
+    //    }
+    //    bodyMaterials.material.color = Color.white;
+
+    //}
+
     private void FixedUpdate()
     {
         Act_By_Unit();
     }
+
+
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
@@ -75,6 +124,7 @@ public class Archer : PlayerUnitClass
         _unitData.level = character_Data.level;
 
         // 체력
+        _unitData.maxHp = character_Data.hp;
         _unitData.hp = character_Data.hp;
 
         // 방어 타입
@@ -90,7 +140,8 @@ public class Archer : PlayerUnitClass
         _unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
-        _unitData.criticRate = character_Data.criticRate;
+        //_unitData.criticRate = character_Data.criticRate;
+        _unitData.criticRate = 50;
 
         print(character_Data.criticRate);
 
@@ -116,13 +167,13 @@ public class Archer : PlayerUnitClass
         _unitData.targetSelectType = character_Data.targetSelectType;
 
         // 일반스킬 할당
-        gen_skill = UnitDataManager.Instance._skill_Dictionary[_unitData.generalSkill];
+        gen_skill = character_Data.unit_Gen_Skill;
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
 
         // 유닛 방어구 속성 데미지 계산을 위한 스크립트 할당
-        _this_Unit_Armor_Property = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
+        _this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
 
         // 유닛 타겟 설정 타입 할당
         _unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];

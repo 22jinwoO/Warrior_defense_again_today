@@ -65,7 +65,7 @@ public class Bullet_Arrow : Abs_Bullet
     {
         if (other.transform.Equals(_target_Unit))
         {
-            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,other.transform, _skill._base_Value);
+            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,unitInfoCs,other.transform);
             Destroy(gameObject);
         }
     }

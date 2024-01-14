@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using static UnitDataManager;
 
 public class SkillDataManager : MonoBehaviour
 {
@@ -12,8 +14,17 @@ public class SkillDataManager : MonoBehaviour
     [Header("특수 스킬 배열")]
     public SpecialSkill[] special_Skills;
 
+    [Header("셋팅한 스킬 할당하는 딕셔너리")]
+    public SerializableDictionary<string, Abs_Skill> Set_skill_Dictionary;
+
+    [Header("스킬 딕셔너리")]
+    public SerializableDictionary<string, SkillData> _skill_Dictionary;
+
     [Header("스킬 링크효과 딕셔너리")]
-    public SerializableDictionary <string, StatusEffect> _skill_Link_Dictionary;
+    public SerializableDictionary <string, LinkSkillData> _skill_Link_Dictionary;
+
+    [Header("스킬 공격 속성 딕셔너리")]
+    public SerializableDictionary<string, eUnit_Attack_Property_States> _skill_AtkType_Dictionary;
 
     [SerializeField]
     StunStatus stunStatus = new StunStatus();
@@ -30,24 +41,112 @@ public class SkillDataManager : MonoBehaviour
     [SerializeField]
     SlowStatus slowStatus = new SlowStatus();
 
+    [Header("스킬 Json 데이터 에셋")]
+    public TextAsset skill_Json_Data;  // Json 데이터 에셋 이 파일은 유니티 상에서 드래그해서 넣어줍니다.
+
+    [Header("스킬 제이슨 파일 변환 데이터형")]
+    public All_Skill_Data all_Skill_Datas;  // 변환 데이터형
+
+    [Header("링크 스킬 제이슨 파일 변환 데이터형")]
+    public All_LinkSkill_Data all_LinkSkill_Datas;  // 변환 데이터형
+
+
+
     private void Awake()
     {
+        all_Skill_Datas = JsonUtility.FromJson<All_Skill_Data>(skill_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
+
+        all_LinkSkill_Datas = JsonUtility.FromJson<All_LinkSkill_Data>(skill_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
+        
+        // 스킬 공격 속성 딕셔너리에 키, 값 할당
+        Add_Skill_AtkType_Dictionary();
+
+        // 링크스킬에 링크스킬 데이터 할당
+        Add_skill_Link_Dictionary(5);
+
+        // 스킬 데이터 할당
+        Add_skill_Dictionary(num:genral_Skills.Length);
+
+
+
+
+        //링크 스킬 데이터 할당
         for (int i = 0; i < genral_Skills.Length; i++)
-        {
+        {           
             Set_Link_Skill(genral_Skills[i]);
         }
 
-        genral_Skills[1]._link_Skill.duration_s = 5;
-        genral_Skills[1]._link_Skill.linkValue_ps = 2;
-        print(genral_Skills[0]._link_Skill);
-        print(genral_Skills[1]._link_Skill);
-        print(genral_Skills[1]._link_Skill.duration_s);
-        print(genral_Skills[1]._link_Skill.linkValue_ps);
-        Add_skill_Link_Dictionary();
+        // 세팅 완료된 스킬 할당
+        Add_Set_Skill_Dictionary();
+        //stunStatus.link_id = _skill_Link_Dictionary["stun01"].link_id;
+        //stunStatus.link_name = _skill_Link_Dictionary["stun01"].link_name;
+        //stunStatus.link_script = _skill_Link_Dictionary["stun01"].link_script;
+        //stunStatus.linkValue_ps = _skill_Link_Dictionary["stun01"].linkValue_ps;
+        //stunStatus.duration_s = _skill_Link_Dictionary["stun01"].duration_s;
+        //stunStatus.moveSpeedreduce = _skill_Link_Dictionary["stun01"].moveSpeedreduce;
+
+        //for (int i = 0; i < 2; i++)
+        //{
+        //    genral_Skills[0].skill_Name= _skill_Dictionary[]
+        //}
+        //genral_Skills[0]._link_Skill.duration_s = 5;
+        //genral_Skills[0]._link_Skill.linkValue_ps = 2;
+        //genral_Skills[1]._link_Skill.duration_s = 5;
+        //genral_Skills[1]._link_Skill.linkValue_ps = 2;
+
+        //print(genral_Skills[0]._link_Skill);
+        //print(genral_Skills[1]._link_Skill);
+        //print(genral_Skills[1]._link_Skill.duration_s);
+        //print(genral_Skills[1]._link_Skill.linkValue_ps);
+        //print(genral_Skills[0]._link_Id);
+        //print(genral_Skills[0].skill_Name);
+        //print(genral_Skills[0]._skill_AtkType);
+        //print(genral_Skills[0]._skill_CoolTm);
         //print(new _skill_Link_Dictionary["stun01"]);
     }
 
-    // # 스킬의 링크 스킬 지정해주는 함수
+    // 초기 데이터 설정 할당 완료된 스킬 딕셔너리에 스킬ID를 키, 스킬ID에 해당하는 스킬을 값 할당해주는 함수
+    #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
+    private void Add_Set_Skill_Dictionary()
+    {
+        //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+        Set_skill_Dictionary.Add(key: "1_101", value: genral_Skills[0]);
+        Set_skill_Dictionary.Add(key: "1_201", value: genral_Skills[1]);
+    }
+    #endregion
+
+    // 스킬 공격 속성 딕셔너리에 키, 값 할당하는 함수
+    private void Add_Skill_AtkType_Dictionary()
+    {
+        _skill_AtkType_Dictionary.Add(key: "pierce", value: eUnit_Attack_Property_States.piercing_Attack);
+        _skill_AtkType_Dictionary.Add(key: "crush", value: eUnit_Attack_Property_States.crushing_attack);
+        _skill_AtkType_Dictionary.Add(key: "slash", value: eUnit_Attack_Property_States.slash_Attack);
+    }
+
+    // # 스킬 지정해주는 함수
+
+    private void Add_skill_Dictionary(int num)
+    {
+        for (int i = 0; i < num; i++)
+        {
+            //스킬 딕셔너리에 스킬 아이디를 키, 스킬의 제이슨 파일 데이터를 값으로 갖는 딕셔너리에 값을 추가
+            _skill_Dictionary.Add(key: all_Skill_Datas.SkillDatas[i].skill_id, value: all_Skill_Datas.SkillDatas[i]);
+
+            // 일반스킬에 링크스킬 연결
+            genral_Skills[i].Set_Init_Skill(all_Skill_Datas.SkillDatas[i]);
+
+            // 일반 스킬의 공격 타입 할당
+            genral_Skills[i]._skill_AtkType = _skill_AtkType_Dictionary[genral_Skills[i]._damgeType];
+
+            Instantiate(genral_Skills[i], transform);
+
+            
+        }
+        // 링크 스킬 스턴
+
+
+    }
+
 
     public void Set_Link_Skill(Abs_Skill skill)
     {
@@ -55,6 +154,7 @@ public class SkillDataManager : MonoBehaviour
         {
             case "stun01":
                 skill._link_Skill = new StunStatus();
+                // 링크 스킬의 데이터 = 링크 스킬 데이터 할당
                 break;
 
             case "bleed01":
@@ -76,25 +176,133 @@ public class SkillDataManager : MonoBehaviour
             default:
                 break;
         }
+        print(skill._link_Id.Length);
+        print("".Length);
+
+        // 링크스킬이 공백(데이터 없음)이 아닐 때만 링크스킬에 해당하는 데이터 할당
+        if (skill._link_Id!=null&&skill._link_Id!="")
+        {
+            skill._link_Skill.link_id = _skill_Link_Dictionary[key: skill._link_Id].link_id;
+            skill._link_Skill.link_name = _skill_Link_Dictionary[key: skill._link_Id].link_name;
+            skill._link_Skill.link_script = _skill_Link_Dictionary[key: skill._link_Id].link_script;
+            skill._link_Skill.linkValue_ps = _skill_Link_Dictionary[key: skill._link_Id].linkValue_ps;
+            skill._link_Skill.duration_s = _skill_Link_Dictionary[key: skill._link_Id].duration_s;
+            skill._link_Skill.moveSpeedreduce = _skill_Link_Dictionary[key: skill._link_Id].moveSpeedreduce;
+
+            print(skill._link_Skill.link_id);
+            print(skill._link_Skill.link_name);
+            print(skill._link_Skill.link_script);
+            print(skill._link_Skill.linkValue_ps);
+            print(skill._link_Skill.duration_s);
+            print(skill._link_Skill.moveSpeedreduce);
+        }
+
+
+        //print(skill._link_Skill.link_id);
+        //print(skill._link_Skill.link_name);
+        //print(skill._link_Skill.link_script);
+        //print(skill._link_Skill.linkValue_ps);
+        //print(skill._link_Skill.duration_s);
+        //print(skill._link_Skill.moveSpeedreduce);
+
     }
 
-//# 스킬의 링크 스킬 지정해주는 함수
-    private void Add_skill_Link_Dictionary()
+
+
+
+    // # 스킬의 링크 스킬 지정해주는 함수
+
+    private void Add_skill_Link_Dictionary(int num)
     {
+        for (int i = 0; i < num; i++)
+        {
+            _skill_Link_Dictionary.Add(key: all_LinkSkill_Datas.SkillLinkDatas[i].link_id, value: all_LinkSkill_Datas.SkillLinkDatas[i]);
+
+        }
         // 링크 스킬 스턴
-        _skill_Link_Dictionary.Add(key: "stun01", value: stunStatus);
 
-        // 링크 스킬 출혈
-        _skill_Link_Dictionary.Add(key: "bleed01", value: bleedingStatus);
+        //// 링크 스킬 스턴
+        //_skill_Link_Dictionary.Add(key: "stun01", value: stunStatus);
 
-        // 링크 스킬 중독
-        _skill_Link_Dictionary.Add(key: "poison01", value: poisonStatus);
+        //// 링크 스킬 출혈
+        //_skill_Link_Dictionary.Add(key: "bleed01", value: bleedingStatus);
 
-        // 링크 스킬 화염피해
-        _skill_Link_Dictionary.Add(key: "burn01", value: burningStatus);
+        //// 링크 스킬 중독
+        //_skill_Link_Dictionary.Add(key: "poison01", value: poisonStatus);
 
-        // 링크 스킬 이속감소
-        _skill_Link_Dictionary.Add(key: "slow01", value: slowStatus);
+        //// 링크 스킬 화염피해
+        //_skill_Link_Dictionary.Add(key: "burn01", value: burningStatus);
+
+        //// 링크 스킬 이속감소
+        //_skill_Link_Dictionary.Add(key: "slow01", value: slowStatus);
 
     }
+
+
+    //링크 스킬 데이터
+    [System.Serializable]
+    public class All_LinkSkill_Data
+    {
+        public LinkSkillData[] SkillLinkDatas;    // SkillDatas 이름은 시트 이름이랑 같아야 함
+    }
+
+    [System.Serializable]
+    public class LinkSkillData
+    {
+        //no	link_id	link_name	link_script	linkValue_ps	duration_s	moveSpeedreduce																			
+
+        public int no;
+
+        public string link_id;
+
+        public string link_name;
+
+
+        public string link_script;
+
+        public int linkValue_ps;
+
+        public int duration_s;
+
+        public int moveSpeedreduce;
+    }
+
+
+    // 스킬 데이터
+    [System.Serializable]
+    public class All_Skill_Data
+    {
+        public SkillData[] SkillDatas;    // SkillDatas 이름은 시트 이름이랑 같아야 함
+    }
+
+
+    [System.Serializable]
+    public class SkillData
+    {
+        // skill_id	skill_name	skill_script	coolTm	targetType	useRange	castingType	traceType	areaShape	areaLength	areaWidth	damageType	baseValue	criticDamage	link_id											
+
+        public string skill_id;
+
+        public string skill_name;
+
+        public string skill_script;
+
+        public int coolTm;
+        public string use_Range;
+        public string targetType;
+
+        public string castingType;
+
+        public string traceType;
+        public string areaShape;
+        public int areaLength;
+        public int areaWidth;
+        public string damageType;
+        public int baseValue;
+        public int criticDamage;
+        public string link_id;
+
+    }
+
+
 }

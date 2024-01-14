@@ -20,6 +20,7 @@ public class OrcFactory : AbsMonsterUnitFactory
             case OrcClass.Orc:
                 print("오크 생산");
                 MonsterUnit = Instantiate(orcPrefab);
+                MonsterUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_warr01"]);
                 break;
 
 

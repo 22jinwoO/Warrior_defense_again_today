@@ -6672,44 +6672,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
-  _unitData:
-    _unit_Name: 
-    _unit_maxHealth: 0
-    _unit_currentHealth: 0
-    _unit_Level: 0
-    no: 0
-    char_id: 
-    unit_class: 
-    level: 0
-    hp: 0
-    defenseType: 
-    moveSpeed: 
-    sightRange: 
-    attackRange: 
-    criticRate: 0
-    generalSkill: 
-    generalSkillName: 
-    specialSkill1: 
-    specialSkill1Name: 
-    specialSkill2: 
-    specialSkill2Name: 
-    targetSelectType: 
-    _eUnit_genSkill_Property: 0
-    _unit_General_Skill_Dmg: 0
-    _unit_Special_Skill_Dmg: 0
-    _eUnit_Defense_Property: 0
-    _unit_Description: 
-    _unit_Type: 
-    _unit_MoveSpeed: 0
-    _unit_SightRange: 0
-    _unit_Attack_Range: 0
-    _unit_Attack_Speed: 0
-    _unit_Attack_CoolTime: 0
-    _unit_Current_Skill_CoolTime: 0
-    _unit_Skill_CoolTime: 0
-    _unit_CriticalRate: 0
-    _unit_targetSelectType: 0
-    unit_Id: 
   anim: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
 --- !u!1 &3276935910214120443
@@ -7807,6 +7769,7 @@ Transform:
   m_Children:
   - {fileID: 5356288897712362187}
   - {fileID: 7566425961191296874}
+  - {fileID: 4359788394748923378}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1100149671020438925
@@ -7823,18 +7786,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _unitData:
     _unit_Name: 
-    _unit_maxHealth: 0
-    _unit_currentHealth: 0
     _unit_Level: 0
     no: 0
     char_id: 
     unit_class: 
     level: 0
+    maxHp: 0
     hp: 0
     defenseType: 
-    moveSpeed: 
-    sightRange: 
-    attackRange: 
+    moveSpeed: 0
+    moveAcc: 0
     criticRate: 0
     generalSkill: 
     generalSkillName: 
@@ -7850,8 +7811,8 @@ MonoBehaviour:
     _unit_Description: 
     _unit_Type: 
     _unit_MoveSpeed: 1
-    _unit_SightRange: 8
-    _unit_Attack_Range: 4
+    sightRange: 0
+    attackRange: 0
     _unit_Attack_Speed: 3
     _unit_Attack_CoolTime: 5
     _unit_Current_Skill_CoolTime: 0
@@ -7870,8 +7831,8 @@ MonoBehaviour:
   _isClick: 0
   _isSearch: 0
   _movePos: {x: 0, y: 0, z: 0}
-  _can_Base_Attack: 0
-  _can_Skill_Attack: 0
+  _can_genSkill_Attack: 0
+  _can_SpcSkill_Attack: 0
   _hit_Effect_SlashAtk: {fileID: 0}
   _hit_Effect_PierceAtk: {fileID: 0}
   _hit_Effect_CrushAtk: {fileID: 0}
@@ -7879,7 +7840,15 @@ MonoBehaviour:
   _projectile_startPos: {fileID: 0}
   gen_skill: {fileID: 4153666595965432161, guid: d1109a157a2a0ee418dfac0bd7da13d2, type: 3}
   spe_skill_1: {fileID: 0}
-  spe_skill_2: {fileID: 0}
+  spe_skill_2: {fileID: 6913384095984081999}
+  canAct: 0
+  playerUnitMtr: {fileID: 2100000, guid: dccf8e44ede71db42b49378af93c5fb7, type: 2}
+  mosterUnitMtr: {fileID: 0}
+  someMeshReners:
+  - {fileID: 8275858659595309234}
+  - {fileID: 4465361571796816955}
+  - {fileID: 9039664846340041259}
+  bodyMeshRener: {fileID: 3204261466029327796}
   holdObPref: {fileID: 3462556803876994634, guid: 97209c46dff9ee845a27e20365814fff, type: 3}
   holdOb: {fileID: 0}
   navObs: {fileID: 0}
@@ -7922,44 +7891,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nav: {fileID: 0}
   unitInfoCs: {fileID: 0}
-  _unitData:
-    _unit_Name: 
-    _unit_maxHealth: 0
-    _unit_currentHealth: 0
-    _unit_Level: 0
-    no: 0
-    char_id: 
-    unit_class: 
-    level: 0
-    hp: 0
-    defenseType: 
-    moveSpeed: 
-    sightRange: 
-    attackRange: 
-    criticRate: 0
-    generalSkill: 
-    generalSkillName: 
-    specialSkill1: 
-    specialSkill1Name: 
-    specialSkill2: 
-    specialSkill2Name: 
-    targetSelectType: 
-    _eUnit_genSkill_Property: 0
-    _unit_General_Skill_Dmg: 0
-    _unit_Special_Skill_Dmg: 0
-    _eUnit_Defense_Property: 0
-    _unit_Description: 
-    _unit_Type: 
-    _unit_MoveSpeed: 0
-    _unit_SightRange: 0
-    _unit_Attack_Range: 0
-    _unit_Attack_Speed: 0
-    _unit_Attack_CoolTime: 0
-    _unit_Current_Skill_CoolTime: 0
-    _unit_Skill_CoolTime: 0
-    _unit_CriticalRate: 0
-    _unit_targetSelectType: 0
-    unit_Id: 
   anim: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}
 --- !u!95 &5692836948082142794
@@ -19672,3 +19603,84 @@ Transform:
   - {fileID: 1076817680679385943}
   m_Father: {fileID: 5031520607440366806}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2999634579363523110
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3809936362958328543}
+    m_Modifications:
+    - target: {fileID: 27184939909337965, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_Name
+      value: Spc_RushSkill
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8525756051881440873, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: unitInfoCs
+      value: 
+      objectReference: {fileID: 1100149671020438925}
+    - target: {fileID: 8525756051881440873, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+      propertyPath: unitTargetSearchCs
+      value: 
+      objectReference: {fileID: 5521264825765098813}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+--- !u!4 &4359788394748923378 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+  m_PrefabInstance: {fileID: 2999634579363523110}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6913384095984081999 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8525756051881440873, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+  m_PrefabInstance: {fileID: 2999634579363523110}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b76fb3dab6941c44b042a9b4811ae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,52 +1,169 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SocialPlatforms.GameCenter;
 
 public class Rush : SpecialSkill
 {
-    
+    [SerializeField]
+    private bool isArrive;
+
+    [SerializeField]
+    private float slerpValue=8f;
+
+
+    [SerializeField]
+    private Rigidbody rigd;
+
+    [SerializeField]
+    private Vector3 startPosition;
+
+    [SerializeField]
+    private Vector3 endPosition;
+
+    [SerializeField]
+    private Vector3 center;
+
+
+    [SerializeField]
+    private Vector3 _target_Direction;
+
+    [SerializeField]
+    private Transform _target_BodyTr;
+
+    [SerializeField]
+    private SphereCollider sprCol;
+
+
+
     public override void Attack_Skill()
     {
-        Collider[] hitCols = Physics.OverlapSphere(transform.position, 20f,unitTargetSearchCs._layerMask);
+        _target_BodyTr = unitTargetSearchCs._targetUnit;
+        StartCoroutine(Rush_Attack());
+
+    }
+
+    IEnumerator Rush_Attack()
+    {
+        startPosition = unitInfoCs.transform.position;    // 발사체 시작 위치
+        endPosition = _target_BodyTr.position;  // 발사체 도착 위치
+
+        center = (startPosition + endPosition) * 0.5f;  // 시작위치와 도착위치를 합한 값 /2 를 하여 중간 위치값 구하기
+
+        center.y -= 5; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
+
+        startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+        endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+
+        for (float t = 0; t < 0.9f; t += Time.deltaTime * slerpValue)
+        {
+
+            Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
+
+            point += center;
+            //transform.position = point;
+            // 화살 촉이 다음에 이동할 위치 바라보도록
+            //_target_Direction = point - unitInfoCs.transform.position;
+
+            //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
+
+            //unitInfoCs.transform.rotation = rot;
+            print(t);
+            unitInfoCs.transform.position = point;
+            //print(transform.gameObject);
+            yield return null;
+        }
+
+
+
+        yield return null;
+
+        // 넉백 하기 위한 콜라이더 생성
+        Collider[] hitCols = Physics.OverlapSphere(unitInfoCs.transform.position, 10f, unitTargetSearchCs._layerMask);
 
         Transform _longTarget = null;  // 가장 가까운 적을 의미하는 변수
 
-        //print(_cols.Length);  
-        if (hitCols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출
-        {
-            //print("적 없음!");
-            return;
-        }
+        Debug.LogWarning(hitCols.Length);  
 
-        float _longDistance = 0f;   // 거리 무한 값 할당
+        yield return null;
 
         foreach (var _colTarget in hitCols)
         {
-            float _distance = Vector3.SqrMagnitude(transform.position - _colTarget.transform.position);
-            if (_distance > _longDistance)
-            {
-                _longDistance = _distance;
-                _longTarget = _colTarget.transform;
-            }
-        }
-        //
-        unitTargetSearchCs._targetUnit = _longTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
-        unitTargetSearchCs._target_Body = _longTarget.GetComponent<UnitInfo>().body_Tr;
-        //print(_targetUnit.name);
-        unitInfoCs._isSearch = true;
+            Debug.LogWarning(_colTarget.gameObject.name);
 
-        // 유닛 회피 무시 상태로 전환
-        unitInfoCs._nav.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-        unitInfoCs._nav.speed = 14f;
-        unitInfoCs._nav.acceleration = 20f;
-        unitInfoCs._nav.SetDestination(_longTarget.position);
+            _colTarget.GetComponent<UnitInfo>().canAct = false;
+
+            _colTarget.GetComponent<NavMeshAgent>().enabled = false;
+
+
+            Vector3 targetRot = unitInfoCs.transform.position - _colTarget.transform.position;
+            targetRot.y = 0f;
+
+            Quaternion rot = Quaternion.LookRotation(targetRot.normalized);
+
+
+            _colTarget.transform.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
+
+            StartCoroutine(DO_NuckBack(_colTarget.GetComponent<Rigidbody>(),_colTarget.transform));
+        }
+
 
         print("애니메이션 호출 함수");
+
+        // 돌격한 유닛이 타겟을 바라보는 방향의 각도를 구한 후 각도 전환
+        _target_Direction = _target_BodyTr.position - unitInfoCs.transform.position;
+
+        Quaternion rot2 = Quaternion.LookRotation(_target_Direction.normalized);
+
+        unitInfoCs.transform.rotation = rot2;
+
+        unitInfoCs.transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
+
+        unitInfoCs.transform.GetComponent<NavMeshAgent>().enabled = true;
     }
 
+
+    IEnumerator DO_NuckBack(Rigidbody targetRigd, Transform other)
+    {
+        //yield return new WaitForSeconds(0.1f);
+
+
+        Debug.LogWarning("넉백됨");
+        float time = 0f;
+        float nuckBackValue = 7.5f;
+        float nuckBackValue2 = 700f;
+        targetRigd.velocity = Vector3.zero;
+
+
+
+        //y= ax + b (a: 넉백가속도 b: 초기 넉백속도. x: 넉백시간, y: 넉백속도)
+
+        float y = 0f;
+        // 벨로시티로 넉백 구현
+        while (time < 0.2f)
+        {
+            targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
+            nuckBackValue2 -= 10f;
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        // 넉백된 몬스터들 행동하기 위해 필요한 값들 활성화
+        targetRigd.GetComponent<UnitInfo>().canAct = true;
+
+        targetRigd.velocity = Vector3.zero;
+        targetRigd.GetComponent<NavMeshAgent>().enabled = true;
+        targetRigd.GetComponent<NavMeshAgent>().isStopped = false;
+
+
+        //targetRigd.rotation= Quaternion.Euler(0f,targetRigd.rotation.y,targetRigd.rotation.z);
+
+    }
     // 충돌하면 공격 애미네이션 실행하고 데미지 들어가게 하도록
 
-    
+
 }

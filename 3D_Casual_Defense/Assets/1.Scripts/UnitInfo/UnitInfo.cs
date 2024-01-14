@@ -15,15 +15,16 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
 {
     [Header("유닛 이름")]
     public string _unit_Name;                           // 유닛 이름
-    public float _unit_maxHealth;                       // 유닛 최대 체력
-    public float _unit_currentHealth;                   // 유닛 현재 체력 유닛 최대체력 넣어주기
+    //public float _unit_maxHealth;                       // 유닛 최대 체력
+    //public float _unit_currentHealth;                   // 유닛 현재 체력 유닛 최대체력 넣어주기
     public int _unit_Level;                             // 유닛 레벨
 
     public int no; // 캐릭터 넘버
     public string char_id;   // 캐릭터 id
     public string unit_class; // 유닛 클래스
     public int level;    // 레벨
-    public int hp;   // 체력
+    public float maxHp;   // 최대 체력
+    public float hp;   // 현재 체력
     public string defenseType;   // 방어 타입
     public int moveSpeed;   // 이동속도
     public int moveAcc;   // 이동 가속도
@@ -79,7 +80,7 @@ public abstract class UnitInfo : MonoBehaviour
     public eUnit_targetSelectType _eUnit_Target_Search_Type;   // 유닛의 타겟 선정 타입
 
     [Header("유닛 방어구 속성")]
-    public ArmorCalculate _this_Unit_Armor_Property;
+    public ArmorCalculate _this_Unit_ArmorCalculateCs;
 
 
     [Header("유닛 바디 트랜스폼")]
@@ -101,11 +102,11 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛이 도착할 위치를 의미하는 벡터변수")]
     public Vector3 _movePos;
 
-    [Header("기본 공격 가능 불가능 확인하는 변수")]
-    public bool _can_Base_Attack;    // 기본 공격 가능 불가능 확인하는 변수
+    [Header("기본 스킬 가능 불가능 확인하는 변수")]
+    public bool _can_genSkill_Attack;    // 기본 공격 가능 불가능 확인하는 변수
 
-    [Header("스킬 공격 가능 불가능 확인하는 변수")]
-    public bool _can_Skill_Attack;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("특수 스킬 공격 가능 불가능 확인하는 변수")]
+    public bool _can_SpcSkill_Attack;   // 스킬 공격 가능 불가능 확인하는 변수
 
 
     // 게임 이펙트 부분*********************************
@@ -140,6 +141,20 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("특수 스킬 - 2")]
     public Abs_Skill spe_skill_2;
 
+    [Header("유닛 행동 가능 불가능 체크하는 변수")]
+    public bool canAct;
+
+    [Header("플레이어 유닛 머태리얼")]
+    public Material playerUnitMtr;
+
+    [Header("몬스터 유닛 머태리얼")]
+    public Material mosterUnitMtr;
+
+    [Header("바디 이외의 메쉬렌더러 변수")]
+    public MeshRenderer[] someMeshReners;
+
+    [Header("바디 메쉬 렌더러 변수")]
+    public SkinnedMeshRenderer bodyMeshRener;
 
     // 사운드 *************************
 
@@ -148,14 +163,15 @@ public abstract class UnitInfo : MonoBehaviour
     // 히트 시 출력되는 텍스트 *************************
 
     // 히트 시 출력되는 텍스트 =========================
+
     #region # Unit_Attack_Skill_CoolTime() : 유닛 기본공격, 스킬공격 쿨타임 돌려주는 함수
     public void Unit_Attack_Skill_CoolTime()
     {
         // 기본 공격이 가능한지 확인
-        _can_Base_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
+        _can_genSkill_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
 
         // 스킬 공격이 가능한지 확인
-        _can_Skill_Attack = _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
+        _can_SpcSkill_Attack = _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
 
         //현재 스킬 공격 쿨타임이 유닛의 스킬 공격 쿨타임 보다 낮다면 쿨타임 돌려주기
         if (_unitData._unit_Skill_CoolTime >= _unitData._unit_Current_Skill_CoolTime)
