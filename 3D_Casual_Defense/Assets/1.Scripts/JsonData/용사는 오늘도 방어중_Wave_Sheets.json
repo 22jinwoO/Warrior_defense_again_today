@@ -15,7 +15,7 @@
     },
     {
       "waveNum": "2",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 2",
       "interval": "1",
       "character1": "ORC_war01",
@@ -28,7 +28,7 @@
     },
     {
       "waveNum": "3",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 3",
       "interval": "1",
       "character1": "ORC_war01",
@@ -36,12 +36,12 @@
       "character3": "ORC_war01",
       "character4": null,
       "character5": null,
-      "maxMonster_Count": "10",
+      "maxMonster_Count": "6",
       "repeatNum": "2"
     },
     {
       "waveNum": "4",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 4",
       "interval": "1",
       "character1": "ORC_war01",
@@ -54,7 +54,7 @@
     },
     {
       "waveNum": "5",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 5",
       "interval": "1",
       "character1": "ORC_war01",
@@ -67,7 +67,7 @@
     },
     {
       "waveNum": "6",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 6",
       "interval": "1",
       "character1": "ORC_war01",
@@ -80,7 +80,7 @@
     },
     {
       "waveNum": "7",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 7",
       "interval": "1",
       "character1": "ORC_war01",
@@ -93,7 +93,7 @@
     },
     {
       "waveNum": "8",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 8",
       "interval": "1",
       "character1": "ORC_war01",
@@ -106,7 +106,7 @@
     },
     {
       "waveNum": "9",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 9",
       "interval": "1",
       "character1": "ORC_war01",
@@ -119,7 +119,7 @@
     },
     {
       "waveNum": "10",
-      "waveStartTime": "120",
+      "waveStartTime": "15",
       "waveName": "웨이브 10",
       "interval": "1",
       "character1": "ORC_war01",

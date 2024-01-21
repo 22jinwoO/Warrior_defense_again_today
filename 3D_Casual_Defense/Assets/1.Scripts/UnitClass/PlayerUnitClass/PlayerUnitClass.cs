@@ -16,30 +16,33 @@ public abstract class PlayerUnitClass : UnitInfo
     [Header("플레이어 유닛 홀드 상태 시 필요한 네비메쉬 옵스태클")]
     public NavMeshObstacle navObs;
 
-    [Header("유닛의 타겟 선정 타입마다 필요한 함수들을 구현해놓은 UnitTargetSearch 스크립트")]
-    [SerializeField]
-    protected UnitTargetSearch unitTargetSearchCs;
-
-    [Header("유닛의 행동들을 구현해놓은 ActUnit 스크립트")]
-    [SerializeField]
-    protected ActUnit actUnitCs;
-
     public Transform initPos;   // 오브젝트 원래 위치
     public Vector3 initPos2;    // 오브젝트 원래 위치
 
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
+
+
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수, IActByUnit 인터페이스 함수 정의
 
     public void Act_By_Unit()  // 유닛 행동 구분지어주는 함수
     {
+        //if (_isTargetDead&& unitTargetSearchCs._targetUnit!=null)
+        //{
+        //    StartCoroutine(TestA());
+        //}
         switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
         {
             case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
+                _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_FreeMode;
+                //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Idle;
                 Act_FreeMode(); // 자유모드일 때 호출되는 함수
                 break;
 
-            case eUnit_Action_States.unit_HoldMode:         
+            case eUnit_Action_States.unit_HoldMode:
+                _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_HoldMode;
+                //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Boundary;
+
                 Act_HoldMode(); // 홀드모드일 때 호출되는 함수
                 break;
         }
@@ -53,7 +56,7 @@ public abstract class PlayerUnitClass : UnitInfo
         navObs.enabled = false;
         _nav.enabled = true;
 
-        if (!holdOb.Equals(null))
+        if (holdOb!=null)
             holdOb.SetActive(false);
 
 
@@ -66,12 +69,12 @@ public abstract class PlayerUnitClass : UnitInfo
                 {
                     actUnitCs.SearchTarget(target_Search_Type: _eUnit_Target_Search_Type);
                 }
-                if (initPos != null)
-                {
-                    print(initPos2);
-                    transform.position = initPos2;
-                    initPos = null;
-                }
+                //if (initPos != null)
+                //{
+                //    print(initPos2);
+                //    transform.position = initPos2;
+                //    initPos = null;
+                //}
                 break;
 
             case eUnit_Action_States.unit_Move: // 유닛 이동
@@ -85,11 +88,20 @@ public abstract class PlayerUnitClass : UnitInfo
                 break;
 
             case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-                actUnitCs.TrackingTarget(next_ActionState: eUnit_Action_States.unit_Tracking);
+                if (unitTargetSearchCs._targetUnit != null)
+                {
+                    actUnitCs.TrackingTarget(next_ActionState: eUnit_Action_States.unit_Tracking);
+                }
                 break;
 
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-                actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
+                if (unitTargetSearchCs._targetUnit!=null)
+                {
+                    actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
+
+                    //actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
+
+                }
                 break;
 
         }
@@ -103,6 +115,7 @@ public abstract class PlayerUnitClass : UnitInfo
         _nav.enabled = false;
         if (holdOb.Equals(null))
         {
+            print(gameObject.name);
             holdOb=Instantiate(holdObPref,transform.position,Quaternion.identity);
             holdOb.transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
             holdOb.gameObject.name = "홀드발판";
@@ -128,11 +141,17 @@ public abstract class PlayerUnitClass : UnitInfo
                 break;
 
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-                actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Boundary);
+                if (unitTargetSearchCs._targetUnit != null)
+                {
+                    actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Boundary);
+                }
                 break;
 
             case eUnit_Action_States.unit_Boundary: // 유닛 홀드(제자리 경계)
-                actUnitCs.Boundary();
+                if (unitTargetSearchCs._targetUnit != null)
+                {
+                    actUnitCs.Boundary();
+                }
                 break;
         }
     }

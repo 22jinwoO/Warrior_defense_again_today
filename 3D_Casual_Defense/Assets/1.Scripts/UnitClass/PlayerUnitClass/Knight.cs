@@ -16,27 +16,70 @@ public class Knight : PlayerUnitClass
         
         navObs=GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
-        _this_Unit_ArmorCalculateCs = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new PaddingArmor();
         _nav = GetComponent<NavMeshAgent>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs=GetComponent<ActUnit>();
         _isClick = false;
+        sprCol=GetComponent<SphereCollider>();
+
+        atkSound = GetComponent<AudioSource>();
+
+        someMtr = new Material[someMeshReners.Length];
 
         for (int i = 0; i < someMeshReners.Length; i++)
         {
-            someMeshReners[i].material = Instantiate(playerUnitMtr);
+            someMeshReners[i].material = Instantiate(_unit_NomralMtr);
 
         }
-        bodyMeshRener.material = Instantiate(playerUnitMtr);
+        bodyMeshRener.material = Instantiate(_unit_NomralMtr);
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            someMtr[i] = someMeshReners[i].material;
+
+        }
+        bodyMtr = bodyMeshRener.material;
+
+        //_unit_CloakingMtr = Instantiate(_unit_CloakingMtr);
+
+        cloaking_someMtr = new Material[someMeshReners.Length];
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            cloaking_someMtr[i] = Instantiate(_unit_CloakingMtr);
+
+        }
+        cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
+
+        //_unit_CloakingMtr = Instantiate(_unit_CloakingMtr);
 
         //Rigidbody asd = GetComponent<Rigidbody>();
         //InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
 
     }
+    private void OnEnable()
+    {
+        bodyMeshRener.material = bodyMtr;
 
+        for (int j = 0; j < someMeshReners.Length; j++)
+        {
+            someMeshReners[j].material = someMtr[j];
+            //0.157f
+        }
+        Color cloaking_Mtr_Color = bodyMeshRener.material.color;
+        cloaking_Mtr_Color.a = 1f;
+        _unit_CloakingMtr.color = cloaking_Mtr_Color;
+
+        for (int j = 0; j < someMeshReners.Length; j++)
+        {
+            cloaking_someMtr[j].color = cloaking_Mtr_Color;
+            //0.157f
+        }
+    }
     private void Start()
     {
-
+        print(_nav+gameObject.name);
         //asd.unit_Data = _unitData;
         //StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
 
@@ -69,6 +112,14 @@ public class Knight : PlayerUnitClass
     //}
     public void Update()
     {
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
+        {
+            _isSearch = false;
+            unitTargetSearchCs._targetUnit = null;
+            unitTargetSearchCs._target_Body = null;
+            _enum_Unit_Action_Mode = _enum_pUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
+        }
         //_unitData = asd.unit_Data;
 
         //transform.eulerAngles = Vector3.zero;
@@ -109,13 +160,18 @@ public class Knight : PlayerUnitClass
 
     private void FixedUpdate()
     {
-        Act_By_Unit();  // 유닛 행동 함수
+        if (canAct)
+        {
+            Act_By_Unit();  // 유닛 행동 함수
+
+        }
     }
 
 
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
+        canAct = true;
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
 
@@ -177,6 +233,8 @@ public class Knight : PlayerUnitClass
 
         // 일반스킬 할당
         gen_skill = character_Data.unit_Gen_Skill;
+        print(gen_skill.unitInfoCs);
+
         gen_skill.unitInfoCs = this;
 
         // 특수 스킬 할당

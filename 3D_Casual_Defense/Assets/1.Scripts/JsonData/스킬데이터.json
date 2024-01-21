@@ -481,23 +481,6 @@
       "link_id": "stun01"
     },
     {
-      "skill_id": "1_301",
-      "skill_name": "대지의 우래",
-      "skill_script": "약한 지진을 일으켜 여러 상대에게 분쇄 피해를 주는 마법 공격입니다. 치명타시 기절 효과를 적용합니다.",
-      "coolTm": "1",
-      "targetType": "area",
-      "useRange": "attack",
-      "castingType": "instant",
-      "traceType": "remote",
-      "areaShape": "circle",
-      "areaLength": "2",
-      "areaWidth": null,
-      "damageType": "crush",
-      "baseValue": "5",
-      "criticDamage": "1",
-      "link_id": null
-    },
-    {
       "skill_id": "1_302",
       "skill_name": "부수기",
       "skill_script": "적을 향해 강력한 충격으로 무기를 내려쳐 분쇄 피해를 주는 무기 공격입니다.",

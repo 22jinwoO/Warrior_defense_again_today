@@ -19,35 +19,71 @@ public class Archer : PlayerUnitClass
     //[SerializeField]
     //private SkinnedMeshRenderer bodyMaterials;
 
-
+    
     private void Awake()
     {
+        someMtr = new Material[someMeshReners.Length];
 
         for (int i = 0; i < someMeshReners.Length; i++)
         {
-            someMeshReners[i].material = Instantiate(playerUnitMtr);
+            someMeshReners[i].material = Instantiate(_unit_NomralMtr);
 
         }
-        bodyMeshRener.material = Instantiate(playerUnitMtr);
+        bodyMeshRener.material = Instantiate(_unit_NomralMtr);
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            someMtr[i] = someMeshReners[i].material;
+
+        }
+        bodyMtr = bodyMeshRener.material;
+
+        cloaking_someMtr = new Material[someMeshReners.Length];
+
+        for (int i = 0; i < someMeshReners.Length; i++)
+        {
+            cloaking_someMtr[i] = Instantiate(_unit_CloakingMtr);
+
+        }
+        cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
+
+
+        //_unit_CloakingMtr = Instantiate(_unit_CloakingMtr);
+
+        //bodyMeshRener.material = Instantiate(_unit_CloakingMtr);
+
+
+        sprCol = GetComponent<SphereCollider>();
 
         //aaa = GetComponent<Material>();
         navObs = GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
-        _this_Unit_ArmorCalculateCs = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new PaddingArmor();
         _nav = GetComponent<NavMeshAgent>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs = GetComponent<ActUnit>();
         _isClick = false;
         //InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
+        //gen_skill._projectile_Prefab = Instantiate(_projectile_Prefab);
+        //gen_skill._projectile_Prefab.SetActive(false);
 
         // 발사체 값 넣어주기
-        _projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_General_Skill_Dmg;
-        _projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = GetComponent<UnitInfo>();
+        atkSound = GetComponent<AudioSource>();
     }
 
     private void Start()
     {
+        gen_skill._projectile_Prefab = Instantiate(_projectile_Prefab);
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = this;
 
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_General_Skill_Dmg;
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
+
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill;
+        print(gen_skill);
+        print(_projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill);
+
+        print(gameObject.activeSelf);
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
         //print(_unitData.sightRange);
@@ -56,7 +92,14 @@ public class Archer : PlayerUnitClass
     // Update is called once per frame
     void Update()
     {
-
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
+        {
+            _isSearch = false;
+            unitTargetSearchCs._targetUnit = null;
+            unitTargetSearchCs._target_Body = null;
+            _enum_Unit_Action_Mode = _enum_pUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
+        }
 
         if (_isClick && Input.GetMouseButtonDown(1))
         {
@@ -101,13 +144,19 @@ public class Archer : PlayerUnitClass
 
     private void FixedUpdate()
     {
-        Act_By_Unit();
+        if (canAct)
+        {
+            Act_By_Unit();  // 유닛 행동 함수
+
+        }
     }
 
 
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
+        canAct = true;
+        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
 
@@ -150,6 +199,14 @@ public class Archer : PlayerUnitClass
 
         // 일반스킬 이름
         _unitData.generalSkillName = character_Data.generalSkillName;
+        gen_skill = Instantiate(character_Data.unit_Gen_Skill,transform);
+        gen_skill.gameObject.name = _unitData.generalSkillName;
+        gen_skill._link_Skill= character_Data.unit_Gen_Skill._link_Skill;
+        gen_skill.unitInfoCs = this;
+        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
+        Debug.LogWarning(gen_skill._link_Skill.link_name);
+        print(gen_skill.unitInfoCs);
+
 
         // 특수 스킬 , 자유모드 일 때 사용하는 스킬
         _unitData.specialSkill1 = character_Data.specialSkill1;
@@ -166,8 +223,8 @@ public class Archer : PlayerUnitClass
         // 유닛 타겟 설정 타입
         _unitData.targetSelectType = character_Data.targetSelectType;
 
-        // 일반스킬 할당
-        gen_skill = character_Data.unit_Gen_Skill;
+        //// 일반스킬 할당
+        //gen_skill = character_Data.unit_Gen_Skill;
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];

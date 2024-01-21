@@ -4,6 +4,10 @@ using UnityEngine;
 
 public abstract class AbsMonsterUnitFactory : MonoBehaviour
 {
+    [SerializeField]
+    public Vector3 spawnPoint = new Vector3(13.5f, 0, -5f);
+
+
     public enum OrcClass
     {
         Default = 0,

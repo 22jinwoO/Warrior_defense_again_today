@@ -29,12 +29,16 @@ public class Bullet_Arrow : Abs_Bullet
 
     private void Awake()
     {
+        //unitInfoCs = transform.parent.GetComponent<UnitInfo>();
+        //_start_Pos = unitInfoCs._projectile_startPos;
+
         slerpValue = 4f;
         lerpValue = 8f;
         //print(_start_Pos.rotation);
         //transform.SetParent(_start_Pos.transform.parent);
         transform.position = _start_Pos.position;
         transform.rotation = unitInfoCs.transform.rotation;
+        Debug.LogWarning(unitInfoCs.gameObject.name);
         //_target_Direction = _target_BodyTr.position - transform.position;
         //print(_target_Direction.normalized);
         //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
@@ -52,21 +56,34 @@ public class Bullet_Arrow : Abs_Bullet
         if (isArrive)
         {
             _target_Direction = _target_BodyTr.position - transform.position;
-            print(_target_Direction.normalized);
             Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
             transform.rotation = rot;
             transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
-
+            
         }
-
+        if (_target_BodyTr == null || _target_Unit == null || _target_Unit.GetComponent<SphereCollider>().enabled == false)
+        {
+            Destroy(gameObject);
+        }
+        //if (unitInfoCs.unitTargetSearchCs._targetUnit == null)
+        //{
+        //    Destroy(gameObject);
+        //}
+        //if (_target_BodyTr.gameObject.activeSelf==false)
+        //{
+        //    print("타겟죽음");
+        //    Destroy(gameObject);
+        //}
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.transform.Equals(_target_Unit))
         {
-            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,unitInfoCs,other.transform);
-            Destroy(gameObject);
+            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,ref unitInfoCs,other.transform);
+            isArrive = false;
+            transform.SetParent(_target_Unit.transform);
+            //Destroy(gameObject,6f);
         }
     }
 

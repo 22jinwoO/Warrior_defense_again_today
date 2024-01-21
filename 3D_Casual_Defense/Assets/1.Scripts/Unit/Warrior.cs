@@ -11,7 +11,7 @@ public class Warrior : UnitInfo
     private void Awake()
     {
         _anim=GetComponent<Animator>();
-        _this_Unit_ArmorCalculateCs = new GambesonArmor();
+        _this_Unit_ArmorCalculateCs = new PaddingArmor();
         _nav = GetComponent<NavMeshAgent>();
         //InitUnitInfoSetting();
 

@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7371116363651018338}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.12903148, y: 0.65701044, z: 0.115542114, w: 0.73371536}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -44,20 +44,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5611494174b39438df92814d939594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skill_Id: 
-  skill_Name: 
-  skill_Description: 
-  _skill_CoolTm: 0
-  _target_Type: 
+  skill_Id: 1_201
+  skill_Name: "\uC800\uACA9 \uD654\uC0B4"
+  skill_Description: "\uD55C \uBA85\uC758 \uD0C0\uAC9F\uC744 \uC800\uACA9\uD558\uC5EC
+    \uAC15\uB825\uD55C \uD798\uC73C\uB85C \uC0C1\uB300\uC5D0\uAC8C \uAD00\uD1B5 \uD53C\uD574\uB97C
+    \uC8FC\uB294 \uD654\uC0B4 \uACF5\uACA9\uC785\uB2C8\uB2E4. \uCE58\uBA85\uD0C0\uC2DC
+    \uAE30\uC808 \uD6A8\uACFC\uB97C \uC801\uC6A9\uD569\uB2C8\uB2E4."
+  _skill_CoolTm: 1
+  _target_Type: target
   _use_Range: 
-  _casting_Type: 
-  _trace_Type: 
-  _area_Shape: 
+  _casting_Type: instant
+  _trace_Type: trajectory
+  _area_Shape: point
   _area_Length: 0
   _area_Width: 0
+  _damgeType: pierce
   _skill_AtkType: 2
   _base_Value: 10
-  _critical_Dmg: 1.5
+  _critical_Dmg: 1
   _link_Id: stun01
   _projectile_Prefab: {fileID: 6721835609700710605, guid: 37811021cdfa76d4583cfcd3c04b9eb4, type: 3}
   unitInfoCs: {fileID: 0}

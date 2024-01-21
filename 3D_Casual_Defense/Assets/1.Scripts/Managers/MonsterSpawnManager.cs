@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class MonsterSpawnManager : MonoBehaviour
+public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 {
 
-    [SerializeField]
-    Vector3 spawnPoint;
 
     [SerializeField]
     AbsMonsterUnitFactory[] monsterUnitFactorys;
@@ -29,8 +28,7 @@ public class MonsterSpawnManager : MonoBehaviour
     [SerializeField]
     private MonsterUnitClass spawnMonster;  //스폰된 몬스터
 
-    [SerializeField]
-    private Wave currentWave;   // 웨이브
+    public Wave currentWave;   // 현재 웨이브
 
     [SerializeField]
     private int currentMonsterIndex = 0;  // 웨이브 몬스터 종류 배열 인덱스
@@ -54,7 +52,7 @@ public class MonsterSpawnManager : MonoBehaviour
 
     public AllData datas;  // 변환 데이터형
 
-
+    //public Text intervalTxt;
 
     private void Awake()
     {
@@ -75,7 +73,7 @@ public class MonsterSpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(C_DynamicBake());
+        //StartCoroutine(C_DynamicBake());
 
     }
 
@@ -87,6 +85,13 @@ public class MonsterSpawnManager : MonoBehaviour
         {
             waveSys.StartWave();
         }
+
+        if (currentWave.wave_maxMonsterCount==currentWave.deathMonsterCnt)
+        {
+            currentWave.deathMonsterCnt = 0;
+            print("웨이브 변경");
+            waveSys.StartWave();
+        }
     }
 
 
@@ -95,7 +100,7 @@ public class MonsterSpawnManager : MonoBehaviour
         currentWave.wave_monsterClasses.Clear();
         // 매개변수로 받아온 웨이브 정보 저장
         currentWave = wave;
-
+        //intervalTxt.text = currentWave.wave_interval.ToString();
         // 현재 웨이브 시작
         StartCoroutine(SpawnMonster());
     }
@@ -103,6 +108,14 @@ public class MonsterSpawnManager : MonoBehaviour
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수
     {
         int repeatNum = 0;
+        Debug.LogWarning("대기시간 :"+currentWave.wave_StartTime);
+        while (currentWave.wave_StartTime > 0)
+        {
+            //intervalTxt.text=currentWave.wave_StartTime.ToString();
+            currentWave.wave_StartTime--;
+            yield return new WaitForSeconds(1f);
+        }
+        //yield return new WaitForSeconds(currentWave.wave_interval);
 
         while (repeatNum<currentWave.wave_RepeatNum)
         {
@@ -142,23 +155,6 @@ public class MonsterSpawnManager : MonoBehaviour
                 break;
 
         }
-        //currentWave.mon
-        //switch (currentWave.)
-        //{
-        //    default:
-        //        break;
-        //}
-        //AbsMonsterUnitFactory monsterFactory = currentWave.monsterUnitClassFactory;
-        //int monsterListIndex = currentWave.monsterKindIndex;
-
-
-        //MonsterUnitClass monsterUnit = monsterFactory[monsterListIndex].CreateMonsterUnit();
-
-        //switch (monsterUnit)
-        //{
-        //    default:
-        //        break;
-        //}
     }
 
     //오크 생산자
@@ -176,8 +172,12 @@ public class MonsterSpawnManager : MonoBehaviour
                 if (!item.gameObject.activeSelf)
                 {
                     print("여기 나오면 안됨");
-                    item.gameObject.SetActive(true);
                     spawnMonster = item;
+                    spawnMonster.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_warr01"]);
+                    spawnMonster.transform.position = monsterUnitFactorys[0].spawnPoint;
+                    item.gameObject.SetActive(true);
+                    //
+                    //spawnMonster.InitUnitInfoSetting();
                     //spawnOrc = item.gameObject;
                     cantSetActive = true;
                     break;
@@ -193,53 +193,10 @@ public class MonsterSpawnManager : MonoBehaviour
             orcList.Add(spawnMonster.GetComponent<Orc>());
             print("프리팹 생성!");
         }
-        //else if (!orcList.Count.Equals(0) && !orcList[orcListIndex].gameObject.activeSelf && orcList.Count>spawnMonsterCount)   // orclistIndex 오브젝트가 활성화 상태라면
-        //{
-        //    print(orcList.Count);
-        //    print(spawnMonsterCount);
-        //    orcList[spawnMonsterCount].gameObject.SetActive(true);
-        //    spawnOrc = orcList[orcListIndex].gameObject;
-        //    orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
-        //    print("오브젝트 풀링 활성화");
-        //}
-
-        //else
-        //{
-        //    monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
-        //    spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
-        //    spawnOrc = spawnMonster.gameObject;
-        //    orcList.Add(spawnMonster.GetComponent<Orc>());
-        //    print("프리팹 생성!");
-        //    orcListIndex++; // 비활성화된 다음 오브젝트를 찾기 위한 인덱스 값 증가
-        //}
-        //print(spawnOrc.name);
-       // print(spawnOrc.transform.position);
-        spawnMonster.transform.position = spawnPoint;
+        //spawnMonster.transform.position = spawnPoint;
         spawnMonster.gameObject.name = "오크";
         spawnMonster.transform.SetParent(orcPrefab_Objects);
         spawnMonster = null;    //spawnMonster 변수 값 초기화
-
-
-
-        //MonsterUnitClass orc = monsterUnitFactorys[0].CreateMonsterUnit();
-
-        //gameObject.GetComponent<List<orc.GetComponent<Orc>().MonsterKind>>();
-        //orcList.Add();
-
-
-        //switch (spawnMonster.GetComponent<MonsterUnitClass>())
-        //{
-        //    case Orc:
-        //        if (orcList.Count.Equals(0))
-        //        {
-
-        //        }
-
-
-        //        break;
-
-        //}
-
     }
 
 
@@ -275,6 +232,6 @@ public class WaveData   // WaveDatas 구글 시트에 해당하는 값을 갖고
     public string character5;   // 다섯번째 종류 몬스터
     public int maxMonster_Count;    // 최대 생성되는 몬스터 수
     public int repeatNum;   // 생성주기 반복 횟수
-    
+
 
 }

@@ -26,8 +26,8 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
     public float maxHp;   // 최대 체력
     public float hp;   // 현재 체력
     public string defenseType;   // 방어 타입
-    public int moveSpeed;   // 이동속도
-    public int moveAcc;   // 이동 가속도
+    public float moveSpeed;   // 이동속도
+    public float moveAcc;   // 이동 가속도
 
     //public int sightRange;   // 시야 범위
     //public int attackRange;   // 공격 범위
@@ -70,6 +70,19 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛 행동 상태 변수")]
     public eUnit_Action_States _enum_Unit_Action_State;   // 유닛 행동 상태 변수
 
+    [Header("플레이어 유닛 기본 모드 상태 변수")]
+    public eUnit_Action_States _enum_pUnit_Action_BaseMode=eUnit_Action_States.unit_FreeMode;   // 플레이어 유닛 기본 모드 상태 변수
+
+    [Header("플레이어 유닛 기본 행동 상태 변수")]
+    public eUnit_Action_States _enum_pUnit_Action_BaseState=eUnit_Action_States.unit_Idle;   // 플레이어 유닛 기본 행동 상태 변수
+
+    [Header("몬스터 유닛 기본 모드 상태 변수")]
+    public eUnit_Action_States _enum_mUnit_Action_BaseMode = eUnit_Action_States.monster_NormalPhase;   // 유닛 모드 상태 변수
+
+    [Header("몬스터 유닛 기본 모드 상태 변수")]
+    public eUnit_Action_States _enum_mUnit_Action_BaseState = eUnit_Action_States.unit_Move;   // 유닛 행동 상태 변수
+
+
     [Header("플레이어가 지정해준 현재 유닛 공격 상태 변수")]
     public eUnit_Action_States _enum_Unit_Attack_State;   // 플레이어가 지정해준 현재 유닛 공격 상태 변수
 
@@ -82,6 +95,13 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛 방어구 속성")]
     public ArmorCalculate _this_Unit_ArmorCalculateCs;
 
+    [Header("유닛의 타겟 선정 타입마다 필요한 함수들을 구현해놓은 UnitTargetSearch 스크립트")]
+    [SerializeField]
+    public UnitTargetSearch unitTargetSearchCs;
+
+    [Header("유닛의 행동들을 구현해놓은 ActUnit 스크립트")]
+    [SerializeField]
+    public ActUnit actUnitCs;
 
     [Header("유닛 바디 트랜스폼")]
     public Transform body_Tr;    // 유닛 바디 트랜스폼
@@ -95,6 +115,11 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛을 클릭했는지 확인하는 변수")]
     public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
 
+    [Header("유닛이 죽었는지 확인하는 변수")]
+    public bool _isDead;       // 유닛이 죽었는지 확인하는 변수
+
+    [Header("타겟이 죽었는지 확인하는 변수")]
+    public bool _isTargetDead;       // 타겟이 죽었는지 확인하는 변수
 
     [Header("적을 탐지했는지 확인하는 변수")]
     public bool _isSearch = false;   // 적을 탐지했는지 확인하는 변수
@@ -126,6 +151,8 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("일반스킬 사용할 때의 발사체 게임 오브젝트 프리팹")]
     public GameObject _projectile_Prefab;   // 스킬 공격 가능 불가능 확인하는 변수
 
+    public Abs_Bullet _projectile_Bullet;   // 스킬 공격 가능 불가능 확인하는 변수
+
     // 발사체 프리팹 =========================
     [Header("일반스킬 사용할 때의 발사체 게임 오브젝트 프리팹 생성 위치")]
     public Transform _projectile_startPos;   // 스킬 공격 가능 불가능 확인하는 변수
@@ -144,11 +171,14 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("유닛 행동 가능 불가능 체크하는 변수")]
     public bool canAct;
 
-    [Header("플레이어 유닛 머태리얼")]
-    public Material playerUnitMtr;
+    [Header("일반 상태 유닛 머태리얼")]
+    public Material _unit_NomralMtr;
 
-    [Header("몬스터 유닛 머태리얼")]
-    public Material mosterUnitMtr;
+    [Header("유닛 투명화 머태리얼")]
+    public Material _unit_CloakingMtr;
+
+    [Header("피격 머태리얼")]
+    public Material _damaged_Mtr;
 
     [Header("바디 이외의 메쉬렌더러 변수")]
     public MeshRenderer[] someMeshReners;
@@ -156,6 +186,17 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("바디 메쉬 렌더러 변수")]
     public SkinnedMeshRenderer bodyMeshRener;
 
+    public Material[] someMtr;
+    public Material bodyMtr;
+
+    public Material[] cloaking_someMtr;
+    public Material cloaking_bodyMtr;
+
+    [Header("스피어 콜라이더")]
+    public SphereCollider sprCol;
+
+
+    public AudioSource atkSound;
     // 사운드 *************************
 
     // 사운드 =========================
@@ -187,7 +228,47 @@ public abstract class UnitInfo : MonoBehaviour
     }
     #endregion
 
+    public IEnumerator TargetDead()
+    {
+        yield return null;
 
+        yield return null;
+        _isTargetDead = true;
+
+        _isSearch = false;
+
+        yield return null;
+        unitTargetSearchCs._targetUnit = null;
+        unitTargetSearchCs._target_Body = null;
+
+        Debug.LogWarning(_isSearch);
+
+        gen_skill.unitTargetSearchCs._targetUnit = null;
+        gen_skill.unitTargetSearchCs._target_Body = null;
+
+        Debug.LogWarning(gameObject.name+": 타겟 비우기");
+        Debug.LogWarning(_isSearch);
+        Debug.LogWarning(actUnitCs.unitTargetSearchCs._targetUnit);
+        Debug.LogWarning(actUnitCs.unitTargetSearchCs._target_Body);
+        yield return null;
+
+        _isSearch = false;
+        _isTargetDead = false;
+
+        if (gameObject.tag.Equals("Player"))
+        {
+            _enum_Unit_Action_Mode = _enum_pUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
+        }
+        else
+        {
+            _enum_Unit_Action_Mode = _enum_mUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_mUnit_Action_BaseState;
+        }
+        Debug.LogWarning(_isSearch);
+
+
+    }
 
 }
 

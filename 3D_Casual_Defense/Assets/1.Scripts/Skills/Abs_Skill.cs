@@ -44,29 +44,29 @@ public abstract class Abs_Skill : MonoBehaviour
 
     public abstract void Attack_Skill();
 
-    public void Set_Init_Skill(SkillDataManager.SkillData sad)
+    public void Set_Init_Skill(SkillDataManager.SkillData skillData)
     {
-        skill_Id = sad.skill_id;
-        skill_Name = sad.skill_name;
-        skill_Description = sad.skill_script;
+        skill_Id = skillData.skill_id;
+        skill_Name = skillData.skill_name;
+        skill_Description = skillData.skill_script;
 
         // 시전 / 사용 조건
-        _skill_CoolTm = sad.coolTm;
-        _target_Type = sad.targetType;      //enum 으로 만들기
-        _use_Range = sad.use_Range;       //enum 으로 만들기
-        _casting_Type = sad.castingType;    //enum 으로 만들기
+        _skill_CoolTm = skillData.coolTm;
+        _target_Type = skillData.targetType;      //enum 으로 만들기
+        _use_Range = skillData.use_Range;       //enum 으로 만들기
+        _casting_Type = skillData.castingType;    //enum 으로 만들기
 
         // 적중 판정
-        _trace_Type = sad.traceType;  //enum 으로 만들기
-        _area_Shape = sad.areaShape;  //enum 으로 만들기
-        _area_Length = sad.areaLength;
-        _area_Width = sad.areaWidth;
+        _trace_Type = skillData.traceType;  //enum 으로 만들기
+        _area_Shape = skillData.areaShape;  //enum 으로 만들기
+        _area_Length = skillData.areaLength;
+        _area_Width = skillData.areaWidth;
 
         // 적용 효과
-        _damgeType = sad.damageType;
-        _base_Value = sad.baseValue;
-        _critical_Dmg = sad.criticDamage;
-        _link_Id = sad.link_id;
+        _damgeType = skillData.damageType;
+        _base_Value = skillData.baseValue;
+        _critical_Dmg = skillData.criticDamage;
+        _link_Id = skillData.link_id;
     }
 }
 

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static UnitDataManager;
 
@@ -73,6 +72,7 @@ public class SkillDataManager : MonoBehaviour
         //링크 스킬 데이터 할당
         for (int i = 0; i < genral_Skills.Length; i++)
         {           
+            Debug.LogWarning(genral_Skills[i]._link_Id);
             Set_Link_Skill(genral_Skills[i]);
         }
 
@@ -112,6 +112,7 @@ public class SkillDataManager : MonoBehaviour
         //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
         Set_skill_Dictionary.Add(key: "1_101", value: genral_Skills[0]);
         Set_skill_Dictionary.Add(key: "1_201", value: genral_Skills[1]);
+        Set_skill_Dictionary.Add(key: "1_302", value: genral_Skills[2]);
     }
     #endregion
 
@@ -154,6 +155,7 @@ public class SkillDataManager : MonoBehaviour
         {
             case "stun01":
                 skill._link_Skill = new StunStatus();
+                Debug.LogWarning("스턴할당");
                 // 링크 스킬의 데이터 = 링크 스킬 데이터 할당
                 break;
 
@@ -176,8 +178,7 @@ public class SkillDataManager : MonoBehaviour
             default:
                 break;
         }
-        print(skill._link_Id.Length);
-        print("".Length);
+
 
         // 링크스킬이 공백(데이터 없음)이 아닐 때만 링크스킬에 해당하는 데이터 할당
         if (skill._link_Id!=null&&skill._link_Id!="")

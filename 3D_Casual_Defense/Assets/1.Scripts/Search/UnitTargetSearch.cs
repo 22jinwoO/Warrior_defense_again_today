@@ -36,6 +36,7 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Search_For_Near_Enemy() : 가장 가까운 거리의 적을 고정으로 탐지하는 함수 , 시야 범위에서 적 인식
     public void Search_For_Fixed_Target() // 고정 타겟을 탐지하는 함수 , 시야 범위에서 적 인식
     {
+
         Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
         //print(gameObject.name + " : " + unitInfoCs._unitData.sightRange);
         foreach (var item in _cols)
@@ -70,18 +71,22 @@ public class UnitTargetSearch : MonoBehaviour
         }
 
         //시야범위 밖의 타겟인데 자꾸 타겟을 인식해서 예외처리 구문 추가해봄
-        //if (_shortestDistance > unitInfoCs._unitData.sightRange)
-        //{
-        //    unitInfoCs._isSearch = false;
-        //    print(gameObject.name + " : " + _shortestDistance + "예외처리 실행");
-        //    return;
-        //}
+        if (_shortestDistance > unitInfoCs._unitData.sightRange)
+        {
+            unitInfoCs._isSearch = false;
+            print(gameObject.name + " : " + _shortestDistance + "예외처리 실행");
+            return;
+        }
 
         _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
         _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
 
         //print(_targetUnit.name);
-        unitInfoCs._isSearch = true;
+        if (!unitInfoCs._isTargetDead)
+        {
+            unitInfoCs._isSearch = true;
+
+        }
 
         // 타겟 바라보는 상태로 변환 (추격)
         unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
@@ -167,28 +172,82 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Look_At_The_Target() : 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     public void Look_At_The_Target(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     {
-        Vector3 dir = _targetUnit.position - transform.position;
+        //float distance = Vector3.Distance(transform.position, _targetUnit.position);
+
+        //// 거리가 공격범위보다 크면 유닛 추적
+        //if (distance > unitInfoCs._unitData.attackRange)
+        //{
+        //    unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
+        //}
+
+        //Vector3 dir = _targetUnit.position - transform.position;
+        //dir.Normalize();
+        //dir.y = 0;
+
+        //Quaternion _lookRotation = Quaternion.LookRotation(dir.normalized);  // 타겟 쪽으로 바라보는 각도
+
+        //Vector3 _euler = Quaternion.RotateTowards(transform.localRotation, _lookRotation, 600f * Time.deltaTime).eulerAngles; //800f는 회전속도
+
+        //transform.localRotation = Quaternion.Euler(0, _euler.y, 0);
+
+        //Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // 유닛이 발사할 수 있는 방향의 각도
+        if (next_Action_State.Equals(eUnit_Action_States.unit_Attack))
+        {
+            actUnitCs.Attack_Unit(next_Action_State);
+
+        }
+
+
+        //if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 8f)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
+        //{
+        //    _euler.y = 0;
+        //    //print("용사와 몬스터의 각도 값 : " + Quaternion.Angle(transform.rotation, _fireRotation));
+
+        //    //if (unitInfoCs._enum_Unit_Action_State != eUnit_Action_States.unit_Attack)
+        //    //    return;
+
+
+        //    // 1. 공격 속도 쿨타임 감소
+
+        //    // 2. 공격속도 쿨타임이 0보다 작아졌다면 발사 후 공격속도 변수에 초기값 다시 넣어줌
+
+        //}
+        //else
+        //{
+        //    unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Tracking;
+        //}
+    }
+    #endregion
+
+    #region # Look_At_The_Castle() : 몬스터가 성이랑 충돌했을 때 성을 바라보게 하는 함수
+    public void Look_At_The_Castle(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
+    {
+        Vector3 dir = Castle.Instance.transform.position - transform.position;
         //dir.Normalize();
         //dir.y = 0;
 
         Quaternion _lookRotation = Quaternion.LookRotation(dir.normalized);  // 타겟 쪽으로 바라보는 각도
 
-        Vector3 _euler = Quaternion.RotateTowards(transform.localRotation, _lookRotation, 200f * Time.deltaTime).eulerAngles; //200f는 회전속도
+        Vector3 _euler = Quaternion.RotateTowards(transform.localRotation, _lookRotation, 600f * Time.deltaTime).eulerAngles; //800f는 회전속도
 
         transform.localRotation = Quaternion.Euler(0, _euler.y, 0);
 
         Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // 유닛이 발사할 수 있는 방향의 각도
+        Debug.LogWarning("몬스터 성 공격219");
 
-
-        if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 5f)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
+        if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 5f&& unitInfoCs._can_genSkill_Attack)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
         {
             _euler.y = 0;
             //print("용사와 몬스터의 각도 값 : " + Quaternion.Angle(transform.rotation, _fireRotation));
+            Debug.LogWarning("몬스터 성 공격226");
 
             if (unitInfoCs._enum_Unit_Action_State != eUnit_Action_States.unit_Attack)
                 return;
+            Debug.LogWarning("몬스터 성 공격228");
 
-            actUnitCs.Attack_Unit(next_Action_State);
+            unitInfoCs._anim.SetBool("canCastleAtk", true);
+
+            //actUnitCs.Attack_Unit(next_Action_State);
             // 1. 공격 속도 쿨타임 감소
 
             // 2. 공격속도 쿨타임이 0보다 작아졌다면 발사 후 공격속도 변수에 초기값 다시 넣어줌
@@ -197,5 +256,17 @@ public class UnitTargetSearch : MonoBehaviour
     }
     #endregion
 
+    public void Atk_Castle()
+    {
+        Debug.LogWarning("몬스터 성 공격 애니메이션 실행");
 
+        unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+        Castle.Instance.Damaged_Castle();
+    }
+
+    public void Change_Atk_Anim()
+    {
+        unitInfoCs._anim.SetBool("canCastleAtk", false);
+
+    }
 }

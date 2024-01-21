@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.70710677, y: 0.000000047415213, z: 0.000000057951922, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1726504492728272104}
@@ -100,7 +100,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1726504492728272104
 Transform:
   m_ObjectHideFlags: 0
@@ -129,6 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9666958957ae7d740b28f01a9c7a783b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _skill: {fileID: -8724978611186274115, guid: 82e25b354af1c9e44a97cc3755bb18aa, type: 3}
   _target_Unit: {fileID: 0}
   _target_BodyTr: {fileID: 0}
   _target_Direction: {x: 0, y: 0, z: 0}
@@ -160,5 +161,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.56
-  m_Center: {x: -0.0011544675, y: -0.013235047, z: -0.0057682544}
+  m_Radius: 0.16
+  m_Center: {x: -0.0011544675, y: -0.013235047, z: -0.02}

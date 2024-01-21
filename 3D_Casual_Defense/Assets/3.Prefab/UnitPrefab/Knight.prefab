@@ -1149,7 +1149,7 @@ GameObject:
   - component: {fileID: 7704232162583421844}
   - component: {fileID: 3204261466029327796}
   m_Layer: 0
-  m_Name: Body_04b
+  m_Name: Body_04b_MR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7747,6 +7747,7 @@ GameObject:
   - component: {fileID: 591294897169345205}
   - component: {fileID: 8630295707120004685}
   - component: {fileID: 3062027296038334723}
+  - component: {fileID: 4235729733240217574}
   m_Layer: 6
   m_Name: Knight
   m_TagString: Player
@@ -7822,13 +7823,21 @@ MonoBehaviour:
     unit_Id: 
   _enum_Unit_Action_Mode: 1
   _enum_Unit_Action_State: 6
+  _enum_pUnit_Action_BaseMode: 1
+  _enum_pUnit_Action_BaseState: 6
+  _enum_mUnit_Action_BaseMode: 3
+  _enum_mUnit_Action_BaseState: 7
   _enum_Unit_Attack_State: 9
   _enum_Unit_Attack_Type: 12
   _eUnit_Target_Search_Type: 1
+  unitTargetSearchCs: {fileID: 0}
+  actUnitCs: {fileID: 0}
   body_Tr: {fileID: 0}
   _nav: {fileID: 0}
   _anim: {fileID: 0}
   _isClick: 0
+  _isDead: 0
+  _isTargetDead: 0
   _isSearch: 0
   _movePos: {x: 0, y: 0, z: 0}
   _can_genSkill_Attack: 0
@@ -7837,23 +7846,29 @@ MonoBehaviour:
   _hit_Effect_PierceAtk: {fileID: 0}
   _hit_Effect_CrushAtk: {fileID: 0}
   _projectile_Prefab: {fileID: 0}
+  _projectile_Bullet: {fileID: 0}
   _projectile_startPos: {fileID: 0}
   gen_skill: {fileID: 4153666595965432161, guid: d1109a157a2a0ee418dfac0bd7da13d2, type: 3}
   spe_skill_1: {fileID: 0}
   spe_skill_2: {fileID: 6913384095984081999}
   canAct: 0
-  playerUnitMtr: {fileID: 2100000, guid: dccf8e44ede71db42b49378af93c5fb7, type: 2}
-  mosterUnitMtr: {fileID: 0}
+  _unit_NomralMtr: {fileID: 2100000, guid: dccf8e44ede71db42b49378af93c5fb7, type: 2}
+  _unit_CloakingMtr: {fileID: 2100000, guid: 098b04fdd77cbf14e8017fa790f89f7c, type: 2}
+  _damaged_Mtr: {fileID: 2100000, guid: 542d0ee2870fb2f4faf1337daa090865, type: 2}
   someMeshReners:
   - {fileID: 8275858659595309234}
   - {fileID: 4465361571796816955}
   - {fileID: 9039664846340041259}
   bodyMeshRener: {fileID: 3204261466029327796}
+  someMtr: []
+  bodyMtr: {fileID: 0}
+  cloaking_someMtr: []
+  cloaking_bodyMtr: {fileID: 0}
+  sprCol: {fileID: 0}
+  atkSound: {fileID: 0}
   holdObPref: {fileID: 3462556803876994634, guid: 97209c46dff9ee845a27e20365814fff, type: 3}
   holdOb: {fileID: 0}
   navObs: {fileID: 0}
-  unitTargetSearchCs: {fileID: 0}
-  actUnitCs: {fileID: 0}
   initPos: {fileID: 0}
   initPos2: {x: 0, y: 0, z: 0}
   isCollision: 0
@@ -7923,7 +7938,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3783625495759935545}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 0.46
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -7946,11 +7961,11 @@ NavMeshObstacle:
   m_Enabled: 0
   serializedVersion: 3
   m_Shape: 0
-  m_Extents: {x: 1.71, y: 1.67, z: 1.71}
+  m_Extents: {x: 0.65, y: 2.5, z: 0.65}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 1.17, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
   m_TimeToStationary: 0.5
 --- !u!135 &3062027296038334723
 SphereCollider:
@@ -7971,8 +7986,104 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.08
-  m_Center: {x: 0, y: 1.21, z: 0}
+  m_Radius: 0.83
+  m_Center: {x: 0, y: 0.92, z: 0}
+--- !u!82 &4235729733240217574
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783625495759935545}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: f5cc8e9e20a1ad34985a10895b378fce, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.2
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &3865493682636983505
 GameObject:
   m_ObjectHideFlags: 0
@@ -8317,7 +8428,7 @@ GameObject:
   - component: {fileID: 1181982589783519794}
   - component: {fileID: 4465361571796816955}
   m_Layer: 0
-  m_Name: shield_06
+  m_Name: shield_06_MR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11992,7 +12103,7 @@ GameObject:
   - component: {fileID: 7489423317190134435}
   - component: {fileID: 8275858659595309234}
   m_Layer: 0
-  m_Name: w_sword
+  m_Name: w_sword_MR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14640,7 +14751,7 @@ GameObject:
   - component: {fileID: 5662065302866699894}
   - component: {fileID: 9039664846340041259}
   m_Layer: 0
-  m_Name: Head_05b
+  m_Name: Head_05b_MR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19019,7 +19130,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1127626886338675488}

@@ -661,13 +661,21 @@ MonoBehaviour:
     unit_Id: 
   _enum_Unit_Action_Mode: 3
   _enum_Unit_Action_State: 7
+  _enum_pUnit_Action_BaseMode: 1
+  _enum_pUnit_Action_BaseState: 6
+  _enum_mUnit_Action_BaseMode: 3
+  _enum_mUnit_Action_BaseState: 7
   _enum_Unit_Attack_State: 9
   _enum_Unit_Attack_Type: 12
   _eUnit_Target_Search_Type: 1
+  unitTargetSearchCs: {fileID: 0}
+  actUnitCs: {fileID: 0}
   body_Tr: {fileID: 6833099824280438778}
   _nav: {fileID: 0}
   _anim: {fileID: 0}
   _isClick: 0
+  _isDead: 0
+  _isTargetDead: 0
   _isSearch: 0
   _movePos: {x: 0, y: 0, z: 0}
   _can_genSkill_Attack: 0
@@ -676,17 +684,24 @@ MonoBehaviour:
   _hit_Effect_PierceAtk: {fileID: 0}
   _hit_Effect_CrushAtk: {fileID: 0}
   _projectile_Prefab: {fileID: 0}
+  _projectile_Bullet: {fileID: 0}
   _projectile_startPos: {fileID: 0}
   gen_skill: {fileID: 0}
   spe_skill_1: {fileID: 0}
   spe_skill_2: {fileID: 0}
   canAct: 0
-  playerUnitMtr: {fileID: 0}
-  mosterUnitMtr: {fileID: 2100000, guid: ca75a69e74ff489bb381553a79a5a187, type: 2}
+  _unit_NomralMtr: {fileID: 2100000, guid: ca75a69e74ff489bb381553a79a5a187, type: 2}
+  _unit_CloakingMtr: {fileID: 2100000, guid: 4359c3b426d52854cac0adb57d3362b1, type: 2}
+  _damaged_Mtr: {fileID: 2100000, guid: 542d0ee2870fb2f4faf1337daa090865, type: 2}
   someMeshReners: []
   bodyMeshRener: {fileID: 8221089018039814748}
-  unitTargetSearchCs: {fileID: 0}
-  actUnitCs: {fileID: 0}
+  someMtr: []
+  bodyMtr: {fileID: 0}
+  cloaking_someMtr: []
+  cloaking_bodyMtr: {fileID: 0}
+  sprCol: {fileID: 0}
+  atkSound: {fileID: 0}
+  mosterUnitMtr: {fileID: 2100000, guid: ca75a69e74ff489bb381553a79a5a187, type: 2}
   hpText: {fileID: 6775984549753675466}
   isMove: 0
   pointTr: {fileID: 0}
@@ -740,7 +755,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3658949938990387124}
   m_Enabled: 1
   m_AgentTypeID: -1372625422
-  m_Radius: 1
+  m_Radius: 0.7
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -749,7 +764,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 0
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 3.7
+  m_Height: 3.48
   m_BaseOffset: 0
   m_WalkableMask: 16
   m_ObstacleAvoidanceType: 3
@@ -793,7 +808,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.7
+  m_Radius: 0.51
   m_Center: {x: 0, y: 1.12, z: 0}
 --- !u!54 &7578938196497678633
 Rigidbody:
@@ -820,7 +835,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 32
   m_CollisionDetection: 0
 --- !u!1 &3770014333208607521
 GameObject:
@@ -1072,7 +1087,7 @@ Transform:
   m_GameObject: {fileID: 5822894063607846474}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.8, z: 0}
+  m_LocalPosition: {x: -0.07, y: 1.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1167,7 +1182,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2855581197593480826}

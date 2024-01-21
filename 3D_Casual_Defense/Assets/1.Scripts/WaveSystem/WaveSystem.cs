@@ -5,13 +5,6 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
-// 여기를 없앴어요 아니에요 Ui 문제인건 포실님이 말슴해주셔서,, 그럼 이부분은 포기해야하나요?;; wave를 먼저 앞에서 선언해준게 문제가 될까요?
-// 메인보다 
-
-
-
-
-
 public class WaveSystem : MonoBehaviour
 
 {
@@ -28,6 +21,7 @@ public class WaveSystem : MonoBehaviour
 
     private void Awake()
     {
+        // WaveDatas 구글 시트를 Json 파일로 변환한 값을 불러와 WaveSystem.cs의 Waves[]배열에 Json파일의 i번째 Wave데이터들을 넣어주는 함수
         LoadWaveData();
     }
 
@@ -45,6 +39,9 @@ public class WaveSystem : MonoBehaviour
 
             // waves[i]의 몬스터 생성주기 = 웨이브 데이터 Json파일 배열 i번째 값의 몬스터 생성주기
             waves[i].wave_interval = spawnManager.datas.waveDatas[i].interval;
+
+            // waves[i]의 웨이브 대기시간 = 웨이브 데이터 Json파일 배열 i번째 값의 웨이브 대기시간
+            waves[i].wave_StartTime = spawnManager.datas.waveDatas[i].waveStartTime;
 
             // waves[i]의 몬스터 최대 생성 수 = 웨이브 데이터 Json파일 배열 i번째 값의 최대 생성 수
             waves[i].wave_maxMonsterCount = spawnManager.datas.waveDatas[i].maxMonster_Count;
@@ -130,10 +127,13 @@ public class WaveSystem : MonoBehaviour
 public struct Wave  // Wave 구조체
 {
     [Header("웨이브 이름")]
-    public string wave_Name;    // 몬스터 생성 주기
+    public string wave_Name;    
 
     [Header("몬스터 생성 주기")]
     public int wave_interval;    // 몬스터 생성 주기
+
+    [Header("몬스터 생성 주기")]
+    public int wave_StartTime;    // 몬스터 생성 주기
 
     [Header("몬스터 종류")]
     public List<MonsterUnitClass> wave_monsterClasses; // 몬스터 종류
@@ -146,6 +146,10 @@ public struct Wave  // Wave 구조체
 
     [Header("생성 반복 횟수")]
     public int wave_RepeatNum;   // 최대 몬스터 생성 수
+
+    [Header("몬스터 죽은 숫자")]
+    public int deathMonsterCnt; // 몬스터 죽은 숫자
+
 
 }
 

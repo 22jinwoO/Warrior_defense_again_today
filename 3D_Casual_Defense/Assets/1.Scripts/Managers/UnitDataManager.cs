@@ -77,6 +77,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Set_UnitData("hum_warr01");
         Set_UnitData("hum_arch01");
+        Set_UnitData("orc_warr01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
@@ -145,7 +146,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
         print(Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
         Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[Instance._unitInfo_Dictionary[unit_ID].defenseType];
         Instance._unitInfo_Dictionary[unit_ID].unit_ArmorCalculateCs = Instance._armorCs_Dictionary[Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property];
-        Instance._unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[Instance._unitInfo_Dictionary[unit_ID].targetSelectType];
+        //Instance._unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[Instance._unitInfo_Dictionary[unit_ID].targetSelectType];
 
     }
 
@@ -210,8 +211,8 @@ public class UnitDataManager : Singleton<UnitDataManager>
     private void Add_ArmorScript_Dictionary()
     {
         _armorCs_Dictionary.Add(eUnit_Defense_Property_States.plate_Armor, new PlateArmor());
-        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.chain_Armor, new MailArmor());
-        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.padding_Armor, new GambesonArmor());
+        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.chain_Armor, new ChainArmor());
+        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.padding_Armor, new PaddingArmor());
     }
     #endregion
 

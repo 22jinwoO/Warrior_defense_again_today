@@ -40,9 +40,9 @@ public enum eUnit_Action_States           // 유닛 행동
     unit_FreeMode,      // 유닛 자유 모드(추격)
     unit_HoldMode,      // 유닛 홀드 모드
 
-    monster_NormalMode,   // 몬스터 일반 모드
-    monster_AngryMode, // 몬스터 분노 모드
-    monster_AttackCastleMode, // 몬스터 성 공격 모드
+    monster_NormalPhase,   // 몬스터 일반 페이즈
+    monster_AngryPhase, // 몬스터 분노 페이즈
+    monster_AttackCastlePhase, // 몬스터 성 공격 페이즈
 
     unit_Idle,          // 대기
     unit_Move,          // 이동

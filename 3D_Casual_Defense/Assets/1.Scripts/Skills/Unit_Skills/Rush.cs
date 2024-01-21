@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SocialPlatforms.GameCenter;
 
 public class Rush : SpecialSkill
 {
@@ -11,7 +10,7 @@ public class Rush : SpecialSkill
     private bool isArrive;
 
     [SerializeField]
-    private float slerpValue=8f;
+    private float slerpValue=3f;
 
 
     [SerializeField]
@@ -96,7 +95,7 @@ public class Rush : SpecialSkill
             _colTarget.GetComponent<UnitInfo>().canAct = false;
 
             _colTarget.GetComponent<NavMeshAgent>().enabled = false;
-
+            print(_colTarget.name);
 
             Vector3 targetRot = unitInfoCs.transform.position - _colTarget.transform.position;
             targetRot.y = 0f;
@@ -133,7 +132,7 @@ public class Rush : SpecialSkill
         Debug.LogWarning("넉백됨");
         float time = 0f;
         float nuckBackValue = 7.5f;
-        float nuckBackValue2 = 700f;
+        float nuckBackValue2 = 800f;
         targetRigd.velocity = Vector3.zero;
 
 
@@ -146,10 +145,13 @@ public class Rush : SpecialSkill
         {
             targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
             nuckBackValue2 -= 10f;
+            print("while이동속도 " + targetRigd.velocity);
+            print("while이동속도 " + -(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
+
             time += Time.deltaTime;
             yield return null;
         }
-
+        print("이동속도 "+targetRigd.velocity);
         yield return new WaitForSeconds(1f);
 
         // 넉백된 몬스터들 행동하기 위해 필요한 값들 활성화
