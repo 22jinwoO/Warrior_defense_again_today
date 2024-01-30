@@ -27,9 +27,6 @@ public class Knight : PlayerUnitClass
 
         someMtr = new Material[someMeshReners.Length];
 
-        Init_Vfx();
-
-
         for (int i = 0; i < someMeshReners.Length; i++)
         {
             someMeshReners[i].material = Instantiate(_unit_NomralMtr);
@@ -79,7 +76,6 @@ public class Knight : PlayerUnitClass
             cloaking_someMtr[j].color = cloaking_Mtr_Color;
             //0.157f
         }
-
     }
     private void Start()
     {

@@ -4,9 +4,10 @@ using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
+using UnityEngine.Windows.Speech;
 
-
-public class Test : PlayerUnitClass
+public class Test : MonoBehaviour
 {
 
 
@@ -31,17 +32,14 @@ public class Test : PlayerUnitClass
 
 
     [SerializeField]
-    private float slerpValue = 8f;
+    private float slerpValue=8f;
 
     [SerializeField]
-    private UnitInfo asdf;
+    private SphereCollider sprCol;
 
-    [SerializeField]
-    private GameObject vfx;
     // Start is called before the first frame update
     void Start()
     {
-        asdf = GetComponent<UnitInfo>();
         //hp = 100;
         //speed = 0;
         //startPosition = transform.position;    // 발사체 시작 위치
@@ -54,46 +52,18 @@ public class Test : PlayerUnitClass
         //startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         //endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         rigd = GetComponent<Rigidbody>();
-        //sprCol = GetComponent<SphereCollider>();
+        sprCol = GetComponent<SphereCollider>();
         //Testgo();
     }
-
-    private Vector3 moveDir;
-    private bool isMoving = false;
 
     // Update is called once per frame
     void Update()
     {
-        // == MOVE ==
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        isMoving = (h != 0f || v != 0f);
-
-        if (isMoving)
+        if (Input.GetKeyDown(KeyCode.S))
         {
-            moveDir = transform.forward * v + transform.right * h;
-            moveDir.Normalize();
+            StartCoroutine(Move_Slerp());
+
         }
-
-        _target_Direction = _target_BodyTr.position - transform.position;
-
-        Quaternion rot2 = Quaternion.LookRotation(_target_Direction.normalized);
-
-        transform.rotation = rot2;
-
-        transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _target_BodyTr.GetComponent<Test2>().Test3(transform.forward);
-        }
-
-        //if (Input.GetKeyDown(KeyCode.S))
-        //{
-        //    StartCoroutine(Move_Slerp());
-
-        //}
 
         //speed += 1;
         //if (isStart) 
@@ -153,7 +123,7 @@ public class Test : PlayerUnitClass
 
         sprCol.enabled = true;
 
-        transform.GetComponent<NavMeshAgent>().enabled = true;
+        transform.GetComponent<NavMeshAgent>().enabled= true;
         transform.rotation = Quaternion.Euler(Vector3.zero);
 
     }
@@ -161,9 +131,9 @@ public class Test : PlayerUnitClass
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Rigidbody>() != null)
+        if (other.GetComponent<Rigidbody>()!=null)
         {
-            Rigidbody DA = other.GetComponent<Rigidbody>();
+            Rigidbody DA     = other.GetComponent<Rigidbody>();
             print(DA.transform.gameObject.name);
             other.GetComponent<NavMeshAgent>().enabled = false;
             Vector3 targetRot = transform.position - other.transform.position;
@@ -178,7 +148,7 @@ public class Test : PlayerUnitClass
             other.GetComponent<UnitInfo>().canAct = false;
 
             other.GetComponent<NavMeshAgent>().enabled = false;
-            StartCoroutine(Aasdf(DA, other.transform));
+            StartCoroutine(Aasdf(DA,other.transform));
             //DA.rotation= Quaternion.Euler(0f,DA.rotation.y,DA.rotation.z);
             //DA.AddForce(-(other.transform.forward) * 6f*Time.deltaTime, ForceMode.Impulse);
             //DA.AddExplosionForce(200f,transform.position,20f);
@@ -197,7 +167,7 @@ public class Test : PlayerUnitClass
         other.GetComponent<NavMeshAgent>().enabled = false;
         //y= ax + b (a: 넉백가속도 b: 초기 넉백속도. x: 넉백시간, y: 넉백속도)
 
-        float y = 0f;
+        float y=0f;
 
         // 벨로시티
         while (time < 0.2f)
@@ -275,10 +245,13 @@ public class Test : PlayerUnitClass
         }
     }
 
-    public override void InitUnitInfoSetting(UnitDataManager.CharacterData character_Data)
-    {
-        throw new System.NotImplementedException();
-    }
 }
 
-
+public class asdf
+{
+    public Transform asd;
+    IEnumerator asddf()
+    {
+        yield return null;
+    }
+}

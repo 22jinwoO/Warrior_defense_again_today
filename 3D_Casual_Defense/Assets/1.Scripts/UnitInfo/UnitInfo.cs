@@ -136,17 +136,14 @@ public abstract class UnitInfo : MonoBehaviour
 
     // 게임 이펙트 부분*********************************
 
-    [Header("피격시 생성되는 이펙트- 0 : 베기 공격 / 1 : 관통 공격 / 2: 분쇄 공격")]
-    public GameObject[] _hit_Effects= new GameObject[3];   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("베기 공격 피격시 생성되는 이펙트")]
+    public GameObject _hit_Effect_SlashAtk;   // 스킬 공격 가능 불가능 확인하는 변수
 
-    [Header("베기 공격 피격시 생성되는 이펙트 오브젝트 풀링")]
-    public List<GameObject> _hit_Effect_SlashAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("관통 공격 피격 시 생성되는 이펙트")]
+    public GameObject _hit_Effect_PierceAtk;   // 스킬 공격 가능 불가능 확인하는 변수
 
-    [Header("관통 공격 피격 시 생성되는 이펙트 오브젝트 풀링")]
-    public List<GameObject> _hit_Effect_PierceAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
-
-    [Header("분쇄 공격 피격 시 생성되는 이펙트 오브젝트 풀링")]
-    public List<GameObject> _hit_Effect_CrushAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("분쇄 공격 피격 시 생성되는 이펙트")]
+    public GameObject _hit_Effect_CrushAtk;   // 스킬 공격 가능 불가능 확인하는 변수
 
     // 게임 이펙트 부분=====================================
 
@@ -197,8 +194,7 @@ public abstract class UnitInfo : MonoBehaviour
 
     [Header("스피어 콜라이더")]
     public SphereCollider sprCol;
-    
-    public Test3 teasfd;
+
 
     public AudioSource atkSound;
     // 사운드 *************************
@@ -208,10 +204,10 @@ public abstract class UnitInfo : MonoBehaviour
     // 히트 시 출력되는 텍스트 *************************
 
     // 히트 시 출력되는 텍스트 =========================
+
     #region # Unit_Attack_Skill_CoolTime() : 유닛 기본공격, 스킬공격 쿨타임 돌려주는 함수
     public void Unit_Attack_Skill_CoolTime()
     {
-        
         // 기본 공격이 가능한지 확인
         _can_genSkill_Attack = _unitData._unit_Attack_CoolTime >= _unitData._unit_Attack_Speed ? true : false;
 
@@ -232,152 +228,47 @@ public abstract class UnitInfo : MonoBehaviour
     }
     #endregion
 
-    // 이펙트 오브젝트 풀링
-    public void Init_Vfx()
+    public IEnumerator TargetDead()
     {
-        for (int i = 0; i < 4; i++)
+        yield return null;
+
+        yield return null;
+        _isTargetDead = true;
+
+        _isSearch = false;
+
+        yield return null;
+        unitTargetSearchCs._targetUnit = null;
+        unitTargetSearchCs._target_Body = null;
+
+        Debug.LogWarning(_isSearch);
+
+        gen_skill.unitTargetSearchCs._targetUnit = null;
+        gen_skill.unitTargetSearchCs._target_Body = null;
+
+        Debug.LogWarning(gameObject.name+": 타겟 비우기");
+        Debug.LogWarning(_isSearch);
+        Debug.LogWarning(actUnitCs.unitTargetSearchCs._targetUnit);
+        Debug.LogWarning(actUnitCs.unitTargetSearchCs._target_Body);
+        yield return null;
+
+        _isSearch = false;
+        _isTargetDead = false;
+
+        if (gameObject.tag.Equals("Player"))
         {
-            GameObject vfx = Instantiate(_hit_Effects[0],transform);
-            print("이펙트생성");
-            _hit_Effect_SlashAtk_Vfxs.Add(vfx);
-            vfx.SetActive(false);
+            _enum_Unit_Action_Mode = _enum_pUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
         }
-
-        for (int i = 0; i < 4; i++)
+        else
         {
-            GameObject vfx = Instantiate(_hit_Effects[1],transform);
-            _hit_Effect_PierceAtk_Vfxs.Add(vfx);
-            vfx.SetActive(false);
+            _enum_Unit_Action_Mode = _enum_mUnit_Action_BaseMode;
+            _enum_Unit_Action_State = _enum_mUnit_Action_BaseState;
         }
-
-        for (int i = 0; i < 4; i++)
-        {
-            GameObject vfx = Instantiate(_hit_Effects[2], transform);
-            _hit_Effect_CrushAtk_Vfxs.Add(vfx);
-            vfx.SetActive(false);
-        }
-
-    }
-    public IEnumerator Damaged_Vfx_On(Abs_Skill atkSkill)
-    {
-        GameObject vfx = null;
-        bool canUse = false;
-
-        switch (atkSkill._skill_AtkType)
-        {
-            case eUnit_Attack_Property_States.Default:
-                break;
-
-                //베기 공격 시 피격 이펙트
-            case eUnit_Attack_Property_States.slash_Attack:
-
-                //GameObject vfx1 = null;
-                //vfx1 = Instantiate(_hit_Effect_SlashAtk, (transform.position + Vector3.up * 0.5f) + -sfxPos * 0.7f, Quaternion.identity);
-
-                for (int i = 0; i < _hit_Effect_SlashAtk_Vfxs.Count; i++)
-                {
-                    if (!_hit_Effect_SlashAtk_Vfxs[i].activeSelf)
-                    {
-                        vfx = _hit_Effect_SlashAtk_Vfxs[i];
-                        canUse = true;
-                        break;
-                    }
-                    yield return null;
-                }
-                if (!canUse)
-                {
-                    vfx = Instantiate(_hit_Effects[0], transform);
-                    print("이펙트생성");
-                    _hit_Effect_SlashAtk_Vfxs.Add(vfx);
-                    vfx.SetActive(false);
-                }
-                //vfx1.transform.SetParent(transform);
-                break;
-
-                //관통 공격 시 피격 이펙트
-            case eUnit_Attack_Property_States.piercing_Attack:
-                for (int i = 0; i < _hit_Effect_PierceAtk_Vfxs.Count; i++)
-                {
-                    if (!_hit_Effect_PierceAtk_Vfxs[i].activeSelf)
-                    {
-                        vfx = _hit_Effect_PierceAtk_Vfxs[i];
-                        canUse = true;
-
-                        break;
-                    }
-                    yield return null;
-                }
-                if (!canUse)
-                {
-                    vfx = Instantiate(_hit_Effects[1], transform);
-                    print("이펙트생성");
-                    _hit_Effect_PierceAtk_Vfxs.Add(vfx);
-                    vfx.SetActive(false);
-                }
-                break;
-
-                //분쇄 공격 시 피격 이펙트
-            case eUnit_Attack_Property_States.crushing_attack:
-                for (int i = 0; i < _hit_Effect_CrushAtk_Vfxs.Count; i++)
-                {
-                    if (!_hit_Effect_CrushAtk_Vfxs[i].activeSelf)
-                    {
-                        vfx = _hit_Effect_CrushAtk_Vfxs[i];
-                        canUse = true;
-
-                        break;
-                    }
-                    yield return null;
-                }
-
-                if (!canUse)
-                {
-                    vfx = Instantiate(_hit_Effects[2], transform);
-                    print("이펙트생성");
-                    _hit_Effect_CrushAtk_Vfxs.Add(vfx);
-                    vfx.SetActive(false);
-                }
-                break;
-
-            default:
-                break;
-        }
-        Vector3 direction = atkSkill.unitInfoCs.transform.position - transform.position;
-        print(transform.gameObject);
-        Quaternion vfxRot;
-        vfxRot = Quaternion.LookRotation(direction.normalized);
-        Debug.Log(direction);
-        Debug.Log(direction.normalized);
-        //vfx.transform.rotation = vfxRot;
-        vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
-
-        if (gameObject.tag=="Player")
-        {
-            Debug.LogWarning(vfxRot);
-            Debug.LogWarning(vfxRot.eulerAngles.y);
-
-        }
-
-        //vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
-        yield return new WaitForSecondsRealtime(0.1f);
-
-        //vfx.transform.position = (transform.position + Vector3.up * 0.5f) + sfxPos * 0.7f;
-        vfx.transform.position = transform.position + Vector3.up * 0.5f+ vfx.transform.forward * 0.7f;
-
-        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, Mathf.Abs(vfx.transform.position.z));
-        Debug.LogWarning("362"+vfx.transform.position);
-        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, -vfx.transform.position.z);
-        Debug.LogWarning("365" + vfx.transform.position);
-
-        //vfx.transform.forward = ;
-
-        vfx.SetActive(true);
-        yield return new WaitForSecondsRealtime(0.5f);
-        vfx.SetActive(false);
-
-
+        Debug.LogWarning(_isSearch);
 
 
     }
+
 }
 

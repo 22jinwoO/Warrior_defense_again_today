@@ -44,11 +44,11 @@ public class ActUnit : MonoBehaviour
     }
     private void Start()
     {
+
         //unitInfoCs._unitData = unitInfoCs._unitData;
         print(unitInfoCs._unitData.criticRate);
         print(unitInfoCs.gameObject.name);
     }
-
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
@@ -56,8 +56,6 @@ public class ActUnit : MonoBehaviour
             StartCoroutine(Get_DamagedBody());
         }
     }
-    
-    // 공격
     #region # Attack_Unit() : 유닛이 공격할 때 호출되는 함수
     public void Attack_Unit(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)   // 매개변수로 공격 후 다음에 어떤상태로 변환할지 넣어주기
     {
@@ -69,38 +67,11 @@ public class ActUnit : MonoBehaviour
         //{
         //    nav.isStopped = true;
         //}
-
-
-        //RaycastHit hit;
-        //float maxDistance = 3000f;
-
-        //Physics.Raycast(unitInfoCs.transform.position + Vector3.up * 0.5f, unitInfoCs.transform.forward, out hit, maxDistance, unitTargetSearchCs._layerMask);
-        //Debug.DrawRay(unitInfoCs.transform.position, unitInfoCs.transform.forward * maxDistance, Color.red);
-        //if (hit.collider != null)
-        //{
-        //    Debug.Log("hit point : " + hit.point + ", distance : " + hit.distance + ", name : " + hit.collider.name);
-        //    Debug.DrawRay(unitInfoCs.transform.position, unitInfoCs.transform.forward * hit.distance, Color.red);
-        //}
-        //else
-        //    Debug.DrawRay(unitInfoCs.transform.position, unitInfoCs.transform.forward * hit.distance, Color.red);
-
         if (unitInfoCs._can_genSkill_Attack)
         {
-            if (nav.enabled)
-            {
-                nav.isStopped = true;  // 이동 가능 상태로 변환
-            }
-
-            Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
-
-            Quaternion rot2 = Quaternion.LookRotation(_target_Direction.normalized);
-
-            unitInfoCs.transform.rotation = rot2;
-
-            unitInfoCs.transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
-
             if (unitInfoCs._can_SpcSkill_Attack&&gameObject.name=="기사")    // 스킬은 근거리 원거리 나눌 필요 x, UseSkill 함수 호출 플레이어 유닛이라면 
             {
+                Debug.Log("스킬공격!!!");
                 if (unitTargetSearchCs._targetUnit == null)
                 {
                     return;
@@ -126,21 +97,15 @@ public class ActUnit : MonoBehaviour
 
             else
             {
+                Debug.Log("기본공격!!!");
+                print("88오브젝트이름 " + unitInfoCs.gameObject.name);
+
+                print("88크리티컬 확률 " + unitInfoCs._unitData.criticRate);
+
                 if (unitTargetSearchCs._targetUnit == null)
                 {
                     return;
                 }
-                //Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
-
-                //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized, transform.up);
-                
-
-                //rot.y = 0;
-
-                //unitInfoCs.transform.rotation = rot;
-
-                //unitInfoCs.transform.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
-
                 anim.SetTrigger("isAttack");
                 
                 unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
@@ -167,7 +132,7 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    // 몬스터 상태전환
+
     #region # Change_MonsterState(eUnit_Action_States next_Action_State) : 몬스터가 공격 후 다음 상태로 변환 시 딜레이를 주기 호출되는 함수
     IEnumerator Change_MonsterState(eUnit_Action_States next_Action_State)
     {
@@ -181,7 +146,6 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    // 애니메이션 공격
     #region # AnimEvent_Normal_Atk() : 일반 스킬 애니메이션 동작 시 호출되는 애니메이션 이벤트 함수
     public void AnimEvent_Normal_Atk()  // 일반 스킬 사용 시 호출되는 애니메이션
     {
@@ -194,7 +158,6 @@ public class ActUnit : MonoBehaviour
         //print("165크리티컬 확률 " + unitInfoCs._unitData.criticRate);
 
         //unitInfoCs.gen_skill.unitInfoCs = unitInfoCs;   // 나중에 유닛 awake 문에서 한번만 실행하도록 변경하기
-
 
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
@@ -224,7 +187,6 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    // 크리티컬 체크 함수
     #region # float CheckCritical(Abs_Skill skill, float atkDmg) : 크리티컬 확률 체크하는 함수
     private float CheckCritical(UnitInfo attacker, Abs_Skill skill, float atkDmg)
     {
@@ -239,6 +201,7 @@ public class ActUnit : MonoBehaviour
         //print("공격자 크리티컬 확률 " + attacker._unitData.criticRate);
         //unitInfoCs._unitData.criticRate = 50;
 
+        print("크리티컬 랜덤 숫자 " + randNum);
 
         // 공격자의 공격이 크리티컬 확률에 해당한다면
         if (randNum <= attacker._unitData.criticRate)
@@ -268,27 +231,23 @@ public class ActUnit : MonoBehaviour
                 // 공격 반환 값 = 기본스킬 데미지 * 크리티컬 배율
                 atkDmg = skill._base_Value * skill._critical_Dmg;
             }
+            print("크리티컬 공격!!");
             //
 
         }
+        print("공격 데미지 "+ atkDmg);
         return atkDmg;
 
     }
     #endregion
 
-    // 데미지 관련
     #region # BeAttacked_By_OtherUnit(Transform other,float attack_Dmg) : 다른 유닛으로부터의 공격으로 피해를 입을 때 호출되는 함수
     // 기본공격 일 때와 스킬 공격 일 때 를 나눠야 함...
     public void BeAttacked_By_OtherUnit(Abs_Skill skill, eUnit_Attack_Property_States myAtkType, ref UnitInfo attacker, Transform other)
     {
-        if (gameObject.tag=="Player")
-        {
-            Debug.LogWarning(attacker.gameObject.name);
-        }
+
         // 피해 입을 때 몸에 피격상태 나타내주는 함수 실행
         StartCoroutine(Get_DamagedBody());
-        Vector3 direction=attacker.transform.position- transform.position;
-        StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill));
 
         // 피격자의 유닛 데이터 가져오기
         unit_Data damagedUnitData = other.GetComponent<UnitInfo>()._unitData;
@@ -297,14 +256,13 @@ public class ActUnit : MonoBehaviour
 
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
-        //Debug.LogWarning(unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg)));
-        //Debug.LogWarning(unitInfoCs._unitData.hp);
+        Debug.LogWarning(unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg)));
+        Debug.LogWarning(unitInfoCs._unitData.hp);
 
         // 피격 받은 우닛의 Hp가 0 이하가 됐을 때
         if (!unitInfoCs._isDead&&unitInfoCs._unitData.hp<=0f)
         {
             unitInfoCs.canAct = false;
-            
             unitInfoCs._nav.speed = 0f;
             unitInfoCs._nav.acceleration = 0f;
 
@@ -387,7 +345,6 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    // 데미지 입을 시 머태리얼 변환
     IEnumerator Get_DamagedBody()
     {
         print("피격당한 유닛 이름 : " + gameObject.name);
@@ -439,7 +396,7 @@ public class ActUnit : MonoBehaviour
 
     }
 
-    // 유닛 죽었을 때 호출되는 함수
+
     IEnumerator DieUnit()
     {
         unitInfoCs.sprCol.enabled = false;
@@ -515,7 +472,6 @@ public class ActUnit : MonoBehaviour
 
     }
 
-    // 적 탐지
     #region # SearchTarget(매개변수 : 유닛 탐지 타입) : 유닛이 Idle 상태일 때 타겟 탐지 시 호출되는 함수
     public void SearchTarget(eUnit_targetSelectType target_Search_Type = eUnit_targetSelectType.Default)  // 유닛 탐지
     {
@@ -537,7 +493,20 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
-    // 추격 (몬스터, 플레이어 둘 다 적용)
+    #region # MoveUnit(Vector3 arrivePos) : 유닛 상태가 Move일 때 호출되는 함수 - 이동 시 호출
+    public void MoveUnit(Vector3 arrivePos) // 유닛 이동
+    {
+        nav.SetDestination(arrivePos);
+        float distance = Vector3.Distance(transform.position, arrivePos);
+        if (distance <= 1.2f)
+        {
+            anim.SetBool("isMove", false);
+
+            unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+        }
+    }
+    #endregion
+
     #region # TrackingTarget(eUnit_Action_States next_ActionState = eUnit_Action_States.Default) : 유닛이 타겟을 추적하는 상태일 때 호출되는 함수
     public void TrackingTarget(eUnit_Action_States next_ActionState = eUnit_Action_States.Default)    // 타겟 추적 상태 시 호출하는 함수
     {
@@ -556,16 +525,12 @@ public class ActUnit : MonoBehaviour
         }
 
         // 공격 범위에 적이 들어왔을 때
-        else if (distance <= unitInfoCs._unitData.attackRange)
+        else if (distance <= unitInfoCs._unitData.attackRange&& unitInfoCs._can_genSkill_Attack)
         {
             print("공격 타입으로 변환");
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
-            if (unitInfoCs._can_genSkill_Attack)
-            {
-                unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
-
-            }
+            unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
 
             //unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
@@ -586,7 +551,6 @@ public class ActUnit : MonoBehaviour
 
     #endregion
 
-    // 공격 준비
     #region # ReadyForAttack(eUnit_Action_States unit_Atk_State = eUnit_Action_States.Default) : 유닛 상태가 Attack 상태일 때 호출, 현재 공격 지정 상태를 매개변수로 함
     public void ReadyForAttack(eUnit_Action_States unit_Atk_State = eUnit_Action_States.Default)  // Attack 상태일 때 호출 ,기본으로 추적상태를 매개변수로 함
     {
@@ -598,21 +562,17 @@ public class ActUnit : MonoBehaviour
         //    unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
         //}
 
-        //Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
+        Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
 
-        //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
+        Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
 
-        //rot.y = 0;
-        //transform.rotation = rot;
+        rot.y = 0;
+        transform.rotation = rot;
         //공격모션을 실행하고
         unitTargetSearchCs.Look_At_The_Target(unit_Atk_State);
     }
     #endregion
 
-
-
-    // 플레이어
-    // 홀드 타입
     #region # Boundary() : 플레이어 유닛이 홀드상태일 때 호출되는 함수
     public void Boundary()  // 유닛 홀드 상태일 때
     {
@@ -629,21 +589,6 @@ public class ActUnit : MonoBehaviour
         {
             unitInfoCs._isSearch = false;
             unitTargetSearchCs._targetUnit = null;
-            unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-        }
-    }
-    #endregion
-
-    // 플레이어 유닛 이동
-    #region # MoveUnit(Vector3 arrivePos) : 유닛 상태가 Move일 때 호출되는 함수 - 이동 시 호출
-    public void MoveUnit(Vector3 arrivePos) // 유닛 이동
-    {
-        nav.SetDestination(arrivePos);
-        float distance = Vector3.Distance(transform.position, arrivePos);
-        if (distance <= 1.2f)
-        {
-            anim.SetBool("isMove", false);
-
             unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
         }
     }

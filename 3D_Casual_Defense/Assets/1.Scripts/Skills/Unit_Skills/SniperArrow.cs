@@ -22,7 +22,7 @@ public class SniperArrow : GeneralSkill
             print(unitInfoCs._projectile_startPos.position);
             GameObject test = Instantiate(_projectile_Prefab, unitInfoCs._projectile_startPos.position, rot);
             //test.GetComponent<Bullet_Arrow>().unitInfoCs = unitInfoCs;
-            //test.transform.SetParent(unitInfoCs.transform);
+            test.transform.SetParent(unitInfoCs.transform);
             test.SetActive(true);
             print("공격 실행");
             //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;

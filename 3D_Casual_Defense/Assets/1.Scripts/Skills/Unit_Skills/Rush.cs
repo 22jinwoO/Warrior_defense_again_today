@@ -132,7 +132,7 @@ public class Rush : SpecialSkill
         Debug.LogWarning("넉백됨");
         float time = 0f;
         float nuckBackValue = 7.5f;
-        float nuckBackValue2 = 1000f;
+        float nuckBackValue2 = 800f;
         targetRigd.velocity = Vector3.zero;
 
 
@@ -144,11 +144,9 @@ public class Rush : SpecialSkill
         while (time < 0.2f)
         {
             targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
-            nuckBackValue2 -= 50f;
+            nuckBackValue2 -= 10f;
             print("while이동속도 " + targetRigd.velocity);
             print("while이동속도 " + -(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
-            Debug.LogWarning(y);
-            y++;
 
             time += Time.deltaTime;
             yield return null;
