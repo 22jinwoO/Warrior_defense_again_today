@@ -56,7 +56,11 @@ public class Bullet_Arrow : Abs_Bullet
         if (isArrive)
         {
             _target_Direction = _target_BodyTr.position - transform.position;
-            Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
+            if (_target_Direction!=Vector3.zero)
+            {
+                _target_Direction = _target_Direction.normalized;
+            }
+            Quaternion rot = Quaternion.LookRotation(_target_Direction);
             transform.rotation = rot;
             transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
             

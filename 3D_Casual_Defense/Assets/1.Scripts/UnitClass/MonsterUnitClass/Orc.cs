@@ -90,7 +90,7 @@ public class Orc : MonsterUnitClass, IActByUnit
         canAct = true;
 
         sprCol = GetComponent<SphereCollider>();
-
+        Init_Vfx();
         for (int i = 0; i < someMeshReners.Length; i++)
         {
             someMeshReners[i].material = Instantiate(mosterUnitMtr);
@@ -217,7 +217,9 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData.generalSkillName = character_Data.generalSkillName;
 
         //일반스킬 할당
-        gen_skill = character_Data.unit_Gen_Skill;
+        gen_skill = Instantiate(character_Data.unit_Gen_Skill, transform);
+        gen_skill.gameObject.name = _unitData.generalSkillName;
+        gen_skill._link_Skill = character_Data.unit_Gen_Skill._link_Skill;
         gen_skill.unitInfoCs = this;
 
         // 특수 스킬 할당
@@ -374,7 +376,9 @@ public class Orc : MonsterUnitClass, IActByUnit
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
                 if (unitTargetSearchCs._targetUnit != null)
                 {
-                    actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
+                    actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
+
+                    //actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
                 }
                 break;
         }
@@ -412,7 +416,7 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     private void OnTriggerEnter(Collider other)
     {
-        if (unitTargetSearchCs._targetUnit!=null&&unitTargetSearchCs._targetUnit.Equals(other))
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.Equals(other))
         {
             _nav.isStopped = true;
 
@@ -425,8 +429,9 @@ public class Orc : MonsterUnitClass, IActByUnit
         if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.Equals(other))
         {
             _nav.isStopped = false;
-
+            
         }
+        
         //print("트리거 콜라이더 나감");
 
     }

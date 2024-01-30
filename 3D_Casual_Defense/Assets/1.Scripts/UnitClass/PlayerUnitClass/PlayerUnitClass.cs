@@ -98,9 +98,6 @@ public abstract class PlayerUnitClass : UnitInfo
                 if (unitTargetSearchCs._targetUnit!=null)
                 {
                     actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
-
-                    //actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
-
                 }
                 break;
 
@@ -143,7 +140,9 @@ public abstract class PlayerUnitClass : UnitInfo
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
                 if (unitTargetSearchCs._targetUnit != null)
                 {
-                    actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Boundary);
+                    actUnitCs.Attack_Unit(eUnit_Action_States.unit_Boundary);
+
+                    //actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Boundary);
                 }
                 break;
 

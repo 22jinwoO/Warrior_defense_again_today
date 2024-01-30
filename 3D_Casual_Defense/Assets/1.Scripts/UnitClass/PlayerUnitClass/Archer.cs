@@ -10,6 +10,9 @@ public class Archer : PlayerUnitClass
     [SerializeField]
     private bool isCollision;
 
+    [SerializeField]
+    private float maxdistance;
+
     //[SerializeField]
     //Material aaa;
 
@@ -19,7 +22,7 @@ public class Archer : PlayerUnitClass
     //[SerializeField]
     //private SkinnedMeshRenderer bodyMaterials;
 
-    
+
     private void Awake()
     {
         someMtr = new Material[someMeshReners.Length];
@@ -48,10 +51,7 @@ public class Archer : PlayerUnitClass
         cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
 
 
-        //_unit_CloakingMtr = Instantiate(_unit_CloakingMtr);
-
-        //bodyMeshRener.material = Instantiate(_unit_CloakingMtr);
-
+        Init_Vfx();
 
         sprCol = GetComponent<SphereCollider>();
 
@@ -92,6 +92,7 @@ public class Archer : PlayerUnitClass
     // Update is called once per frame
     void Update()
     {
+
         if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
             _isSearch = false;
@@ -117,30 +118,6 @@ public class Archer : PlayerUnitClass
 
     }
 
-    //IEnumerator Get_DamagedBody()
-    //{
-    //    print("V키 눌림");
-    //    //Material asdf = GetComponentInChildren<Material>();
-
-    //    //Material asdfd= aaa;
-    //    for (int i = 0; i < someMaterials.Length; i++)
-    //    {
-    //        someMaterials[i].material.color = Color.gray;
-
-    //    }
-    //    bodyMaterials.material.color = Color.gray;
-
-    //    // aaa = asdf;
-    //    yield return new WaitForSeconds(0.1f);
-    //    for (int i = 0; i < someMaterials.Length; i++)
-    //    {
-    //        someMaterials[i].material.color = Color.white;
-    //        someMaterials[i].material.color = Color.white;
-
-    //    }
-    //    bodyMaterials.material.color = Color.white;
-
-    //}
 
     private void FixedUpdate()
     {
@@ -156,7 +133,6 @@ public class Archer : PlayerUnitClass
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
         canAct = true;
-        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
 
@@ -189,8 +165,7 @@ public class Archer : PlayerUnitClass
         _unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
-        //_unitData.criticRate = character_Data.criticRate;
-        _unitData.criticRate = 50;
+        _unitData.criticRate = character_Data.criticRate;
 
         print(character_Data.criticRate);
 
@@ -203,9 +178,6 @@ public class Archer : PlayerUnitClass
         gen_skill.gameObject.name = _unitData.generalSkillName;
         gen_skill._link_Skill= character_Data.unit_Gen_Skill._link_Skill;
         gen_skill.unitInfoCs = this;
-        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
-        Debug.LogWarning(gen_skill._link_Skill.link_name);
-        print(gen_skill.unitInfoCs);
 
 
         // 특수 스킬 , 자유모드 일 때 사용하는 스킬
@@ -222,9 +194,6 @@ public class Archer : PlayerUnitClass
 
         // 유닛 타겟 설정 타입
         _unitData.targetSelectType = character_Data.targetSelectType;
-
-        //// 일반스킬 할당
-        //gen_skill = character_Data.unit_Gen_Skill;
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
@@ -249,37 +218,24 @@ public class Archer : PlayerUnitClass
         // 근접 공격 유닛 (나중에 없애도 됨)
         _enum_Unit_Attack_Type = eUnit_Action_States.long_Range_Atk;
 
-        //_unitData._unit_Name = "궁수";                                                        // 유닛 이름
-        //_unitData._unit_maxHealth = 200f;                                                       // 유닛 체력
         _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;      // 유닛 공격속성
         _unitData._unit_General_Skill_Dmg = 1f;                                                  // 유닛 공격 데미지
         _unitData._unit_Special_Skill_Dmg = 6f;                                            // 유닛 공격 데미지
-        //_unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;    // 유닛 방어속성
-        //_unitData._unit_Description = "궁수입니다";                                           // 유닛 설명
-        //_unitData._unit_Type = "궁수";                                                       // 유닛 타입
         _unitData._unit_MoveSpeed = 1f;                                                      // 유닛 이동속도
-        //_unitData.sightRange = _unitData.sightRange;                                                     // 유닛 시야
-        //_unitData.attackRange = _unitData.attackRange;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
         _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
-
-        //_enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
-        //_enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-        //_enum_Unit_Attack_State = eUnit_Action_States.unit_Tracking;
-        //_enum_Unit_Attack_Type = eUnit_Action_States.long_Range_Atk;
-        //_eUnit_Target_Search_Type = eUnit_targetSelectType.fixed_Target;
-
     }
     #endregion
 
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
+        //Gizmos.color = Color.red;
+        //Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
+        //Gizmos.color = Color.blue;
+        //Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
+
     }
 }

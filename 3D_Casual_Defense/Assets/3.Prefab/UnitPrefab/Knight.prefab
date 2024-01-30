@@ -7842,9 +7842,13 @@ MonoBehaviour:
   _movePos: {x: 0, y: 0, z: 0}
   _can_genSkill_Attack: 0
   _can_SpcSkill_Attack: 0
-  _hit_Effect_SlashAtk: {fileID: 0}
-  _hit_Effect_PierceAtk: {fileID: 0}
-  _hit_Effect_CrushAtk: {fileID: 0}
+  _hit_Effects:
+  - {fileID: 4850038978506937979, guid: 62343aafb1ec55b40bd5b7077f93a4c8, type: 3}
+  - {fileID: 849876788736577692, guid: a9960255849004540ae185638b36a7c5, type: 3}
+  - {fileID: 7597856941088715453, guid: 81ab1874ce7a06940bec48c18f23d5fa, type: 3}
+  _hit_Effect_SlashAtk_Vfxs: []
+  _hit_Effect_PierceAtk_Vfxs: []
+  _hit_Effect_CrushAtk_Vfxs: []
   _projectile_Prefab: {fileID: 0}
   _projectile_Bullet: {fileID: 0}
   _projectile_startPos: {fileID: 0}
