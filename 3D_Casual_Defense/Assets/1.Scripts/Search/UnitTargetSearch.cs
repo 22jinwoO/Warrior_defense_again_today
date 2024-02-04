@@ -247,6 +247,10 @@ public class UnitTargetSearch : MonoBehaviour
 
             unitInfoCs._anim.SetBool("canCastleAtk", true);
 
+            unitInfoCs.atkSound.volume = SoundManager.Instance.VolumeCheck(transform);
+
+            unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
+
             //actUnitCs.Attack_Unit(next_Action_State);
             // 1. 공격 속도 쿨타임 감소
 

@@ -190,8 +190,9 @@ public class ActUnit : MonoBehaviour
             //unitInfoCs.atkSound.volume = Random.Range(0.2f, 0.4f);
             
             // 거리에 따른 볼륨 크기 조절
-            unitInfoCs.atkSound.volume = unitInfoCs.VolumeCheck();
+            unitInfoCs.atkSound.volume = SoundManager.Instance.VolumeCheck(transform);
 
+            // 오디오 클립 변수 생성하고 어웨이크문에서 오디오 클립 할당하도록 수정하기
             unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
 
         }

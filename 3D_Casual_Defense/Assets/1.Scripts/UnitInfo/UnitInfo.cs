@@ -452,7 +452,7 @@ public abstract class UnitInfo : MonoBehaviour
         hitSound.pitch = UnityEngine.Random.Range(0.7f, 1.4f);
 
         // 히트 사운드 볼륨 조절
-        hitSound.volume = VolumeCheck();
+        hitSound.volume = SoundManager.Instance.VolumeCheck(transform);
 
         yield return null;
 
@@ -483,26 +483,6 @@ public abstract class UnitInfo : MonoBehaviour
         vfx.SetActive(true);
         yield return new WaitForSecondsRealtime(0.5f);
         vfx.SetActive(false);
-    }
-
-    public float VolumeCheck()
-    {
-        float distance = Vector3.Distance(transform.position, soundPos.position);
-        // sfxVol = 0f;
-
-        if (distance <= 10f)
-           return 1f;
-
-        if (distance <= 15f)
-            return 0.7f;
-
-        if (distance <= 20f)
-            return 0.4f;
-
-        if (distance <= 25f)        
-            return 0.2f;
-        else
-            return 0f;
     }
 }
 
