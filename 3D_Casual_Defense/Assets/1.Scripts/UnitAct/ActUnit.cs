@@ -69,6 +69,21 @@ public class ActUnit : MonoBehaviour
         //}
         if (unitInfoCs._can_genSkill_Attack)
         {
+            if (nav.enabled)
+            {
+                nav.isStopped = true;  // 이동 가능 상태로 변환
+            }
+
+            Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
+
+            Quaternion rot2 = Quaternion.LookRotation(_target_Direction.normalized);
+
+            unitInfoCs.transform.rotation = rot2;
+
+            unitInfoCs.transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
+
+
+
             if (unitInfoCs._can_SpcSkill_Attack&&gameObject.name=="기사")    // 스킬은 근거리 원거리 나눌 필요 x, UseSkill 함수 호출 플레이어 유닛이라면 
             {
                 Debug.Log("스킬공격!!!");
@@ -165,10 +180,19 @@ public class ActUnit : MonoBehaviour
         }
 
         unitInfoCs.gen_skill.unitTargetSearchCs = unitTargetSearchCs;
+
         if (unitInfoCs.atkSound!=null)
         {
             //unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
-            unitInfoCs.atkSound.Play();
+
+            // 사운드 오디오 소스 할당
+            unitInfoCs.atkSound.pitch = Random.Range(0.7f, 1.4f);
+            //unitInfoCs.atkSound.volume = Random.Range(0.2f, 0.4f);
+            
+            // 거리에 따른 볼륨 크기 조절
+            unitInfoCs.atkSound.volume = unitInfoCs.VolumeCheck();
+
+            unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
 
         }
         // 일반 스킬 사용
@@ -192,14 +216,6 @@ public class ActUnit : MonoBehaviour
     {
         // int 범위를 구할때는 최대값이 제외된다. (크리티컬 확률에 해당하는지 체크)
         int randNum = Random.Range(1, 101);
-        //print("피격자"+unitInfoCs.gameObject.name);
-
-        //print("피격자 크리티컬 확률 " + unitInfoCs._unitData.criticRate);
-
-        //print("공격자" + attacker.gameObject.name);
-
-        //print("공격자 크리티컬 확률 " + attacker._unitData.criticRate);
-        //unitInfoCs._unitData.criticRate = 50;
 
         print("크리티컬 랜덤 숫자 " + randNum);
 
@@ -231,11 +247,8 @@ public class ActUnit : MonoBehaviour
                 // 공격 반환 값 = 기본스킬 데미지 * 크리티컬 배율
                 atkDmg = skill._base_Value * skill._critical_Dmg;
             }
-            print("크리티컬 공격!!");
-            //
 
         }
-        print("공격 데미지 "+ atkDmg);
         return atkDmg;
 
     }
@@ -248,6 +261,9 @@ public class ActUnit : MonoBehaviour
 
         // 피해 입을 때 몸에 피격상태 나타내주는 함수 실행
         StartCoroutine(Get_DamagedBody());
+        Vector3 direction = attacker.transform.position - transform.position;
+        StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill));
+
 
         // 피격자의 유닛 데이터 가져오기
         unit_Data damagedUnitData = other.GetComponent<UnitInfo>()._unitData;
@@ -256,8 +272,6 @@ public class ActUnit : MonoBehaviour
 
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
-        Debug.LogWarning(unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg)));
-        Debug.LogWarning(unitInfoCs._unitData.hp);
 
         // 피격 받은 우닛의 Hp가 0 이하가 됐을 때
         if (!unitInfoCs._isDead&&unitInfoCs._unitData.hp<=0f)
@@ -297,51 +311,9 @@ public class ActUnit : MonoBehaviour
 
             unitTargetSearchCs._targetUnit = null;
             unitTargetSearchCs._target_Body = null;
-            //skill.unitInfoCs._isSearch = false;
-            //attacker.unitTargetSearchCs._targetUnit = null;
-            //attacker.unitTargetSearchCs._target_Body = null;
 
-            //
-            // 타겟 리셋 //
-            //attacker._isTargetDead = true;
-
-            //attacker._isSearch = false;
-            //StartCoroutine(attacker.TargetDead());
-
-            //Debug.LogWarning(skill.unitTargetSearchCs._targetUnit);
-            //Debug.LogWarning(skill.unitTargetSearchCs._target_Body);
-            //attacker.unitTargetSearchCs._targetUnit = null;
-            //attacker.unitTargetSearchCs._target_Body = null;
-            //attacker.gen_skill.unitTargetSearchCs._targetUnit = null;
-            //attacker.gen_skill.unitTargetSearchCs._target_Body = null;
-            //Debug.LogWarning(skill.unitInfoCs.unitTargetSearchCs._targetUnit);
-            //Debug.LogWarning(skill.unitInfoCs.unitTargetSearchCs._target_Body);
-            //Debug.LogWarning(attacker.unitTargetSearchCs._targetUnit);
-            //Debug.LogWarning(attacker.unitTargetSearchCs._target_Body);
-
-            //skill.unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-
-
-
-            //unitInfoCs._nav.enabled = false;
-            //unitInfoCs.actUnitCs.enabled = false;
-            //unitInfoCs.canAct = false;
-            //unitInfoCs.enabled = false;
 
         }
-        //Abs_StatusEffect asd = new PoisonStatus();
-        //StartCoroutine(asd.Get_Posion(other.GetComponent<UnitInfo>(), "", 2, 5));
-
-        //print("충돌했음");
-        //print(other.gameObject.name);
-        //print(other.GetComponent<UnitInfo>()._unitData);
-        //print(damagedUnitData._eUnit_Defense_Property);
-        //print(unitInfoCs._unitData._unit_maxHealth);
-        //print(damagedUnitData.);
-        //print(unitInfoCs._this_Unit_ArmorCalculateCs);
-        //print(attack_Dmg);
-        //print(unitInfoCs._unitData._unit_maxHealth);
-
     }
     #endregion
 
@@ -416,11 +388,9 @@ public class ActUnit : MonoBehaviour
             //0.157f
         }
         unitInfoCs.bodyMeshRener.material = unitInfoCs.cloaking_bodyMtr;
-        Debug.LogWarning(unitInfoCs._unit_CloakingMtr);
-        Debug.LogWarning(unitInfoCs.bodyMeshRener.material);
+
         yield return new WaitForSeconds(1f);
-        Debug.LogWarning(unitInfoCs._unit_CloakingMtr);
-        Debug.LogWarning(unitInfoCs.bodyMeshRener.material);
+
         Color cloaking_Mtr_Color = unitInfoCs.bodyMeshRener.material.color;
 
         while (colorValue_a>0.0f)
@@ -493,6 +463,7 @@ public class ActUnit : MonoBehaviour
     }
     #endregion
 
+    // 플레이어 유닛 이동
     #region # MoveUnit(Vector3 arrivePos) : 유닛 상태가 Move일 때 호출되는 함수 - 이동 시 호출
     public void MoveUnit(Vector3 arrivePos) // 유닛 이동
     {
@@ -525,13 +496,15 @@ public class ActUnit : MonoBehaviour
         }
 
         // 공격 범위에 적이 들어왔을 때
-        else if (distance <= unitInfoCs._unitData.attackRange&& unitInfoCs._can_genSkill_Attack)
+        else if (distance <= unitInfoCs._unitData.attackRange)
         {
-            print("공격 타입으로 변환");
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
-            unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
+            if (unitInfoCs._can_genSkill_Attack)
+            {
+                unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
 
+            }
             //unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
 
@@ -581,7 +554,6 @@ public class ActUnit : MonoBehaviour
         unitTargetSearchCs.Look_At_The_Target(next_Action_State : eUnit_Action_States.unit_Boundary);
         if (distance <= unitInfoCs._unitData.attackRange)
         {
-            print("공격 타입으로 변환");
             unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
         // 시야 범위 밖으로 적이 사라졌을 때
@@ -593,5 +565,4 @@ public class ActUnit : MonoBehaviour
         }
     }
     #endregion
-
 }

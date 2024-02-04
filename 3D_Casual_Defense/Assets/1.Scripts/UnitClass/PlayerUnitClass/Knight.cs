@@ -13,8 +13,9 @@ public class Knight : PlayerUnitClass
     Abs_StatusEffect asd = new PoisonStatus();
     private void Awake()
     {
-        
-        navObs=GetComponent<NavMeshObstacle>();
+        soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
+
+        navObs = GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
         _this_Unit_ArmorCalculateCs = new PaddingArmor();
         _nav = GetComponent<NavMeshAgent>();
@@ -24,6 +25,10 @@ public class Knight : PlayerUnitClass
         sprCol=GetComponent<SphereCollider>();
 
         atkSound = GetComponent<AudioSource>();
+
+
+        Init_Vfx();
+
 
         someMtr = new Material[someMeshReners.Length];
 

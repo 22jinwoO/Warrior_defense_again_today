@@ -12,19 +12,23 @@ public class BleedingStatus : Abs_StatusEffect
 
         for (int i = 0; i < (int)duration; i++)
         {
+            thisUnit._status_Effect_Bleeding.SetActive(false);
+
             float times = 0f;
 
             while (times <= 1f)
             {
                 if (isStatusApply)
                 {
+                    thisUnit._status_Effect_Bleeding.SetActive(false);
+
                     yield break;    // 리턴같은거
                 }
                 times += Time.deltaTime;
 
                 yield return null;
             }
-
+            thisUnit._status_Effect_Bleeding.SetActive(true);
             thisUnit._unitData.hp -= statusValue;
             Debug.LogWarning("타겟 유닛 피"+i+" "+thisUnit._unitData.hp);
 

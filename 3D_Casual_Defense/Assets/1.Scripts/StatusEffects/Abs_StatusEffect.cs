@@ -15,9 +15,9 @@ public abstract class Abs_StatusEffect
     public int linkValue_ps;
     public int duration_s;
     public int moveSpeedreduce;
-    public GameObject linkVfx;
-    public GameObject linkSfx;
-    public GameObject icon;
+    //public GameObject linkVfx;
+    //public GameObject linkSfx;
+    //public GameObject icon;
     public bool isStatusApply;
 
     //상태이상 효과 적용하는 함수

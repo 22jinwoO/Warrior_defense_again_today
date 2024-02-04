@@ -10,19 +10,15 @@ public class Archer : PlayerUnitClass
     [SerializeField]
     private bool isCollision;
 
-    //[SerializeField]
-    //Material aaa;
+    [SerializeField]
+    private float maxdistance;
 
-    //[SerializeField]
-    //private MeshRenderer[] someMaterials;
 
-    //[SerializeField]
-    //private SkinnedMeshRenderer bodyMaterials;
-
-    
     private void Awake()
     {
         someMtr = new Material[someMeshReners.Length];
+        soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
+
 
         for (int i = 0; i < someMeshReners.Length; i++)
         {
@@ -52,6 +48,7 @@ public class Archer : PlayerUnitClass
 
         //bodyMeshRener.material = Instantiate(_unit_CloakingMtr);
 
+        Init_Vfx();
 
         sprCol = GetComponent<SphereCollider>();
 
@@ -67,8 +64,9 @@ public class Archer : PlayerUnitClass
         //gen_skill._projectile_Prefab = Instantiate(_projectile_Prefab);
         //gen_skill._projectile_Prefab.SetActive(false);
 
-        // 발사체 값 넣어주기
-        atkSound = GetComponent<AudioSource>();
+        // 사운드 오디오 소스 할당
+        atkSound = GetComponents<AudioSource>()[0];
+        hitSound = GetComponents<AudioSource>()[1];
     }
 
     private void Start()
@@ -189,10 +187,7 @@ public class Archer : PlayerUnitClass
         _unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
-        //_unitData.criticRate = character_Data.criticRate;
-        _unitData.criticRate = 50;
-
-        print(character_Data.criticRate);
+        _unitData.criticRate = character_Data.criticRate;
 
         // 일반스킬
         _unitData.generalSkill = character_Data.generalSkill;

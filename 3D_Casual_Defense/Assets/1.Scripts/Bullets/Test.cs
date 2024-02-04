@@ -1,11 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
-using UnityEngine.Windows.Speech;
+
 
 public class Test : MonoBehaviour
 {
@@ -51,8 +47,8 @@ public class Test : MonoBehaviour
 
         //startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         //endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-        rigd = GetComponent<Rigidbody>();
-        sprCol = GetComponent<SphereCollider>();
+        //rigd = GetComponent<Rigidbody>();
+        //sprCol = GetComponent<SphereCollider>();
         //Testgo();
     }
 
@@ -61,9 +57,16 @@ public class Test : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            StartCoroutine(Move_Slerp());
+            GameObject test = GameObject.FindGameObjectWithTag("Test");
+            float distance = Vector3.Distance(transform.position, test.transform.position);
 
+            Debug.Log(distance);
         }
+        //if (Input.GetKeyDown(KeyCode.S))
+        //{
+        //    StartCoroutine(Move_Slerp());
+
+        //}
 
         //speed += 1;
         //if (isStart) 
@@ -244,14 +247,25 @@ public class Test : MonoBehaviour
 
         }
     }
-
-}
-
-public class asdf
-{
-    public Transform asd;
-    IEnumerator asddf()
+    private void OnDrawGizmos()
     {
-        yield return null;
+        //
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, 10f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 15f);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, 20f);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, 25f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, 30f);
+
     }
 }
+
+

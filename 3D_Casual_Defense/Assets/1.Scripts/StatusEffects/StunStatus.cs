@@ -14,6 +14,8 @@ public class StunStatus : Abs_StatusEffect
         if (thisUnit._unitData.hp>0f&&thisUnit._nav.enabled == true)
         {
             thisUnit._anim.SetBool("isStun",true);
+            thisUnit._status_Effect_Stun_Start.SetActive(false);
+            thisUnit._status_Effect_Stun.SetActive(false);
 
             yield return null;
             isStatusApply = false;
@@ -34,11 +36,16 @@ public class StunStatus : Abs_StatusEffect
                 thisUnit._nav.isStopped = true;
             }
             Debug.LogWarning("스턴시작 + ");
+            thisUnit._status_Effect_Stun_Start.SetActive(true);
+            thisUnit._status_Effect_Stun.SetActive(true);
+
             while (times <= duration)
             {
                 if (!thisUnit.gameObject.activeSelf || isStatusApply|| thisUnit._unitData.hp <= 0f)
                 {
                     thisUnit._anim.SetBool("isStun", false);
+                    thisUnit._status_Effect_Stun_Start.SetActive(false);
+                    thisUnit._status_Effect_Stun.SetActive(false);
                     //thisUnit._nav.speed = 0f;
                     //thisUnit._nav.acceleration = 0f;
                     thisUnit._nav.velocity = Vector3.zero;
@@ -55,6 +62,9 @@ public class StunStatus : Abs_StatusEffect
                 yield return null;
             }
             Debug.LogWarning("스턴 끝 ");
+            thisUnit._status_Effect_Stun_Start.SetActive(false);
+            thisUnit._status_Effect_Stun.SetActive(false);
+
             thisUnit._anim.SetBool("isStun", false);
             if (thisUnit._unitData.hp>0f)
             {

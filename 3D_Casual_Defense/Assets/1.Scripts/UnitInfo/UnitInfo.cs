@@ -7,6 +7,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using UnityEngine.AI;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 
 // 함수이름은 명사말고 동사 먼저, enum은 변수이름 앞에 소문자 e 작성, 변수는 카멜표기법으로 소문자 이후 단어 첫글자 대문자
@@ -71,10 +72,10 @@ public abstract class UnitInfo : MonoBehaviour
     public eUnit_Action_States _enum_Unit_Action_State;   // 유닛 행동 상태 변수
 
     [Header("플레이어 유닛 기본 모드 상태 변수")]
-    public eUnit_Action_States _enum_pUnit_Action_BaseMode=eUnit_Action_States.unit_FreeMode;   // 플레이어 유닛 기본 모드 상태 변수
+    public eUnit_Action_States _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_FreeMode;   // 플레이어 유닛 기본 모드 상태 변수
 
     [Header("플레이어 유닛 기본 행동 상태 변수")]
-    public eUnit_Action_States _enum_pUnit_Action_BaseState=eUnit_Action_States.unit_Idle;   // 플레이어 유닛 기본 행동 상태 변수
+    public eUnit_Action_States _enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Idle;   // 플레이어 유닛 기본 행동 상태 변수
 
     [Header("몬스터 유닛 기본 모드 상태 변수")]
     public eUnit_Action_States _enum_mUnit_Action_BaseMode = eUnit_Action_States.monster_NormalPhase;   // 유닛 모드 상태 변수
@@ -135,15 +136,40 @@ public abstract class UnitInfo : MonoBehaviour
 
 
     // 게임 이펙트 부분*********************************
+    [Header("피격시 생성되는 이펙트- 0 : 베기 공격 / 1 : 관통 공격 / 2: 분쇄 공격")]
+    public GameObject[] _hit_Effects = new GameObject[3];   // 스킬 공격 가능 불가능 확인하는 변수
 
-    [Header("베기 공격 피격시 생성되는 이펙트")]
-    public GameObject _hit_Effect_SlashAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("베기 공격 피격시 생성되는 이펙트 오브젝트 풀링")]
+    public List<GameObject> _hit_Effect_SlashAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
 
-    [Header("관통 공격 피격 시 생성되는 이펙트")]
-    public GameObject _hit_Effect_PierceAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("관통 공격 피격 시 생성되는 이펙트 오브젝트 풀링")]
+    public List<GameObject> _hit_Effect_PierceAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
 
-    [Header("분쇄 공격 피격 시 생성되는 이펙트")]
-    public GameObject _hit_Effect_CrushAtk;   // 스킬 공격 가능 불가능 확인하는 변수
+    [Header("분쇄 공격 피격 시 생성되는 이펙트 오브젝트 풀링")]
+    public List<GameObject> _hit_Effect_CrushAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("피격 사운드 - 0 : 베기 공격 / 1 : 관통 공격 / 2: 분쇄 공격")]
+    [SerializeField]
+    private AudioClip[] hit_Sfxs;
+
+    [Header("기절 상태이상 발생 이펙트")]
+    public GameObject _status_Effect_Stun_Start;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("출혈 상태이상 발생 이펙트")]
+    public GameObject _status_Effect_Bleeding_Start;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("기절 상태이상 이펙트")]
+    public GameObject _status_Effect_Stun;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("중독 상태이상 이펙트")]
+    public GameObject _status_Effect_Poison;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("출혈 상태이상 이펙트")]
+    public GameObject _status_Effect_Bleeding;   // 스킬 공격 가능 불가능 확인하는 변수
+
+    [Header("이속감소 상태이상 이펙트")]
+    public GameObject _status_Effect_Slow;   // 스킬 공격 가능 불가능 확인하는 변수
+
 
     // 게임 이펙트 부분=====================================
 
@@ -195,8 +221,17 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("스피어 콜라이더")]
     public SphereCollider sprCol;
 
-
+    [Header("공격 사운드")]
+    [SerializeField]
     public AudioSource atkSound;
+
+    [Header("피격 사운드")]
+    [SerializeField]
+    public AudioSource hitSound;
+
+    [SerializeField]
+    public Transform soundPos;
+
     // 사운드 *************************
 
     // 사운드 =========================
@@ -246,7 +281,7 @@ public abstract class UnitInfo : MonoBehaviour
         gen_skill.unitTargetSearchCs._targetUnit = null;
         gen_skill.unitTargetSearchCs._target_Body = null;
 
-        Debug.LogWarning(gameObject.name+": 타겟 비우기");
+        Debug.LogWarning(gameObject.name + ": 타겟 비우기");
         Debug.LogWarning(_isSearch);
         Debug.LogWarning(actUnitCs.unitTargetSearchCs._targetUnit);
         Debug.LogWarning(actUnitCs.unitTargetSearchCs._target_Body);
@@ -270,5 +305,204 @@ public abstract class UnitInfo : MonoBehaviour
 
     }
 
+    // 이펙트 오브젝트 풀링
+    public void Init_Vfx()
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject vfx = Instantiate(_hit_Effects[0], transform);
+            print("이펙트생성");
+            _hit_Effect_SlashAtk_Vfxs.Add(vfx);
+            vfx.SetActive(false);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject vfx = Instantiate(_hit_Effects[1], transform);
+            _hit_Effect_PierceAtk_Vfxs.Add(vfx);
+            vfx.SetActive(false);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            GameObject vfx = Instantiate(_hit_Effects[2], transform);
+            _hit_Effect_CrushAtk_Vfxs.Add(vfx);
+            vfx.SetActive(false);
+        }
+
+        GameObject vfx1 = Instantiate(_status_Effect_Stun_Start,transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        vfx1.SetActive(false);
+        _status_Effect_Stun_Start = vfx1;
+
+        GameObject vfx2 = Instantiate(_status_Effect_Bleeding_Start, transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        vfx2.SetActive(false);
+        _status_Effect_Bleeding_Start = vfx2;
+
+        GameObject vfx3 = Instantiate(_status_Effect_Stun, transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        vfx3.SetActive(false);
+        _status_Effect_Stun = vfx3;
+
+
+        GameObject vfx4 = Instantiate(_status_Effect_Poison, transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        vfx4.SetActive(false);
+        _status_Effect_Poison = vfx4;
+
+        GameObject vfx5 = Instantiate(_status_Effect_Bleeding, transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        vfx5.SetActive(false);
+        _status_Effect_Bleeding = vfx5;
+
+        // 슬로우 이펙트 미구현
+        //GameObject vfx6 = Instantiate(_status_Effect_Slow, transform);   // 스킬 공격 가능 불가능 확인하는 변수
+        //vfx6.SetActive(false);
+        //_status_Effect_Slow = vfx6;
+    }
+
+
+    public IEnumerator Damaged_Vfx_On(Abs_Skill atkSkill)
+    {
+        GameObject vfx = null;  // 피격 이펙트
+        bool canUse = false;    // 이펙트 오브젝트 풀링 값 사용 가능한지 판단하는 bool 자료형
+        AudioClip hitSfx = null;    // 이펙트 오브젝트 풀링 값 사용 가능한지 판단하는 bool 자료형
+
+
+        switch (atkSkill._skill_AtkType)
+        {
+            case eUnit_Attack_Property_States.Default:
+                break;
+
+            //베기 공격 시 피격 이펙트
+            case eUnit_Attack_Property_States.slash_Attack:
+
+                //GameObject vfx1 = null;
+                //vfx1 = Instantiate(_hit_Effect_SlashAtk, (transform.position + Vector3.up * 0.5f) + -sfxPos * 0.7f, Quaternion.identity);
+                hitSfx = hit_Sfxs[0];
+                for (int i = 0; i < _hit_Effect_SlashAtk_Vfxs.Count; i++)
+                {
+                    if (!_hit_Effect_SlashAtk_Vfxs[i].activeSelf)
+                    {
+                        vfx = _hit_Effect_SlashAtk_Vfxs[i];
+                        canUse = true;
+                        break;
+                    }
+                    yield return null;
+                }
+
+
+                if (!canUse)
+                {
+                    vfx = Instantiate(_hit_Effects[0], transform);
+                    _hit_Effect_SlashAtk_Vfxs.Add(vfx);
+                    vfx.SetActive(false);
+                }
+                //vfx1.transform.SetParent(transform);
+                break;
+
+            //관통 공격 시 피격 이펙트
+            case eUnit_Attack_Property_States.piercing_Attack:
+                hitSfx = hit_Sfxs[1];
+
+                for (int i = 0; i < _hit_Effect_PierceAtk_Vfxs.Count; i++)
+                {
+                    if (!_hit_Effect_PierceAtk_Vfxs[i].activeSelf)
+                    {
+                        vfx = _hit_Effect_PierceAtk_Vfxs[i];
+                        canUse = true;
+
+                        break;
+                    }
+                    yield return null;
+                }
+                if (!canUse)
+                {
+                    vfx = Instantiate(_hit_Effects[1], transform);
+                    _hit_Effect_PierceAtk_Vfxs.Add(vfx);
+                    vfx.SetActive(false);
+                }
+                break;
+
+            //분쇄 공격 시 피격 이펙트
+            case eUnit_Attack_Property_States.crushing_attack:
+                hitSfx = hit_Sfxs[2];
+
+                for (int i = 0; i < _hit_Effect_CrushAtk_Vfxs.Count; i++)
+                {
+                    if (!_hit_Effect_CrushAtk_Vfxs[i].activeSelf)
+                    {
+                        vfx = _hit_Effect_CrushAtk_Vfxs[i];
+                        canUse = true;
+
+                        break;
+                    }
+                    yield return null;
+                }
+
+                if (!canUse)
+                {
+                    vfx = Instantiate(_hit_Effects[2], transform);
+                    _hit_Effect_CrushAtk_Vfxs.Add(vfx);
+                    vfx.SetActive(false);
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        //히트 사운드 피치 조절
+        hitSound.pitch = UnityEngine.Random.Range(0.7f, 1.4f);
+
+        // 히트 사운드 볼륨 조절
+        hitSound.volume = VolumeCheck();
+
+        yield return null;
+
+        hitSound.PlayOneShot(hitSfx);
+
+
+        Vector3 direction = atkSkill.unitInfoCs.transform.position - transform.position;
+        print(transform.gameObject);
+        Quaternion vfxRot;
+        vfxRot = Quaternion.LookRotation(direction.normalized);
+
+        //vfx.transform.rotation = vfxRot;
+        vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
+
+
+        //vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
+        yield return new WaitForSecondsRealtime(0.1f);
+        //vfx.transform.position = (transform.position + Vector3.up * 0.5f) + sfxPos * 0.7f;
+        vfx.transform.position = transform.position + Vector3.up * 0.5f + vfx.transform.forward * 0.7f;
+
+        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, Mathf.Abs(vfx.transform.position.z));
+        Debug.LogWarning("362" + vfx.transform.position);
+        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, -vfx.transform.position.z);
+        Debug.LogWarning("365" + vfx.transform.position);
+
+        //vfx.transform.forward = ;
+
+        vfx.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.5f);
+        vfx.SetActive(false);
+    }
+
+    public float VolumeCheck()
+    {
+        float distance = Vector3.Distance(transform.position, soundPos.position);
+        // sfxVol = 0f;
+
+        if (distance <= 10f)
+           return 1f;
+
+        if (distance <= 15f)
+            return 0.7f;
+
+        if (distance <= 20f)
+            return 0.4f;
+
+        if (distance <= 25f)        
+            return 0.2f;
+        else
+            return 0f;
+    }
 }
 

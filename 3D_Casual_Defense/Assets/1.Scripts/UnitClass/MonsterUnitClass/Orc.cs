@@ -45,32 +45,11 @@ public class Orc : MonsterUnitClass, IActByUnit
     //[SerializeField]
     //private NavMeshPath path;
 
-    private void OnEnable()
-    {
-        bodyMeshRener.material = bodyMtr;
-        _nav.isStopped = false;
 
-        for (int j = 0; j < someMeshReners.Length; j++)
-        {
-            someMeshReners[j].material = someMtr[j];
-            //0.157f
-        }
-        Color cloaking_Mtr_Color = bodyMeshRener.material.color;
-        cloaking_Mtr_Color.a = 1f;
-        _unit_CloakingMtr.color = cloaking_Mtr_Color;
-
-        for (int j = 0; j < someMeshReners.Length; j++)
-        {
-            cloaking_someMtr[j].color = cloaking_Mtr_Color;
-            //0.157f
-        }
-
-        _nav.SetDestination(castleTr.position);
-
-    }
     // Start is called before the first frame update
     void Awake()
     {
+        soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
 
         print(MonsterKind);
         rgb = GetComponent<Rigidbody>();
@@ -79,6 +58,8 @@ public class Orc : MonsterUnitClass, IActByUnit
         //ObstacleAvoidanceType obstacleAvoidanceType = ;
         //obstacleAvoidanceType.
         //print(_nav.obstacleAvoidanceType.);
+
+        Init_Vfx();
 
         _this_Unit_ArmorCalculateCs = new ChainArmor();
         _enum_Unit_Action_Mode = eUnit_Action_States.monster_NormalPhase;
@@ -111,6 +92,11 @@ public class Orc : MonsterUnitClass, IActByUnit
         cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
 
         _nav.SetDestination(castleTr.position); // 성으로 이동
+
+        // 사운드 오디오 소스 할당
+        atkSound = GetComponents<AudioSource>()[0];
+        hitSound = GetComponents<AudioSource>()[1];
+
         //NavMeshPath path = new NavMeshPath();
         //_nav.CalculatePath(castleTr.position, path);
         //print(_nav.CalculatePath(castleTr.position, path));
@@ -118,8 +104,31 @@ public class Orc : MonsterUnitClass, IActByUnit
         //_nav.SetPath(path);
         //_nav.SetDestination(castleTr.position); // 성으로 이동
     }
+    private void OnEnable()
+    {
+        bodyMeshRener.material = bodyMtr;
+        _nav.isStopped = false;
+
+        for (int j = 0; j < someMeshReners.Length; j++)
+        {
+            someMeshReners[j].material = someMtr[j];
+            //0.157f
+        }
+        Color cloaking_Mtr_Color = bodyMeshRener.material.color;
+        cloaking_Mtr_Color.a = 1f;
+        _unit_CloakingMtr.color = cloaking_Mtr_Color;
+
+        for (int j = 0; j < someMeshReners.Length; j++)
+        {
+            cloaking_someMtr[j].color = cloaking_Mtr_Color;
+            //0.157f
+        }
+        _nav.SetDestination(castleTr.position);
+
+    }
 
     // Update is called once per frame
+
     void Update()
     {
         //transform.rotation = Quaternion.identity;
@@ -217,7 +226,9 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData.generalSkillName = character_Data.generalSkillName;
 
         //일반스킬 할당
-        gen_skill = character_Data.unit_Gen_Skill;
+        gen_skill = Instantiate(character_Data.unit_Gen_Skill, transform);
+        gen_skill.gameObject.name = _unitData.generalSkillName;
+        gen_skill._link_Skill = character_Data.unit_Gen_Skill._link_Skill;
         gen_skill.unitInfoCs = this;
 
         // 특수 스킬 할당
@@ -374,7 +385,7 @@ public class Orc : MonsterUnitClass, IActByUnit
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
                 if (unitTargetSearchCs._targetUnit != null)
                 {
-                    actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
+                    actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
                 }
                 break;
         }
@@ -412,10 +423,9 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     private void OnTriggerEnter(Collider other)
     {
-        if (unitTargetSearchCs._targetUnit!=null&&unitTargetSearchCs._targetUnit.Equals(other))
+        if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.Equals(other))
         {
             _nav.isStopped = true;
-
         }
     }
 

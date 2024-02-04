@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Monster
   - HoldPrefabs
+  - FxTemporaire
+  - SoundPos
+  - Test
   layers:
   - Default
   - TransparentFX

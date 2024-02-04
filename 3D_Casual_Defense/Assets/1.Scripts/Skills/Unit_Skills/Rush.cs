@@ -132,7 +132,7 @@ public class Rush : SpecialSkill
         Debug.LogWarning("넉백됨");
         float time = 0f;
         float nuckBackValue = 7.5f;
-        float nuckBackValue2 = 800f;
+        float nuckBackValue2 = 1000f;
         targetRigd.velocity = Vector3.zero;
 
 
@@ -144,14 +144,11 @@ public class Rush : SpecialSkill
         while (time < 0.2f)
         {
             targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
-            nuckBackValue2 -= 10f;
-            print("while이동속도 " + targetRigd.velocity);
-            print("while이동속도 " + -(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
+            nuckBackValue2 -= 50f;
 
             time += Time.deltaTime;
             yield return null;
         }
-        print("이동속도 "+targetRigd.velocity);
         yield return new WaitForSeconds(1f);
 
         // 넉백된 몬스터들 행동하기 위해 필요한 값들 활성화
