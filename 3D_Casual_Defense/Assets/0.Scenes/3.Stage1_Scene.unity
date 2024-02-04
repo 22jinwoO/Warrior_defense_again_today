@@ -3894,8 +3894,11 @@ MonoBehaviour:
   caslteModel: {fileID: 6450545110410098829}
   _castle_Hp: 0
   _anim: {fileID: 0}
+  _boxCollider: {fileID: 0}
   _source: {fileID: 0}
   _hitCaslteClip: {fileID: 8300000, guid: 04608e661dee36e419e2eb3d6dd4bb79, type: 3}
+  _downCaslteClip: {fileID: 8300000, guid: 5ae4d298ed547ba4c88587effb75d7e1, type: 3}
+  isDown: 0
 --- !u!95 &990893174
 Animator:
   serializedVersion: 5
@@ -3904,7 +3907,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 990893169}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: f9948c3c5c8e35944bca92a56ae3fe24, type: 2}
   m_CullingMode: 0
@@ -6730,7 +6733,7 @@ Transform:
   m_GameObject: {fileID: 2010428789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13, y: 40, z: -19.9}
+  m_LocalPosition: {x: 13, y: 40, z: -4.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
