@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine.AI;
 using static UnitDataManager;
 
@@ -13,12 +15,15 @@ public class Archer : PlayerUnitClass
     [SerializeField]
     private float maxdistance;
 
+    [SerializeField]
+    private TextMeshProUGUI textMeshProUGUI;
 
+    public Player player;
     private void Awake()
     {
         someMtr = new Material[someMeshReners.Length];
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
-
+        player= GameObject.Find("Player").GetComponent<Player>();
 
         for (int i = 0; i < someMeshReners.Length; i++)
         {
@@ -67,6 +72,8 @@ public class Archer : PlayerUnitClass
         // 사운드 오디오 소스 할당
         atkSound = GetComponents<AudioSource>()[0];
         hitSound = GetComponents<AudioSource>()[1];
+
+
     }
 
     private void Start()
@@ -78,10 +85,7 @@ public class Archer : PlayerUnitClass
         gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
 
         gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill;
-        print(gen_skill);
-        print(_projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill);
 
-        print(gameObject.activeSelf);
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
         //print(_unitData.sightRange);
@@ -99,14 +103,35 @@ public class Archer : PlayerUnitClass
             _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
         }
 
-        if (_isClick && Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (_isClick && Input.GetMouseButtonDown(1))
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
+        //    if (Physics.Raycast(ray, out RaycastHit hit))
+        //    {
+        //        _movePos = hit.point;
+        //        _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+
+        //    }
+        //}
+
+        if (_isClick)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (player.isChoice&&touch.phase==TouchPhase.Began&&Input.touchCount == 1)
             {
-                _movePos = hit.point;
-                _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    player.isChoice = false;
+
+                    _movePos = hit.point;
+                    _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+                    player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point;
+
+                }
+
             }
         }
 

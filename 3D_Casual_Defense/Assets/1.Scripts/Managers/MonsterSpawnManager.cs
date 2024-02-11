@@ -52,6 +52,14 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
     public AllData datas;  // 변환 데이터형
 
+
+    private Stage1_TextManager txtManager;
+
+    [SerializeField]
+    private UI_PopUpManager uiManager;
+
+
+
     //public Text intervalTxt;
 
     private void Awake()
@@ -68,22 +76,30 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         //{
         //    print(datas.waveDatas[3].interval);
         //}
-        //nms = GameObject.FindGameObjectWithTag("EditorOnly").GetComponent<NavMeshSurface>();
+        print("이거 오류 맞음??"+nms.name);
+        txtManager = Stage1_TextManager.Instance;
     }
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(C_DynamicBake());
+        // 몬스터 네비메쉬 서페이스 5초마다 초기화
+        StartCoroutine(C_DynamicBake());
 
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            waveSys.StartWave();
+            StopCoroutine(SpawnMonster());
+            for (int i = 0; i < orcList.Count; i++)
+            {
+                orcList[i].gameObject.SetActive(false);
+            }
+            waveSys.currentWaveIndex = 8;
+            currentWave.wave_maxMonsterCount = currentWave.deathMonsterCnt;
+            
         }
 
         if (currentWave.wave_maxMonsterCount==currentWave.deathMonsterCnt)
@@ -97,7 +113,9 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
     public void StartWave(Wave wave)
     {
+        // 현재 웨이브 몬스터 종류 리스트 초기화
         currentWave.wave_monsterClasses.Clear();
+
         // 매개변수로 받아온 웨이브 정보 저장
         currentWave = wave;
         //intervalTxt.text = currentWave.wave_interval.ToString();
@@ -107,12 +125,17 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수
     {
+        txtManager.currentWaveTxt.text = currentWave.wave_Name;
+        txtManager.CountDeadMonster();
+        txtManager.currentWave_IntervalTxt.text = "웨이브 대기 시간 : " + currentWave.wave_StartTime.ToString();
+
         int repeatNum = 0;
         Debug.LogWarning("대기시간 :"+currentWave.wave_StartTime);
         while (currentWave.wave_StartTime > 0)
         {
             //intervalTxt.text=currentWave.wave_StartTime.ToString();
             currentWave.wave_StartTime--;
+            txtManager.currentWave_IntervalTxt.text = "웨이브 대기 시간 : " + currentWave.wave_StartTime.ToString();
             yield return new WaitForSeconds(1f);
         }
         //yield return new WaitForSeconds(currentWave.wave_interval);
@@ -193,6 +216,8 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
             orcList.Add(spawnMonster.GetComponent<Orc>());
             print("프리팹 생성!");
         }
+
+        print("네비메쉬 위에 있는지 확인" + spawnMonster._nav.isOnNavMesh);
         //spawnMonster.transform.position = spawnPoint;
         spawnMonster.gameObject.name = "오크";
         spawnMonster.transform.SetParent(orcPrefab_Objects);

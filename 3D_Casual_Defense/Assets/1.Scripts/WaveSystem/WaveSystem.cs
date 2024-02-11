@@ -16,7 +16,10 @@ public class WaveSystem : MonoBehaviour
     [SerializeField]
     private MonsterSpawnManager spawnManager;
 
-    private int currentWaveIndex = -1;  // 현재 웨이브 인덱스
+    public int currentWaveIndex = -1;  // 현재 웨이브 인덱스
+
+    [SerializeField]
+    private UI_PopUpManager uiManager;
 
 
     private void Awake()
@@ -25,6 +28,15 @@ public class WaveSystem : MonoBehaviour
         LoadWaveData();
     }
 
+    //private void Update()
+    //{
+
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        currentWaveIndex = 10;
+    //        StartWave();
+    //    }
+    //}
     #region # LoadWaveData() : WaveDatas 구글 시트를 Json 파일로 변환한 값을 불러와 WaveSystem.cs의 Waves[]배열에 Json파일의 i번째 Wave데이터들을 넣어줌
     private void LoadWaveData()
     {
@@ -119,6 +131,13 @@ public class WaveSystem : MonoBehaviour
             // SpawnManager의 StartWave() 함수 호출, 현재 웨이브 정보 제공
             spawnManager.StartWave(waves[currentWaveIndex]);
             print("커렌트웨이브 인덱스 "+currentWaveIndex);
+        }
+
+        // Waver가 없다면 클리어 UI 호출
+        else
+        {
+            // 플레이어 승리 시 팝업창 활성화
+            uiManager.PlayerWinPopUp();
         }
     }
 }

@@ -113,7 +113,7 @@ public abstract class PlayerUnitClass : UnitInfo
     {
         navObs.enabled = true;
         _nav.enabled = false;
-        if (holdOb.Equals(null))
+        if (holdOb==null)
         {
             print(gameObject.name);
             holdOb=Instantiate(holdObPref,transform.position,Quaternion.identity);

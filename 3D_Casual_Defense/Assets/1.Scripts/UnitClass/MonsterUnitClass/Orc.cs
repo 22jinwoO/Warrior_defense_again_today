@@ -91,11 +91,11 @@ public class Orc : MonsterUnitClass, IActByUnit
         }
         cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
 
-        _nav.SetDestination(castleTr.position); // 성으로 이동
 
         // 사운드 오디오 소스 할당
         atkSound = GetComponents<AudioSource>()[0];
         hitSound = GetComponents<AudioSource>()[1];
+        _nav.SetDestination(castleTr.position); // 성으로 이동
 
         //NavMeshPath path = new NavMeshPath();
         //_nav.CalculatePath(castleTr.position, path);
@@ -104,6 +104,7 @@ public class Orc : MonsterUnitClass, IActByUnit
         //_nav.SetPath(path);
         //_nav.SetDestination(castleTr.position); // 성으로 이동
     }
+
     private void OnEnable()
     {
         bodyMeshRener.material = bodyMtr;
@@ -127,12 +128,18 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     }
 
+
     // Update is called once per frame
 
     void Update()
     {
         //transform.rotation = Quaternion.identity;
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            print("오크네비메쉬 확인" + _nav.name);
+            print("네비메쉬 위에 있는지 오크가 확인" + _nav.isOnNavMesh);
 
+        }
         Unit_Attack_Skill_CoolTime();
         if (unitTargetSearchCs._targetUnit!=null&& unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
@@ -160,7 +167,7 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     private void FixedUpdate()
     {
-        if (canAct)
+        if (canAct&&_nav.isOnNavMesh)
         {
             Act_By_Unit();  // 유닛 행동 구분지어 주는 함수
         }

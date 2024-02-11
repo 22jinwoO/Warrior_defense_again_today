@@ -28,6 +28,6 @@ public class SoundManager : Singleton<SoundManager>
         if (distance <= 25f)
             return 0.2f;
         else
-            return 0f;
+            return 0.1f;
     }
 }

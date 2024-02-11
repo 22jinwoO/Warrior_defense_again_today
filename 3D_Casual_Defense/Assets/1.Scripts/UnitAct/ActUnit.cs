@@ -7,11 +7,8 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 //
 public class ActUnit : MonoBehaviour
 {
@@ -30,6 +27,8 @@ public class ActUnit : MonoBehaviour
 
     public UnitTargetSearch unitTargetSearchCs;
 
+    private Stage1_TextManager txtManager;
+
     
     private void Awake()
     {
@@ -40,7 +39,7 @@ public class ActUnit : MonoBehaviour
         anim = GetComponent<Animator>();
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
 
-
+        txtManager = Stage1_TextManager.Instance;
     }
     private void Start()
     {
@@ -416,12 +415,19 @@ public class ActUnit : MonoBehaviour
         else
         {
             MonsterSpawnManager.Instance.currentWave.deathMonsterCnt++;
+
+            // 몬스터 처치 수 텍스트 변환
+            txtManager.CountDeadMonster();
+
         }
+
+        // 사망한 유닛 비활성화
         gameObject.SetActive(false);
 
 
         // 나중에 재생성 될 떄 원래 머태리얼로 할당받도록 하기
         yield return new WaitForSeconds(1f);
+
         // 일반 머태리얼로 할당
         unitInfoCs.bodyMeshRener.material = unitInfoCs.bodyMtr;
 

@@ -311,7 +311,6 @@ public abstract class UnitInfo : MonoBehaviour
         for (int i = 0; i < 4; i++)
         {
             GameObject vfx = Instantiate(_hit_Effects[0], transform);
-            print("이펙트생성");
             _hit_Effect_SlashAtk_Vfxs.Add(vfx);
             vfx.SetActive(false);
         }
