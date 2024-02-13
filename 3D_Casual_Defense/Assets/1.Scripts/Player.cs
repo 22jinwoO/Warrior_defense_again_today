@@ -63,6 +63,9 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
                     clickUnitCs.clikUnitInfo = hit.transform.GetComponent<UnitInfo>();
                     //isMove = true;
                     isChoice = true;
+                    flagTr.position = transform.position;
+                    flagTr.gameObject.SetActive(true);
+
                     textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<UnitInfo>()._isClick;
 
                 }
@@ -93,7 +96,6 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        flagTr.gameObject.SetActive(true);
 
     }
 
@@ -109,6 +111,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
             clickUnitInfo._isClick = false;
             clickUnitInfo = null;
             flagTr.gameObject.SetActive(false);
+            
             isChoice = false;
             isMove = false;
         }

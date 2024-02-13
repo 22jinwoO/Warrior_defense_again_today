@@ -18,13 +18,27 @@ public class UI_PopUpManager : MonoBehaviour
     [SerializeField]
     private Stage1_TextManager txtManager;
 
+    [SerializeField]
+    private Button usePopUpBtn;
+
+    [SerializeField]
+    public bool isUseShop;
+
+    [SerializeField]
+    private RectTransform buyUnitPopUp;
+
     private void Awake()
     {
+        isUseShop = true;
+
         // 로비로 가는 버튼 함수 연결
         goLobbyBtn.onClick.AddListener(GoLobbyBtn);
 
         // 홈으로 이동하는 함수 연결
         retryBtn.onClick.AddListener(GoRetryBtn);
+
+        // 홈으로 이동하는 함수 연결
+        usePopUpBtn.onClick.AddListener(()=>StartCoroutine(UseUnitPopUp()));
     }
 
     //홈버튼에서 호출되는 함수
@@ -40,7 +54,31 @@ public class UI_PopUpManager : MonoBehaviour
 
         SceneManager.LoadScene(scene.name);
     }
+    public IEnumerator UseUnitPopUp()
+    {
+        if (isUseShop)
+        {
+            while (buyUnitPopUp.position.y < 0f)
+            {
+                buyUnitPopUp.position += new Vector3(0, +10f, 0);
+                yield return null;
+            }
+            isUseShop = false;
+            yield break;
+        }
 
+        if (!isUseShop)
+        {
+            while (buyUnitPopUp.position.y > -110f)
+            {
+                buyUnitPopUp.position += new Vector3(0, -10f, 0);
+                yield return null;
+            }
+            isUseShop = true;
+            yield break;
+
+        }
+    }
     public void PlayerWinPopUp()
     {
         txtManager.PlayerWinTxt();

@@ -23,6 +23,9 @@ public class CreatePlayerUnit : MonoBehaviour
 
     public UnitInfo clikUnitInfo;
 
+    [SerializeField]
+    private UI_PopUpManager popUpMgr;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,18 +36,7 @@ public class CreatePlayerUnit : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{   
-        //    // 기사 유닛 생산자
-        //    print("스페이스 바 눌림!");
-        //    playerUnitFactorys[0].knightClass = AbsPlayerUnitFactory.KnightClass.Knight;
-        //    PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
-        //    knight.transform.position = Vector3.zero;
-        //    knight.gameObject.name = "기사";
-        //}
-    }
+
 
     private void CreateKnight()
     {
@@ -59,6 +51,9 @@ public class CreatePlayerUnit : MonoBehaviour
         //print(UnitDataManager.Instance._unitInfo_Dictionary[knight._unitData.unit_Id]);
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "기사";
+
+        popUpMgr.isUseShop = false;
+        StartCoroutine(popUpMgr.UseUnitPopUp());
     }
     private void CreateArcher()
     {
@@ -70,6 +65,9 @@ public class CreatePlayerUnit : MonoBehaviour
         PlayerUnitClass knight = playerUnitFactorys[1].CreatePlayerUnit();
         knight.transform.position = Vector3.zero;
         knight.gameObject.name = "궁수";
+        popUpMgr.isUseShop = false;
+        StartCoroutine(popUpMgr.UseUnitPopUp());
+
     }
 
     private void ClickUnitFree()
