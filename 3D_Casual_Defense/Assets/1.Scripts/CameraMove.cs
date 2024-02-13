@@ -17,6 +17,10 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private float zoomSpeed = 6.0f;
 
+
+    [SerializeField]
+    private Player player;
+
     [SerializeField]
     private TextMeshProUGUI textMeshProUGUI;
 
@@ -25,6 +29,8 @@ public class CameraMove : MonoBehaviour
     {
         OnCameraMove();
         OnCameraZoomMode();
+        OnUnitMove();
+
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             mainCam.fieldOfView += 1f * zoomSpeed;
@@ -36,10 +42,9 @@ public class CameraMove : MonoBehaviour
             textMeshProUGUI.text = "카메라 줌인";
         }
     }
-
-    private void OnCameraMove()
+    private void OnUnitMove()
     {
-        if (Input.touchCount != 1)
+        if(!player.isMove.Equals(true))
             return;
 
         Touch firstTouch = Input.GetTouch(0);   // 첫번째 터치 정보
@@ -47,14 +52,37 @@ public class CameraMove : MonoBehaviour
         // 직전 프레임의 터치 위치를 구하기 위해 "현재 위치 - 위치 변화량" 을 계산
         Vector2 previousTouch = (firstTouch.position - firstTouch.deltaPosition);
 
+        // 카메라 움직일 방향 구하기
         Vector2 dir = firstTouch.position - previousTouch;
 
+        // 방향 적용한 벡터
         Vector3 vec = new Vector3(dir.x, 0, dir.y);
 
+        // 카메라 움직임 적용 (플래그가 이동해야 할 방향으로 카메라가 움직여야 하기 때문에 + 해줘야함)
+        camTr.position += vec * zoomSpeed * Time.deltaTime;
+        textMeshProUGUI.text = "유닛 움직임 카메라 이동중\n " + " " + dir + "\n " + vec.magnitude;
+    }
 
 
+    private void OnCameraMove()
+    {
+        if (Input.touchCount != 1||player.isMove.Equals(true))
+            return;
 
+        Touch firstTouch = Input.GetTouch(0);   // 첫번째 터치 정보
+
+        // 직전 프레임의 터치 위치를 구하기 위해 "현재 위치 - 위치 변화량" 을 계산
+        Vector2 previousTouch = (firstTouch.position - firstTouch.deltaPosition);
+
+        // 카메라 움직일 방향 구하기
+        Vector2 dir = firstTouch.position - previousTouch;
+
+        // 방향 적용한 벡터
+        Vector3 vec = new Vector3(dir.x, 0, dir.y);
+
+        // 카메라 움직임 적용 (드래그한 방향 반대로 카메라가 움직여야 하기 때문에 - 해줘야함)
         camTr.position -= vec * zoomSpeed * Time.deltaTime;
+
         textMeshProUGUI.text = "카메라 이동중\n " + " " + dir + "\n " + vec.magnitude;
 
     }

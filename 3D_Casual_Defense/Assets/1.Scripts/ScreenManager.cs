@@ -8,5 +8,24 @@ public class ScreenManager : MonoBehaviour
     {
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.SetResolution(1920, 1080, true);
+
+        Camera camera = Camera.main;
+
+        Rect rect = camera.rect;
+
+        float scaleHeight = ((float)Screen.width / Screen.height) / ((float)16 / 9);
+        float scaleWidth = 1f / scaleHeight;
+
+        if (scaleHeight<1)
+        {
+            rect.height = scaleHeight;
+            rect.y = (1f - scaleHeight) / 2f;
+        }
+        else
+        {
+            rect.width = scaleWidth;
+            rect.x = (1f - scaleWidth) / 2f;
+        }
+        camera.rect = rect;
     }
 }

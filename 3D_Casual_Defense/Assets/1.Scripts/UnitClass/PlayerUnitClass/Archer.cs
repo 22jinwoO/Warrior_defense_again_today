@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.AI;
 using static UnitDataManager;
+using UnityEngine.EventSystems;
+
 
 public class Archer : PlayerUnitClass
 {
@@ -115,25 +117,54 @@ public class Archer : PlayerUnitClass
         //    }
         //}
 
-        if (_isClick)
-        {
-            Touch touch = Input.GetTouch(0);
-            if (player.isChoice&&touch.phase==TouchPhase.Began&&Input.touchCount == 1)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (_isClick)
+        //{
+        //    Touch touch = Input.GetTouch(0);
 
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-                    player.isChoice = false;
+        //    if (player.isChoice && touch.phase == TouchPhase.Moved && Input.touchCount == 1)
+        //    {
+        //        player.textMeshProUGUI.text = "드래그중";
 
-                    _movePos = hit.point;
-                    _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-                    player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point;
+        //        Vector3 mouseInput = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                }
+        //        if (player.isChoice && touch.phase == TouchPhase.Ended && Input.touchCount == 1)
+        //        {
+        //            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            }
-        }
+        //            if (Physics.Raycast(ray, out RaycastHit hit))
+        //            {
+        //                mouseInput=new Vector3(mouseInput.x, 0f, mouseInput.z);
+        //                _movePos = mouseInput;
+        //                _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+        //                player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point + "\n월드좌표 : " + mouseInput;
+        //                player.isChoice = false;
+        //                _isClick = false;
+        //            }
+
+        //        }
+        //    }
+
+
+        //    //Vector3 mouseInput = Camera.main.ScreenToWorldPoint(hit.point);
+
+        //    //if (player.isChoice&&touch.phase==TouchPhase.Ended&&Input.touchCount == 1)
+        //    //{
+        //    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        //    //    if (Physics.Raycast(ray, out RaycastHit hit))
+        //    //    {
+        //    //        player.isChoice = false;
+
+        //    //        Vector3 mouseInput = Camera.main.ScreenToWorldPoint(hit.point);
+
+        //    //        _movePos = mouseInput;
+        //    //        _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+        //    //        player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point + "\n월드좌표 : " + mouseInput;
+
+        //    //    }
+
+        //    //}
+        //}
 
         //Instantiate(_projectile_Prefab);
         Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
@@ -302,4 +333,6 @@ public class Archer : PlayerUnitClass
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
     }
+
+
 }
