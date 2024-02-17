@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 using static UnitDataManager;
-
+using EnumTypes;
 public class Orc : MonsterUnitClass, IActByUnit
 {
     [SerializeField]

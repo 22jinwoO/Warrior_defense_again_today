@@ -62,6 +62,16 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
     private void Awake()
     {
+        // 버튼에 스트링으로 딕셔너리 키 값 넣어주기 방법 1.
+        // 버튼 배열 가져오고 버튼마다 리스트 인덱스 값 하나씩 넣어주기
+        List<string> asdf = new List<string>(_unitInfo_Dictionary.Keys);
+        asdf.AddRange(_unitInfo_Dictionary.Keys);
+
+        // 방법 2.
+        //List<string> asdf = new List<string>();
+        //asdf.AddRange(_unitInfo_Dictionary.Keys);
+
+
         All_character_Datas = JsonUtility.FromJson<All_Character_Data>(character_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
 
         //Add_Skill_Dictionary(); // 스킬 딕셔너리에 키, 값 할당하는 함수 (스킬데이터 매니저로 옮겨줘서 삭제할 에정)

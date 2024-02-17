@@ -54,6 +54,7 @@ public class UI_PopUpManager : MonoBehaviour
 
         SceneManager.LoadScene(scene.name);
     }
+
     public IEnumerator UseUnitPopUp()
     {
         if (isUseShop)
@@ -79,6 +80,7 @@ public class UI_PopUpManager : MonoBehaviour
 
         }
     }
+
     public void PlayerWinPopUp()
     {
         txtManager.PlayerWinTxt();

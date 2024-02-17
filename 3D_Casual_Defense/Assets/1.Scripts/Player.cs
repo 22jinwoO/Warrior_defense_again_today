@@ -4,10 +4,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using Unity.VisualScripting;
+using EnumTypes;
 
-public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
+namespace EnumTypes
 {
+    public enum AttackTypes
+    {
+        None, Melee, Range
+    }
+
+    public enum CardRanks
+    {
+        Normal, Special, Rare
+    }
+
+    public enum CardHowToUses
+    {
+        Normal, TargetGround, TargetEntity
+    }
+
+    public enum CardAfterUses
+    {
+        Discard, Destruct, Spawn
+    }
+
+    public enum GameFlowState
+    {
+        InitGame, SelectStage, Setting, Wave, EventFlow, Ending
+    }
+}
+
+public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDragHandler, IEndDragHandler
+{
+    [SerializeField]
+    private Material _flag_Material;
+
+
+    [SerializeField]
+    private Material[] _Materials;
+
     [SerializeField]
     private CreatePlayerUnit clickUnitCs;
 
@@ -22,6 +57,12 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
 
     public bool isChoice;
     public bool isMove;
+
+    private void Awake()
+    {
+
+        _flag_Material= flagTr.GetComponent<Material>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -58,11 +99,12 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
                 if (hit.transform.tag == "Player")
                 {
                     clickUnitInfo = hit.transform.GetComponent<UnitInfo>();
-                    transform.position = clickUnitInfo.transform.position;
+                    
                     hit.transform.GetComponent<UnitInfo>()._isClick = true;
                     clickUnitCs.clikUnitInfo = hit.transform.GetComponent<UnitInfo>();
                     //isMove = true;
                     isChoice = true;
+                    _flag_Material = _Materials[0];
                     flagTr.position = transform.position;
                     flagTr.gameObject.SetActive(true);
 
@@ -70,6 +112,12 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
 
                 }
             }
+        }
+
+        if (isChoice&&!isMove)
+        {
+            transform.position = clickUnitInfo.transform.position;
+            flagTr.position = transform.position;
         }
     }
     public void OnDrag(PointerEventData eventData)
@@ -117,4 +165,8 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDrag
         }
     }
 
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        //_flag_Material = _Materials[1];
+    }
 }

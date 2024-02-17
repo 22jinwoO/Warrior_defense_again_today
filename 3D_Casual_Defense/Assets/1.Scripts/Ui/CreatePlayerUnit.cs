@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class CreatePlayerUnit : MonoBehaviour
@@ -26,21 +27,24 @@ public class CreatePlayerUnit : MonoBehaviour
     [SerializeField]
     private UI_PopUpManager popUpMgr;
 
-    // Start is called before the first frame update
     void Start()
     {
-        clickKnightBtn.onClick.AddListener(CreateKnight);
-        clickArcherBtn.onClick.AddListener(CreateArcher);
+        //clickKnightBtn.onClick.AddListener(CreateKnight);
+        //clickArcherBtn.onClick.AddListener(CreateArcher);
         clickUnitFreeBtn.onClick.AddListener(ClickUnitFree);
         clickUnitHoldBtn.onClick.AddListener(ClickUnitHold);
     }
 
-    // Update is called once per frame
-
-
-    private void CreateKnight()
+    // 드래그 끝났을 때 호출되도록?
+    public PlayerUnitClass CreateKnight()
     {
         print("기사생산");
+
+        // 소환진 활성화
+
+        // 대기시간 다 지나면
+
+        // 반환된 유닛 활성화
 
 
         // 기사 유닛 생산자
@@ -49,24 +53,28 @@ public class CreatePlayerUnit : MonoBehaviour
         // 생산자 실행
         PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
         //print(UnitDataManager.Instance._unitInfo_Dictionary[knight._unitData.unit_Id]);
-        knight.transform.position = Vector3.zero;
-        knight.gameObject.name = "기사";
+        //Vector3 setPos = new Vector3(Input.mousePosition.x, 0f, Input.mousePosition.z);
+        //knight.transform.position = setPos;
+        knight.gameObject.name = "기사"+ knight._unitData.char_id;
 
         popUpMgr.isUseShop = false;
         StartCoroutine(popUpMgr.UseUnitPopUp());
+        return knight;
     }
-    private void CreateArcher()
+
+    public PlayerUnitClass CreateArcher()
     {
         print("궁수생산");
         // 궁수 유닛 생산자
         playerUnitFactorys[1].archerClass = AbsPlayerUnitFactory.ArcherClass.Archer;
 
         // 생산자 실행
-        PlayerUnitClass knight = playerUnitFactorys[1].CreatePlayerUnit();
-        knight.transform.position = Vector3.zero;
-        knight.gameObject.name = "궁수";
+        PlayerUnitClass Archor = playerUnitFactorys[1].CreatePlayerUnit();
+        //Archor.transform.position = Vector3.zero;
+        Archor.gameObject.name = "궁수";
         popUpMgr.isUseShop = false;
         StartCoroutine(popUpMgr.UseUnitPopUp());
+        return Archor;
 
     }
 
@@ -104,4 +112,5 @@ public class CreatePlayerUnit : MonoBehaviour
         clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
+
 }

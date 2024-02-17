@@ -18,9 +18,9 @@ public class ArcherFactory : AbsPlayerUnitFactory
             case ArcherClass.Archer:
                 print("궁수 생산");
                 playerUnit = Instantiate(ArcherPrefab);
+
                 // 궁수 유닛 ID에 해당하는 제이슨 파일 찾아서 필요한 데이터 할당
                 playerUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["hum_arch01"]);
-
                 break;
 
 
