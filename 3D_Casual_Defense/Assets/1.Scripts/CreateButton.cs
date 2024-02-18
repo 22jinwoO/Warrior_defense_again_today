@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
-public class CreateButton_1 : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     [SerializeField]
     private Player player;
 
 
     [SerializeField]
-    private CreatePlayerUnit _unit;
+    private CreatePlayerUnit unitFactory;
 
-    [SerializeField]
-    private PlayerUnitClass playerUnit;
+    public string playerUnitId;
+
+    public Transform spawnPoint;
 
 
     public void OnDrag(PointerEventData eventData)
@@ -27,21 +27,24 @@ public class CreateButton_1 : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
         {
             player.isMove = true;
 
-            playerUnit.transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
+            spawnPoint.position = new Vector3(hit.point.x, 0f, hit.point.z);
         }
 
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        playerUnit = _unit.CreateKnight();
+        //unitFactory.playerUnit = unitFactory.RedayUnit(playerUnitId);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        playerUnit = null;
-        player.isMove = false;
+        //playerUnitId = null;
+        unitFactory.SpawnSummon(spawnPoint.position);
 
+        spawnPoint = null;
+        player.isMove = false;
+        //eventData.worldPosition;
 
     }
 }
