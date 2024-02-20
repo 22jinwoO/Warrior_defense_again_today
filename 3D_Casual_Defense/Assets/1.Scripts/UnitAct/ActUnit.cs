@@ -41,13 +41,6 @@ public class ActUnit : MonoBehaviour
 
         txtManager = Stage1_TextManager.Instance;
     }
-    private void Start()
-    {
-
-        //unitInfoCs._unitData = unitInfoCs._unitData;
-        print(unitInfoCs._unitData.criticRate);
-        print(unitInfoCs.gameObject.name);
-    }
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.V))
@@ -371,6 +364,9 @@ public class ActUnit : MonoBehaviour
 
     IEnumerator DieUnit()
     {
+        // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결 해제
+        Castle.Instance.OnCastleDown -= unitInfoCs.OnCastleDown;
+
         unitInfoCs.sprCol.enabled = false;
 
         float colorValue_a =1f;

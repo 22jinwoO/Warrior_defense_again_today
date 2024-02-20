@@ -133,14 +133,9 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     void Update()
     {
-        //transform.rotation = Quaternion.identity;
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            print("오크네비메쉬 확인" + _nav.name);
-            print("네비메쉬 위에 있는지 오크가 확인" + _nav.isOnNavMesh);
-
-        }
         Unit_Attack_Skill_CoolTime();
+
+        // 타겟이 죽었을 때 호출되는 함수
         if (unitTargetSearchCs._targetUnit!=null&& unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
             _isSearch = false;
@@ -151,18 +146,7 @@ public class Orc : MonsterUnitClass, IActByUnit
             _nav.SetDestination(castleTr.position);
         }
 
-        //if (Input.GetMouseButtonDown(1))
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        //    if (Physics.Raycast(ray, out RaycastHit hit))
-        //    {
-        //        _nav.SetDestination(hit.point);
-        //        //_movePos = hit.point;
-        //        //_enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-        //    }
-        //}
-        //hpText.text="몬스터 체력 : "+ Mathf.CeilToInt(_unitData._unit_maxHealth).ToString();
     }
 
     private void FixedUpdate()
@@ -174,17 +158,24 @@ public class Orc : MonsterUnitClass, IActByUnit
 
     }
 
-    #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
-    public override void InitUnitInfoSetting(CharacterData character_Data)
+    //private void U
+
+    // 활성화 시 필요한 초기 데이터 값 부여하는 함수
+    private void SetUnitValue()
     {
         canAct = true;
         sprCol.enabled = true;
         _nav.enabled = true;
         _isSearch = false;
         _isDead = false;
-        _nav.speed = 3.5f;
+        _nav.speed = 1f;
         _nav.acceleration = 8f;
 
+    }
+
+    private void SetStructValue(CharacterData character_Data)
+    {
+        // 유닛 가속도
         _unitData.moveAcc = 8f;
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
@@ -298,6 +289,25 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
 
         //_unitData.unit_Id = "hum_warr01";
+
+    }
+
+    #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
+    public override void InitUnitInfoSetting(CharacterData character_Data)
+    {
+        if (Castle.Instance._castle_Hp.Equals(0))
+        {
+            OnCastleDown();
+        }
+
+        // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결
+        Castle.Instance.OnCastleDown += OnCastleDown;
+
+
+        // 활성화 시 필요한 초기 데이터 값 부여하는 함수
+        SetUnitValue();
+
+        SetStructValue(character_Data);
     }
     #endregion
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수

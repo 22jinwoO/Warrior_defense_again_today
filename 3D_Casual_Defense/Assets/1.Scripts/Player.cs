@@ -93,7 +93,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
         //    }
         //}
 
-        if (!isChoice&&Input.GetMouseButtonDown(0))
+        if (!isMove&&Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -117,6 +117,10 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
                 else
                 {
+                    print("다른거 맞음");
+                    isChoice =false;
+                    flagTr.gameObject.SetActive(false);
+
                     if (clickUnitInfo!=null)
                     {
                         clickUnitInfo._isClick = false;
@@ -126,7 +130,6 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
                     clickUnitCs.clikUnitInfo = null;
                     isChoice = false;
-                    flagTr.gameObject.SetActive(false);
                 }
             }
         }

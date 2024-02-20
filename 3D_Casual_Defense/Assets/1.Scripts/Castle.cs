@@ -38,6 +38,14 @@ public class Castle : Singleton<Castle>
     [SerializeField]
     private GameObject downVfxs;
 
+
+    //델리게이트 선언
+    public delegate void CastleDownHandler();
+
+    //이벤트 선언
+    public event CastleDownHandler OnCastleDown;
+
+
     private void Awake()
     {
         isDown = false;
@@ -65,6 +73,9 @@ public class Castle : Singleton<Castle>
     // 성 내구도 0 이 됐을 때 무너지는 연출 구현한 함수
     private IEnumerator DownCaslte()
     {
+        //이벤트 호출
+        OnCastleDown();
+
         downVfxs.SetActive(true);
         _boxCollider.enabled = false;
         _source.PlayOneShot(_downCaslteClip);

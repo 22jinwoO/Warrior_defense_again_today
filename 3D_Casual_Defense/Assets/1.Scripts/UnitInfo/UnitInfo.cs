@@ -482,5 +482,22 @@ public abstract class UnitInfo : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
         vfx.SetActive(false);
     }
+
+
+    public void OnCastleDown()
+    {
+        
+        _isSearch = false;
+        canAct = false;
+        unitTargetSearchCs._targetUnit = null;
+        unitTargetSearchCs._target_Body = null;
+        _enum_Unit_Action_Mode = _enum_mUnit_Action_BaseMode;
+        _enum_Unit_Action_State = _enum_mUnit_Action_BaseState;
+        this.enabled = false;
+        actUnitCs.enabled = false;
+        _nav.enabled = false;
+        _anim.enabled = false;
+        unitTargetSearchCs.enabled = false;
+    }
 }
 

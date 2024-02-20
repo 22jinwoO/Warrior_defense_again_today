@@ -175,6 +175,14 @@ public class Knight : PlayerUnitClass
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
+        if (Castle.Instance._castle_Hp.Equals(0))
+        {
+            OnCastleDown();
+        }
+
+        // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결
+        Castle.Instance.OnCastleDown += OnCastleDown;
+
         canAct = true;
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
