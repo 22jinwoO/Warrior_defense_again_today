@@ -59,9 +59,11 @@ public class UI_PopUpManager : MonoBehaviour
     {
         if (isUseShop)
         {
-            while (buyUnitPopUp.position.y < 0f)
+            while (buyUnitPopUp.anchoredPosition.y < 0f)
             {
-                buyUnitPopUp.position += new Vector3(0, +10f, 0);
+                buyUnitPopUp.anchoredPosition += new Vector2(0, +10f);
+                print(buyUnitPopUp.anchoredPosition.y);
+
                 yield return null;
             }
             isUseShop = false;
@@ -70,9 +72,10 @@ public class UI_PopUpManager : MonoBehaviour
 
         if (!isUseShop)
         {
-            while (buyUnitPopUp.position.y > -110f)
+            while (buyUnitPopUp.anchoredPosition.y > -100f)
             {
-                buyUnitPopUp.position += new Vector3(0, -10f, 0);
+                buyUnitPopUp.anchoredPosition += new Vector2(0, -10f);
+                print(buyUnitPopUp.anchoredPosition.y);
                 yield return null;
             }
             isUseShop = true;

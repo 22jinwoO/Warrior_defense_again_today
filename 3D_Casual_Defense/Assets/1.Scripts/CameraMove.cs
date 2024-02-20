@@ -24,23 +24,63 @@ public class CameraMove : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI textMeshProUGUI;
 
+    public float speed = 15f;
+
     // Update is called once per frame
     void Update()
     {
-        OnCameraMove();
-        OnCameraZoomMode();
-        OnUnitMove();
+        if (Application.platform==RuntimePlatform.Android)
+        {
+            OnCameraMove();
+            OnCameraZoomMode();
+            OnUnitMove();
 
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+
+        }
+
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
+            transform.Translate(-speed * Time.deltaTime, 0, 0);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.Translate(speed * Time.deltaTime, 0, 0);
+        }
+        else if (Input.GetKey(KeyCode.UpArrow))
+        {
+            transform.Translate(0, 0, speed * Time.deltaTime);
+        }
+        else if (Input.GetKey(KeyCode.DownArrow))
+        {
+            transform.Translate(0, 0, -speed * Time.deltaTime);
+        }
+
+        float wheelInput = Input.GetAxis("Mouse ScrollWheel");
+
+        if (wheelInput > 0)
+        {        // 휠을 밀어 돌렸을 때의 처리 ↑   
+                 mainCam.fieldOfView -= 1f * zoomSpeed;
+
+        }
+        else if (wheelInput < 0)    
+        
+        {        // 휠을 당겨 올렸을 때의 처리 ↓   
             mainCam.fieldOfView += 1f * zoomSpeed;
-            textMeshProUGUI.text = "카메라 줌 아웃";
+
+
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            mainCam.fieldOfView -= 1f * zoomSpeed;
-            textMeshProUGUI.text = "카메라 줌인";
-        }
+
+
+        //if (Input.GetKeyDown(KeyCode.UpArrow))
+        //{
+        //    mainCam.fieldOfView += 1f * zoomSpeed;
+        //    textMeshProUGUI.text = "카메라 줌 아웃";
+        //}
+        //if (Input.GetKeyDown(KeyCode.DownArrow))
+        //{
+        //    mainCam.fieldOfView -= 1f * zoomSpeed;
+        //    textMeshProUGUI.text = "카메라 줌인";
+        //}
     }
     private void OnUnitMove()
     {

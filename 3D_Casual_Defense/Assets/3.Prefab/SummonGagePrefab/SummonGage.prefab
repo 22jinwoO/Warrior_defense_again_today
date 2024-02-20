@@ -223,7 +223,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 10, y: 1.5}
+  m_SizeDelta: {x: 2.5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4276959671601189577
 MonoBehaviour:
@@ -290,3 +290,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxGage: 0
   gageSlider: {fileID: 4276959671601189577}
+  playerID: 
+  unitFactory: {fileID: 0}
+  btnIndex: 0
+  myPos: {x: 0, y: 0, z: 0}
+  unitTr: {x: 0, y: 0, z: 0}
+  portal: {fileID: 0}

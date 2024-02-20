@@ -19,6 +19,12 @@ public abstract class PlayerUnitClass : UnitInfo
     public Transform initPos;   // 오브젝트 원래 위치
     public Vector3 initPos2;    // 오브젝트 원래 위치
 
+    [Header("유닛을 클릭했는지 확인하는 변수")]
+    public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
+
+
+    public Transform arriveFlag;
+
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
 
@@ -85,6 +91,14 @@ public abstract class PlayerUnitClass : UnitInfo
                 _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
                                                  //unitTargetSearchCs._unitModelTr.LookAt(_movePos);
                 actUnitCs.MoveUnit(_movePos);
+                arriveFlag.transform.position = _movePos;
+                float distance = Vector3.Distance(transform.position, _movePos);
+
+                if(distance <= 2f)
+                {
+                    arriveFlag.transform.SetParent(transform);
+                    arriveFlag.gameObject.SetActive(false);
+                }
                 break;
 
             case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적

@@ -113,8 +113,6 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("애니메이터")]
     public Animator _anim;       // 애니메이터
 
-    [Header("유닛을 클릭했는지 확인하는 변수")]
-    public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
 
     [Header("유닛이 죽었는지 확인하는 변수")]
     public bool _isDead;       // 유닛이 죽었는지 확인하는 변수
@@ -262,6 +260,7 @@ public abstract class UnitInfo : MonoBehaviour
         }
     }
     #endregion
+
 
     public IEnumerator TargetDead()
     {

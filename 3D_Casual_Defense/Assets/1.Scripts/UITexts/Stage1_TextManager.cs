@@ -49,6 +49,6 @@ public class Stage1_TextManager : Singleton<Stage1_TextManager>
 
     public void ShowCastleHpTxt()
     {
-        castleHpTxt.text = ($"성 체력 : {Castle.Instance._castle_Hp}");
+        castleHpTxt.text = ($"성 내구도 : {Castle.Instance._castle_Hp}");
     }
 }

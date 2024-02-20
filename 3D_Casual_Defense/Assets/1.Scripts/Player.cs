@@ -47,16 +47,19 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     private CreatePlayerUnit clickUnitCs;
 
     [SerializeField]
-    private UnitInfo clickUnitInfo;
+    private PlayerUnitClass clickUnitInfo;
 
-    [SerializeField]
-    private Transform flagTr;
+    public Transform flagTr;
 
     [SerializeField]
     public TextMeshProUGUI textMeshProUGUI;
 
     public bool isChoice;
     public bool isMove;
+
+    [SerializeField]
+    private Transform emptyParent;
+
 
     private void Awake()
     {
@@ -89,7 +92,8 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
         //        }
         //    }
         //}
-        if (!isChoice&&Input.touchCount==1)
+
+        if (!isChoice&&Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -98,18 +102,31 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
             {
                 if (hit.transform.tag == "Player")
                 {
-                    clickUnitInfo = hit.transform.GetComponent<UnitInfo>();
-                    
-                    hit.transform.GetComponent<UnitInfo>()._isClick = true;
-                    clickUnitCs.clikUnitInfo = hit.transform.GetComponent<UnitInfo>();
+                    clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+
+                    clickUnitInfo._isClick = true;
+                    clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
                     //isMove = true;
                     isChoice = true;
                     _flag_Material = _Materials[0];
                     flagTr.position = transform.position;
                     flagTr.gameObject.SetActive(true);
 
-                    textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<UnitInfo>()._isClick;
+                    textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
+                }
 
+                else
+                {
+                    if (clickUnitInfo!=null)
+                    {
+                        clickUnitInfo._isClick = false;
+                    }
+
+                    clickUnitInfo = null;
+
+                    clickUnitCs.clikUnitInfo = null;
+                    isChoice = false;
+                    flagTr.gameObject.SetActive(false);
                 }
             }
         }
@@ -119,7 +136,9 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
             transform.position = clickUnitInfo.transform.position;
             flagTr.position = transform.position;
         }
+
     }
+
     public void OnDrag(PointerEventData eventData)
     {
         if (isChoice)
@@ -156,8 +175,15 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
             textMeshProUGUI.text = $"드래그끝\n유닛이 이동할 좌표 : {transform.position}";
 
+            clickUnitInfo.arriveFlag.SetParent(emptyParent);
+
+            clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
+            clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+
             clickUnitInfo._isClick = false;
             clickUnitInfo = null;
+            //GameObject clone = Instantiate(flagTr.gameObject, transform.position,Quaternion.identity);
+            //Destroy(clone, 7f);
             flagTr.gameObject.SetActive(false);
             
             isChoice = false;

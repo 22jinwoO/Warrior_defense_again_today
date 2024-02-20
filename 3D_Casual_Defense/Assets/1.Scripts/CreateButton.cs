@@ -9,6 +9,7 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [SerializeField]
     private Player player;
 
+    public int btnIndex;
 
     [SerializeField]
     private CreatePlayerUnit unitFactory;
@@ -34,15 +35,17 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        spawnPoint.gameObject.SetActive(true);
+
         //unitFactory.playerUnit = unitFactory.RedayUnit(playerUnitId);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         //playerUnitId = null;
-        unitFactory.SpawnSummon(spawnPoint.position);
-
-        spawnPoint = null;
+        unitFactory.SpawnSummon(spawnPoint.position, btnIndex);
+        spawnPoint.gameObject.SetActive(false);
+        //spawnPoint = null;
         player.isMove = false;
         //eventData.worldPosition;
 
