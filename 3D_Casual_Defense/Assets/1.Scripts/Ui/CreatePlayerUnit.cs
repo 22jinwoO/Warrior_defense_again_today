@@ -231,6 +231,7 @@ public class CreatePlayerUnit : MonoBehaviour
         {
             return;
         }
+        playerCs.unitCtrlCanvas.SetActive(false);
         print("클릭한 유닛 자유모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
@@ -238,6 +239,11 @@ public class CreatePlayerUnit : MonoBehaviour
         clikUnitInfo._isSearch = false;
         clikUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
         //clikUnitInfo.transform.position = initPos;
+
+        playerCs.isChoice = false;
+        playerCs.isMove = false;
+        playerCs.flagTr.gameObject.SetActive(false);
+
 
         clikUnitInfo._isClick = false;
         clikUnitInfo = null;
@@ -249,6 +255,8 @@ public class CreatePlayerUnit : MonoBehaviour
         {
             return;
         }
+        playerCs.unitCtrlCanvas.SetActive(false);
+
         print("클릭한 유닛 홀드모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;

@@ -15,6 +15,8 @@ public class BillBoard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.forward = mainCamera.transform.forward;
+        //transform.forward = mainCamera.transform.forward;
+        transform.LookAt(mainCamera.transform);
+        //transform.Rotate(transform.eulerAngles.x, 0f, 180);
     }
 }

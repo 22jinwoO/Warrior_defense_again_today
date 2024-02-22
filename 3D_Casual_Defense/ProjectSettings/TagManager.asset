@@ -9,6 +9,7 @@ TagManager:
   - FxTemporaire
   - SoundPos
   - Test
+  - UnitUI
   layers:
   - Default
   - TransparentFX

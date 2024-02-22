@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using EnumTypes;
+using System;
+using Unity.VisualScripting;
 
 namespace EnumTypes
 {
@@ -60,6 +62,10 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     [SerializeField]
     private Transform emptyParent;
 
+    public GameObject unitCtrlCanvas;
+
+    [SerializeField]
+    private float xValue, yValue, zValue;
 
     private void Awake()
     {
@@ -69,29 +75,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     // Update is called once per frame
     void Update()
     {
-        //float distance = Camera.main.WorldToScreenPoint(transform.position).z;
 
-        //Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
-        //Vector3 objPos = Camera.main.ScreenToWorldPoint(mousePos);
-
-        ////objPos.z = 0;
-        //objPos.x = 0;
-        //transform.position = objPos;
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //    if (Physics.Raycast(ray, out RaycastHit hit))
-        //    {
-        //        if (hit.transform.tag=="Player")
-        //        {
-        //            textMeshProUGUI.text = hit.transform.name+"지정 완료!";
-        //            print("유닛 지정 완료!");
-        //            hit.transform.GetComponent<UnitInfo>()._isClick = true;
-        //            clickUnitCs.clikUnitInfo= hit.transform.GetComponent<UnitInfo>();
-        //        }
-        //    }
-        //}
 
         if (!isMove&&Input.GetMouseButtonDown(0))
         {
@@ -100,33 +84,54 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                if (hit.transform.tag == "Player")
+                if (hit.transform.CompareTag("Player"))
                 {
-                    clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+                    if (!isChoice)
+                    {
+                        clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
 
-                    clickUnitInfo._isClick = true;
-                    clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
-                    //isMove = true;
-                    isChoice = true;
-                    _flag_Material = _Materials[0];
-                    flagTr.position = transform.position;
-                    flagTr.gameObject.SetActive(true);
+                        clickUnitInfo._isClick = true;
+                        clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+                        //isMove = true;
+                        _flag_Material = _Materials[0];
 
-                    textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
+                        // 플레이어 조작 창 활성화
+                        unitCtrlCanvas.transform.position = transform.position;
+                        unitCtrlCanvas.SetActive(true);
+
+                        //플레이어 선택창 활성화
+                        flagTr.position = transform.position;
+                        flagTr.gameObject.SetActive(true);
+
+                        textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
+                        isChoice = true;
+
+                    }
+                    //if(isChoice)
+                    //{
+                    //    times += Time.deltaTime;
+                    //    if (times>=0.3f)
+                    //    {
+                    //        isMove = true;
+                    //        StartCoroutine(FlagAnim());
+                    //        times = 0f;
+                    //    }
+                    //}
                 }
 
-                else
+                else if(!hit.transform.tag.Equals("UnitUI"))
                 {
                     print("다른거 맞음");
-                    isChoice =false;
+                    isChoice = false;
                     flagTr.gameObject.SetActive(false);
 
-                    if (clickUnitInfo!=null)
+                    if (clickUnitInfo != null)
                     {
                         clickUnitInfo._isClick = false;
                     }
 
                     clickUnitInfo = null;
+                    unitCtrlCanvas.SetActive(false);
 
                     clickUnitCs.clikUnitInfo = null;
                     isChoice = false;
@@ -137,16 +142,51 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
         if (isChoice&&!isMove)
         {
             transform.position = clickUnitInfo.transform.position;
+            unitCtrlCanvas.transform.position = transform.position+new Vector3(xValue,yValue,zValue);
+
             flagTr.position = transform.position;
         }
 
     }
 
+    private IEnumerator FlagAnim()
+    {
+        _flag_Material.color = Color.white;
+
+        // 유닛 설정 팝업창 비활성화
+        unitCtrlCanvas.SetActive(false);
+
+        float value = 4f;
+        flagTr.localScale = new Vector3(value, 0f, value);
+        while (value>1.5f)
+        {
+            flagTr.localScale = new Vector3(value, 0f, value);
+            value -= 0.1f;
+            yield return null;
+
+        }
+
+    }
+
+    public float times = 0f;
     public void OnDrag(PointerEventData eventData)
     {
-        if (isChoice)
+        //times += Time.deltaTime;
+        //if (times>=0.3f&&!isMove)
+        //{
+        //    StartCoroutine(FlagAnim());
+        //    isChoice = true;
+
+        //}
+        if (isChoice&&isMove)
         {
-            isMove = true;
+            
+
+            // 이동 위치 활성화
+            flagTr.gameObject.SetActive(true);
+
+
+            //isMove = true;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
@@ -164,15 +204,17 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
         }
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData)
     {
-
+        //StartCoroutine(FlagAnim());
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (isChoice&& isMove)
         {
+            _flag_Material.color = Color.blue;
+
             clickUnitInfo._movePos = transform.position;
             clickUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Move;
 
@@ -194,8 +236,9 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
         }
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
-        //_flag_Material = _Materials[1];
+        //StartCoroutine(FlagAnim());
+
     }
 }

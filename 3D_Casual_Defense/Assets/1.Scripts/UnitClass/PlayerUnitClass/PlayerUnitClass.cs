@@ -91,7 +91,7 @@ public abstract class PlayerUnitClass : UnitInfo
                 _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
                                                  //unitTargetSearchCs._unitModelTr.LookAt(_movePos);
                 actUnitCs.MoveUnit(_movePos);
-                arriveFlag.transform.position = _movePos;
+                //arriveFlag.transform.position = _movePos;
                 float distance = Vector3.Distance(transform.position, _movePos);
 
                 if(distance <= 2f)
