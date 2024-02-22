@@ -22295,6 +22295,7 @@ MonoBehaviour:
   xValue: 0
   yValue: 0.7
   zValue: 0
+  times: 0
 --- !u!4 &1919210178
 Transform:
   m_ObjectHideFlags: 0
@@ -22331,7 +22332,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.6
-  m_Height: 3
+  m_Height: 3.5
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1934658528

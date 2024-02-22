@@ -75,7 +75,27 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     // Update is called once per frame
     void Update()
     {
+        // 유닛 클릭 지속 시 이동상태로 전환시켜주는 구문
+        if (isChoice && Input.GetMouseButton(0) && !isMove)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform.CompareTag("Player"))
+                {
+                    times += Time.deltaTime;
+                    if (times >= 0.3f)
+                    {
+                        isMove = true;
+                        StartCoroutine(FlagAnim());
+                        times = 0f;
+                    }
+
+                }
+            }
+        }
 
         if (!isMove&&Input.GetMouseButtonDown(0))
         {
