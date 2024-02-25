@@ -12,6 +12,9 @@ public class Rush : SpecialSkill
     [SerializeField]
     private float slerpValue=3f;
 
+    [SerializeField]
+    private float lerpValue = 8f;
+
 
     [SerializeField]
     private Rigidbody rigd;
@@ -35,7 +38,10 @@ public class Rush : SpecialSkill
     [SerializeField]
     private SphereCollider sprCol;
 
-
+    private void Awake()
+    {
+        lerpValue = 8f;
+    }
 
     public override void Attack_Skill()
     {
@@ -56,7 +62,7 @@ public class Rush : SpecialSkill
         startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
 
-        for (float t = 0; t < 0.9f; t += Time.deltaTime * slerpValue)
+        for (float t = 0; t < 0.5f; t += Time.deltaTime * slerpValue)
         {
 
             Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
@@ -75,6 +81,11 @@ public class Rush : SpecialSkill
             yield return null;
         }
 
+        for (float t = 0; t < 0.5f; t += Time.deltaTime * lerpValue)
+        {
+            transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
+            yield return null;
+        }
 
 
         yield return null;
@@ -132,7 +143,7 @@ public class Rush : SpecialSkill
         Debug.LogWarning("넉백됨");
         float time = 0f;
         float nuckBackValue = 7.5f;
-        float nuckBackValue2 = 1000f;
+        float nuckBackValue2 = 200f;
         targetRigd.velocity = Vector3.zero;
 
 
@@ -144,7 +155,7 @@ public class Rush : SpecialSkill
         while (time < 0.2f)
         {
             targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
-            nuckBackValue2 -= 50f;
+            nuckBackValue2 -= 2f;
 
             time += Time.deltaTime;
             yield return null;
