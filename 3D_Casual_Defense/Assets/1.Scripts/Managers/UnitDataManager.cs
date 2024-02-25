@@ -127,6 +127,8 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         public Abs_Skill unit_Gen_Skill;
         public Abs_Skill unit_Spc_Skill;
+        public Abs_Skill unit_Spc_Skill2;
+
         public eUnit_Defense_Property_States unit_Armor_property;
         public ArmorCalculate unit_ArmorCalculateCs;
         public eUnit_targetSelectType unit_targetSelectType;
@@ -149,13 +151,18 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
     }
 
+    // 링크스킬, 스킬데이터가 장착된 스킬들을 유닛 데이터에 할당
     public void Set_UnitData(string unit_ID)
     {
-        Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[Instance._unitInfo_Dictionary[unit_ID].generalSkill];
-        print(Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Id);
-        print(Instance._unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
-        Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[Instance._unitInfo_Dictionary[unit_ID].defenseType];
-        Instance._unitInfo_Dictionary[unit_ID].unit_ArmorCalculateCs = Instance._armorCs_Dictionary[Instance._unitInfo_Dictionary[unit_ID].unit_Armor_property];
+        _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
+        print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
+        print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2]);
+        _unitInfo_Dictionary[unit_ID].unit_Spc_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1];
+        _unitInfo_Dictionary[unit_ID].unit_Spc_Skill2 = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2];
+        print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Id);
+        print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
+        _unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[_unitInfo_Dictionary[unit_ID].defenseType];
+        _unitInfo_Dictionary[unit_ID].unit_ArmorCalculateCs = Instance._armorCs_Dictionary[_unitInfo_Dictionary[unit_ID].unit_Armor_property];
         //Instance._unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[Instance._unitInfo_Dictionary[unit_ID].targetSelectType];
 
     }

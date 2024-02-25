@@ -12,7 +12,7 @@ public class PoisonStatus : Abs_StatusEffect
 
         thisUnit._status_Effect_Poison.SetActive(false);
 
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return null;
 
         thisUnit._status_Effect_Poison.SetActive(true);
 
@@ -34,8 +34,13 @@ public class PoisonStatus : Abs_StatusEffect
             }
 
             thisUnit._unitData.hp -= statusValue;
-            Debug.LogWarning("타겟 유닛 피" + i + " " + thisUnit._unitData.hp);
 
-        }
+            if (thisUnit._unitData.hp<=0f&&thisUnit.canAct)
+            {
+                thisUnit.actUnitCs.DeadCheck();
+                yield break;    // 리턴같은거
+            }
+
+            Debug.LogWarning("타겟 유닛 피" + i + " " + thisUnit._unitData.hp);        }
     }
 }

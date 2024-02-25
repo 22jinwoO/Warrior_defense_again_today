@@ -78,31 +78,7 @@ public class SkillDataManager : MonoBehaviour
 
         // 세팅 완료된 스킬 할당
         Add_Set_Skill_Dictionary();
-        //stunStatus.link_id = _skill_Link_Dictionary["stun01"].link_id;
-        //stunStatus.link_name = _skill_Link_Dictionary["stun01"].link_name;
-        //stunStatus.link_script = _skill_Link_Dictionary["stun01"].link_script;
-        //stunStatus.linkValue_ps = _skill_Link_Dictionary["stun01"].linkValue_ps;
-        //stunStatus.duration_s = _skill_Link_Dictionary["stun01"].duration_s;
-        //stunStatus.moveSpeedreduce = _skill_Link_Dictionary["stun01"].moveSpeedreduce;
 
-        //for (int i = 0; i < 2; i++)
-        //{
-        //    genral_Skills[0].skill_Name= _skill_Dictionary[]
-        //}
-        //genral_Skills[0]._link_Skill.duration_s = 5;
-        //genral_Skills[0]._link_Skill.linkValue_ps = 2;
-        //genral_Skills[1]._link_Skill.duration_s = 5;
-        //genral_Skills[1]._link_Skill.linkValue_ps = 2;
-
-        //print(genral_Skills[0]._link_Skill);
-        //print(genral_Skills[1]._link_Skill);
-        //print(genral_Skills[1]._link_Skill.duration_s);
-        //print(genral_Skills[1]._link_Skill.linkValue_ps);
-        //print(genral_Skills[0]._link_Id);
-        //print(genral_Skills[0].skill_Name);
-        //print(genral_Skills[0]._skill_AtkType);
-        //print(genral_Skills[0]._skill_CoolTm);
-        //print(new _skill_Link_Dictionary["stun01"]);
     }
 
     // 초기 데이터 설정 할당 완료된 스킬 딕셔너리에 스킬ID를 키, 스킬ID에 해당하는 스킬을 값 할당해주는 함수
@@ -113,6 +89,10 @@ public class SkillDataManager : MonoBehaviour
         Set_skill_Dictionary.Add(key: "1_101", value: genral_Skills[0]);
         Set_skill_Dictionary.Add(key: "1_201", value: genral_Skills[1]);
         Set_skill_Dictionary.Add(key: "1_302", value: genral_Skills[2]);
+
+        // 스폐셜 스킬
+        Set_skill_Dictionary.Add(key: "2_303", value: special_Skills[0]);
+        Set_skill_Dictionary.Add(key: "2_304", value: special_Skills[1]);
     }
     #endregion
 
@@ -144,7 +124,21 @@ public class SkillDataManager : MonoBehaviour
             
         }
         // 링크 스킬 스턴
+        for (int i = 4; i <= 5; i++)
+        {
+            //스킬 딕셔너리에 스킬 아이디를 키, 스킬의 제이슨 파일 데이터를 값으로 갖는 딕셔너리에 값을 추가
+            _skill_Dictionary.Add(key: all_Skill_Datas.SkillDatas[i].skill_id, value: all_Skill_Datas.SkillDatas[i]);
 
+            // 일반스킬에 링크스킬 연결
+            special_Skills[i - 4].Set_Init_Skill(all_Skill_Datas.SkillDatas[i]);
+
+            // 일반 스킬의 공격 타입 할당
+            special_Skills[i-4]._skill_AtkType = _skill_AtkType_Dictionary[special_Skills[i - 4]._damgeType];
+
+            Instantiate(special_Skills[i - 4], transform);
+
+
+        }
 
     }
 

@@ -7,6 +7,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 //
@@ -211,6 +212,8 @@ public class ActUnit : MonoBehaviour
         // int 범위를 구할때는 최대값이 제외된다. (크리티컬 확률에 해당하는지 체크)
         int randNum = Random.Range(1, 101);
 
+        bool isCritical = false;
+
         print("크리티컬 랜덤 숫자 " + randNum);
 
         // 공격자의 공격이 크리티컬 확률에 해당한다면
@@ -232,7 +235,8 @@ public class ActUnit : MonoBehaviour
                 print(duration_s);
 
                 StartCoroutine(skill._link_Skill.Apply_Status_Effect(targetUnitInfo, link_Id, link_value, duration_s));
-                
+
+                isCritical = true;
                 // 링크스킬 적용 후 기본 공격 값 반환
             }
             //링크 스킬이 없을 경우의 크리티컬이 적용됐다면
@@ -243,6 +247,9 @@ public class ActUnit : MonoBehaviour
             }
 
         }
+        // 피격 효과 보여주기 + 사운드 출력
+        StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill, isCritical));
+
         return atkDmg;
 
     }
@@ -256,7 +263,7 @@ public class ActUnit : MonoBehaviour
         // 피해 입을 때 몸에 피격상태 나타내주는 함수 실행
         StartCoroutine(Get_DamagedBody());
         Vector3 direction = attacker.transform.position - transform.position;
-        StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill));
+        //StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill));
 
 
         // 피격자의 유닛 데이터 가져오기
@@ -267,8 +274,15 @@ public class ActUnit : MonoBehaviour
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
 
+        DeadCheck();
+    }
+    #endregion
+
+
+    public void DeadCheck()
+    {
         // 피격 받은 우닛의 Hp가 0 이하가 됐을 때
-        if (!unitInfoCs._isDead&&unitInfoCs._unitData.hp<=0f)
+        if (unitInfoCs.canAct && unitInfoCs._unitData.hp <= 0f)
         {
             unitInfoCs.canAct = false;
             unitInfoCs._nav.speed = 0f;
@@ -285,16 +299,16 @@ public class ActUnit : MonoBehaviour
 
             //unitInfoCs._isDead = true;
             //attacker._isTargetDead = true;
-            if (skill.unitInfoCs.gameObject.tag.Equals("Player"))
+            if (unitInfoCs.gameObject.tag.Equals("Player"))
             {
-                skill.unitInfoCs._enum_Unit_Action_Mode = skill.unitInfoCs._enum_pUnit_Action_BaseMode;
-                skill.unitInfoCs._enum_Unit_Action_State = skill.unitInfoCs._enum_pUnit_Action_BaseState;
+                unitInfoCs._enum_Unit_Action_Mode = unitInfoCs._enum_pUnit_Action_BaseMode;
+                unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_pUnit_Action_BaseState;
             }
 
-            else 
+            else
             {
-                skill.unitInfoCs._enum_Unit_Action_Mode = skill.unitInfoCs._enum_mUnit_Action_BaseMode;
-                skill.unitInfoCs._enum_Unit_Action_State = skill.unitInfoCs._enum_mUnit_Action_BaseState;
+                unitInfoCs._enum_Unit_Action_Mode =   unitInfoCs._enum_mUnit_Action_BaseMode;
+                unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_mUnit_Action_BaseState;
 
             }
             anim.SetTrigger("isDie");
@@ -309,8 +323,6 @@ public class ActUnit : MonoBehaviour
 
         }
     }
-    #endregion
-
     IEnumerator Get_DamagedBody()
     {
         print("피격당한 유닛 이름 : " + gameObject.name);

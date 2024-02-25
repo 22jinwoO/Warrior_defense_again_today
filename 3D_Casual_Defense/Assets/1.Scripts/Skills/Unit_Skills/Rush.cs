@@ -91,7 +91,7 @@ public class Rush : SpecialSkill
         yield return null;
 
         // 넉백 하기 위한 콜라이더 생성
-        Collider[] hitCols = Physics.OverlapSphere(unitInfoCs.transform.position, 10f, unitTargetSearchCs._layerMask);
+        Collider[] hitCols = Physics.OverlapSphere(unitInfoCs.transform.position, 2.5f, unitTargetSearchCs._layerMask);
 
         Transform _longTarget = null;  // 가장 가까운 적을 의미하는 변수
 
@@ -155,19 +155,27 @@ public class Rush : SpecialSkill
         while (time < 0.2f)
         {
             targetRigd.velocity = (-(other.transform.forward) * nuckBackValue2 * Time.deltaTime);
-            nuckBackValue2 -= 2f;
+            nuckBackValue2 -= 3.5f;
 
             time += Time.deltaTime;
             yield return null;
         }
         yield return new WaitForSeconds(1f);
 
+        UnitInfo monsterInfo = targetRigd.GetComponent<UnitInfo>();
         // 넉백된 몬스터들 행동하기 위해 필요한 값들 활성화
-        targetRigd.GetComponent<UnitInfo>().canAct = true;
+        monsterInfo.canAct = true;
 
         targetRigd.velocity = Vector3.zero;
         targetRigd.GetComponent<NavMeshAgent>().enabled = true;
         targetRigd.GetComponent<NavMeshAgent>().isStopped = false;
+
+        if (monsterInfo._enum_mUnit_Action_BaseMode.Equals(eUnit_Action_States.monster_NormalPhase))
+        {
+            targetRigd.GetComponent<NavMeshAgent>().SetDestination(Castle.Instance.transform.position);
+        }
+
+
 
 
         //targetRigd.rotation= Quaternion.Euler(0f,targetRigd.rotation.y,targetRigd.rotation.z);

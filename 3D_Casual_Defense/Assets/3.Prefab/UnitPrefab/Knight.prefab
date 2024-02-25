@@ -7855,8 +7855,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a5d7ce79866ab7548863a479c96b119f, type: 3}
   hit_Sfxs:
   - {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
+  - {fileID: 8300000, guid: 572740557e9f0b146a160959f3e8e1bc, type: 3}
   - {fileID: 8300000, guid: 9d3f2fa6767d05847a24fd6e7e62991c, type: 3}
+  - {fileID: 8300000, guid: a28c7ddfa4474064ca7ec645eb7d60f8, type: 3}
   - {fileID: 8300000, guid: 150634f2cdcf45443835eab470bbef46, type: 3}
+  - {fileID: 8300000, guid: 1f65c28aaa7d07743adda476fa11c953, type: 3}
   _status_Effect_Stun_Start: {fileID: 3200935325708232526, guid: 1aec2c8390b95bb4b93dce5204111c36, type: 3}
   _status_Effect_Bleeding_Start: {fileID: 8369370015732452752, guid: 0ee9e128b3402b442b890751afda1aa7, type: 3}
   _status_Effect_Stun: {fileID: 2477367603802380283, guid: b2aa00449bf205a4dab3edc0ce20d92a, type: 3}
@@ -7866,9 +7869,9 @@ MonoBehaviour:
   _projectile_Prefab: {fileID: 0}
   _projectile_Bullet: {fileID: 0}
   _projectile_startPos: {fileID: 0}
-  gen_skill: {fileID: 4153666595965432161, guid: d1109a157a2a0ee418dfac0bd7da13d2, type: 3}
+  gen_skill: {fileID: 0}
   spe_skill_1: {fileID: 0}
-  spe_skill_2: {fileID: 6913384095984081999}
+  spe_skill_2: {fileID: 0}
   canAct: 0
   _unit_NomralMtr: {fileID: 2100000, guid: dccf8e44ede71db42b49378af93c5fb7, type: 2}
   _unit_CloakingMtr: {fileID: 2100000, guid: 098b04fdd77cbf14e8017fa790f89f7c, type: 2}
@@ -20007,14 +20010,3 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1522713326655743956, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
   m_PrefabInstance: {fileID: 2999634579363523110}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6913384095984081999 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8525756051881440873, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
-  m_PrefabInstance: {fileID: 2999634579363523110}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b76fb3dab6941c44b042a9b4811ae06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

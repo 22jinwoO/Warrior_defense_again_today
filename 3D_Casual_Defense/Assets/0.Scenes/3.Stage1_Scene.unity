@@ -7304,7 +7304,9 @@ MonoBehaviour:
   - {fileID: 4153666595965432161, guid: d1109a157a2a0ee418dfac0bd7da13d2, type: 3}
   - {fileID: -8724978611186274115, guid: 82e25b354af1c9e44a97cc3755bb18aa, type: 3}
   - {fileID: 3742223063834649109, guid: ad276cfc278832c459608a715038e441, type: 3}
-  special_Skills: []
+  special_Skills:
+  - {fileID: 8525756051881440873, guid: 4604661ef5a622a4bb99c5f98175f43b, type: 3}
+  - {fileID: 5063281556003278518, guid: 4b663e12504f4db4ba10b95e3881bf55, type: 3}
   Set_skill_Dictionary:
     keys: []
     values: []

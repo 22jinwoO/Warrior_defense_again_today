@@ -361,7 +361,7 @@ public abstract class UnitInfo : MonoBehaviour
     }
 
 
-    public IEnumerator Damaged_Vfx_On(Abs_Skill atkSkill)
+    public IEnumerator Damaged_Vfx_On(Abs_Skill atkSkill,bool isCritical)
     {
         GameObject vfx = null;  // 피격 이펙트
         bool canUse = false;    // 이펙트 오브젝트 풀링 값 사용 가능한지 판단하는 bool 자료형
@@ -378,7 +378,10 @@ public abstract class UnitInfo : MonoBehaviour
 
                 //GameObject vfx1 = null;
                 //vfx1 = Instantiate(_hit_Effect_SlashAtk, (transform.position + Vector3.up * 0.5f) + -sfxPos * 0.7f, Quaternion.identity);
-                hitSfx = hit_Sfxs[0];
+                if (!isCritical)
+                    hitSfx = hit_Sfxs[0];
+                else
+                    hitSfx = hit_Sfxs[1];
                 for (int i = 0; i < _hit_Effect_SlashAtk_Vfxs.Count; i++)
                 {
                     if (!_hit_Effect_SlashAtk_Vfxs[i].activeSelf)
@@ -402,7 +405,10 @@ public abstract class UnitInfo : MonoBehaviour
 
             //관통 공격 시 피격 이펙트
             case eUnit_Attack_Property_States.piercing_Attack:
-                hitSfx = hit_Sfxs[1];
+                if (!isCritical)
+                    hitSfx = hit_Sfxs[2];
+                else
+                    hitSfx = hit_Sfxs[3];
 
                 for (int i = 0; i < _hit_Effect_PierceAtk_Vfxs.Count; i++)
                 {
@@ -425,7 +431,10 @@ public abstract class UnitInfo : MonoBehaviour
 
             //분쇄 공격 시 피격 이펙트
             case eUnit_Attack_Property_States.crushing_attack:
-                hitSfx = hit_Sfxs[2];
+                if (!isCritical)
+                    hitSfx = hit_Sfxs[4];
+                else
+                    hitSfx = hit_Sfxs[5];
 
                 for (int i = 0; i < _hit_Effect_CrushAtk_Vfxs.Count; i++)
                 {

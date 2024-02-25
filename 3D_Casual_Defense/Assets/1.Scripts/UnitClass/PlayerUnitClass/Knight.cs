@@ -142,7 +142,7 @@ public class Knight : PlayerUnitClass
             _unitData.attackRange = _unitData.sightRange;
         }
         else
-            _unitData.attackRange = 5f;
+            _unitData.attackRange = 2f;
         //_nav.velocity.magnitude /= 2f;
         //if (_nav.velocity!=Vector3.zero)
         //{
@@ -215,7 +215,7 @@ public class Knight : PlayerUnitClass
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
-        _unitData.attackRange = 1f;
+        _unitData.attackRange = 2f;
         //_unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
@@ -251,8 +251,13 @@ public class Knight : PlayerUnitClass
         gen_skill.unitInfoCs = this;
 
         // 특수 스킬 할당
-        //gen_skill = character_Data.unit_Spc_Skill;
-        //unit_Spc_Skill.unitInfoCs = this;
+        spe_skill_1 = character_Data.unit_Spc_Skill;
+        spe_skill_1.unitInfoCs = this;
+
+        // 특수 스킬 할당
+        spe_skill_2 = character_Data.unit_Spc_Skill2;
+        spe_skill_2.unitInfoCs = this;
+
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = character_Data.unit_Armor_property;
