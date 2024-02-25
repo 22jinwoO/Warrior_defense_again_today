@@ -237,6 +237,8 @@ public class UnitTargetSearch : MonoBehaviour
 
         if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 5f&& unitInfoCs._can_genSkill_Attack)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
         {
+
+
             _euler.y = 0;
             //print("용사와 몬스터의 각도 값 : " + Quaternion.Angle(transform.rotation, _fireRotation));
             Debug.LogWarning("몬스터 성 공격226");
@@ -247,9 +249,7 @@ public class UnitTargetSearch : MonoBehaviour
 
             unitInfoCs._anim.SetBool("canCastleAtk", true);
 
-            unitInfoCs.atkSound.volume = SoundManager.Instance.VolumeCheck(transform);
 
-            unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
 
             //actUnitCs.Attack_Unit(next_Action_State);
             // 1. 공격 속도 쿨타임 감소
@@ -263,6 +263,9 @@ public class UnitTargetSearch : MonoBehaviour
     public void Atk_Castle()
     {
         Debug.LogWarning("몬스터 성 공격 애니메이션 실행");
+        unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
+
+        unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[0]);
 
         unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
         Castle.Instance.Damaged_Castle();

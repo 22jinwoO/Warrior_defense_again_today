@@ -105,7 +105,6 @@ MonoBehaviour:
   body_Tr: {fileID: 2695629710927761196}
   _nav: {fileID: 0}
   _anim: {fileID: 0}
-  _isClick: 0
   _isDead: 0
   _isTargetDead: 0
   _isSearch: 0
@@ -119,6 +118,9 @@ MonoBehaviour:
   _hit_Effect_SlashAtk_Vfxs: []
   _hit_Effect_PierceAtk_Vfxs: []
   _hit_Effect_CrushAtk_Vfxs: []
+  use_Sfxs:
+  - {fileID: 8300000, guid: 91865d4f2c4cc4849bdcba6d26c81acb, type: 3}
+  - {fileID: 8300000, guid: 3b6f6e95f8efd404293a61b9d79571e5, type: 3}
   hit_Sfxs:
   - {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
   - {fileID: 8300000, guid: 9d3f2fa6767d05847a24fd6e7e62991c, type: 3}
@@ -146,8 +148,8 @@ MonoBehaviour:
   cloaking_someMtr: []
   cloaking_bodyMtr: {fileID: 0}
   sprCol: {fileID: 0}
-  atkSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  atkSoundPlayer: {fileID: 0}
+  hitSoundPlayer: {fileID: 0}
   soundPos: {fileID: 0}
   mosterUnitMtr: {fileID: 2100000, guid: 5300b04fc173c9b45a547a2995fac3e3, type: 2}
   hpText: {fileID: 5307049294792087285}
@@ -295,8 +297,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_audioClip: {fileID: 8300000, guid: 91865d4f2c4cc4849bdcba6d26c81acb, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -392,7 +394,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

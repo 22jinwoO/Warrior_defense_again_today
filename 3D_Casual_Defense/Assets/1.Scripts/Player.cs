@@ -67,10 +67,23 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     [SerializeField]
     private float xValue, yValue, zValue;
 
+    [SerializeField]
+    private AudioSource audioPlayer;
+
+
+    [SerializeField]
+    private AudioClip[] audioSources;
+
     private void Awake()
     {
+        //audioPlayer.PlayOneShot();
+        if (TryGetComponent(out AudioSource audioSource))
+        {
+            audioPlayer = audioSource;
+        }
 
-        _flag_Material= flagTr.GetComponent<Material>();
+
+        _flag_Material = flagTr.GetComponent<Material>();
     }
     // Update is called once per frame
     void Update()
@@ -86,7 +99,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                 if (hit.transform.CompareTag("Player"))
                 {
                     times += Time.deltaTime;
-                    if (times >= 0.3f)
+                    if (times >= 0.6f)
                     {
                         isMove = true;
                         StartCoroutine(FlagAnim());
@@ -108,6 +121,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                 {
                     if (!isChoice)
                     {
+                        audioPlayer.PlayOneShot(audioSources[0]);
                         clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
 
                         clickUnitInfo._isClick = true;
@@ -171,6 +185,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
     private IEnumerator FlagAnim()
     {
+        audioPlayer.PlayOneShot(audioSources[1]);
         _flag_Material.color = Color.white;
 
         // 유닛 설정 팝업창 비활성화

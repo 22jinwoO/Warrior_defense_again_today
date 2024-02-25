@@ -59,6 +59,7 @@ public class ActUnit : MonoBehaviour
         //{
         //    nav.isStopped = true;
         //}
+        // 기본 스킬로 공격
         if (unitInfoCs._can_genSkill_Attack)
         {
             if (nav.enabled)
@@ -76,14 +77,14 @@ public class ActUnit : MonoBehaviour
 
 
 
-            if (unitInfoCs._can_SpcSkill_Attack&&gameObject.name=="기사")    // 스킬은 근거리 원거리 나눌 필요 x, UseSkill 함수 호출 플레이어 유닛이라면 
+            if (unitInfoCs._can_SpcSkill_Attack&&gameObject.name=="Knight(Clone)")    // 스킬은 근거리 원거리 나눌 필요 x, UseSkill 함수 호출 플레이어 유닛이라면 
             {
                 Debug.Log("스킬공격!!!");
                 if (unitTargetSearchCs._targetUnit == null)
                 {
                     return;
                 }
-                //anim.SetTrigger("isAttack");
+                anim.SetTrigger("isAttack");
                 unitInfoCs.spe_skill_2.Attack_Skill();
 
                 unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
@@ -173,19 +174,19 @@ public class ActUnit : MonoBehaviour
 
         unitInfoCs.gen_skill.unitTargetSearchCs = unitTargetSearchCs;
 
-        if (unitInfoCs.atkSound!=null)
+        if (unitInfoCs.atkSoundPlayer!=null)
         {
-            //unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
+            //unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.atkSoundPlayer.GetComponent<AudioClip>());
 
             // 사운드 오디오 소스 할당
-            unitInfoCs.atkSound.pitch = Random.Range(0.7f, 1.4f);
-            //unitInfoCs.atkSound.volume = Random.Range(0.2f, 0.4f);
+            unitInfoCs.atkSoundPlayer.pitch = Random.Range(0.7f, 1.4f);
+            //unitInfoCs.atkSoundPlayer.volume = Random.Range(0.2f, 0.4f);
             
             // 거리에 따른 볼륨 크기 조절
-            unitInfoCs.atkSound.volume = SoundManager.Instance.VolumeCheck(transform);
+            unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
 
             // 오디오 클립 변수 생성하고 어웨이크문에서 오디오 클립 할당하도록 수정하기
-            unitInfoCs.atkSound.PlayOneShot(unitInfoCs.atkSound.GetComponent<AudioClip>());
+            unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[0]);
 
         }
         // 일반 스킬 사용
@@ -364,6 +365,10 @@ public class ActUnit : MonoBehaviour
 
     IEnumerator DieUnit()
     {
+        unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
+
+        unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[1]);
+
         // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결 해제
         Castle.Instance.OnCastleDown -= unitInfoCs.OnCastleDown;
 

@@ -478,7 +478,7 @@
       "damageType": "pierce",
       "baseValue": "10",
       "criticDamage": "1",
-      "link_id": "stun01"
+      "link_id": "poison01"
     },
     {
       "skill_id": "1_301",

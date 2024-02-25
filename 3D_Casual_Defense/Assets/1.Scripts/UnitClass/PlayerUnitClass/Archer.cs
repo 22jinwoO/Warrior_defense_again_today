@@ -72,8 +72,8 @@ public class Archer : PlayerUnitClass
         //gen_skill._projectile_Prefab.SetActive(false);
 
         // 사운드 오디오 소스 할당
-        atkSound = GetComponents<AudioSource>()[0];
-        hitSound = GetComponents<AudioSource>()[1];
+        atkSoundPlayer = GetComponents<AudioSource>()[0];
+        hitSoundPlayer = GetComponents<AudioSource>()[1];
 
 
     }
@@ -244,10 +244,12 @@ public class Archer : PlayerUnitClass
         _unitData.moveSpeed = character_Data.moveSpeed;
 
         // 시야 범위
-        _unitData.sightRange = character_Data.sightRange;
+        //_unitData.sightRange = character_Data.sightRange;
+        _unitData.sightRange = 10f;
 
         // 공격 범위
-        _unitData.attackRange = character_Data.attackRange;
+        //_unitData.attackRange = character_Data.attackRange;
+        _unitData.attackRange = 8f;
 
         // 크리티컬 확률
         _unitData.criticRate = character_Data.criticRate;

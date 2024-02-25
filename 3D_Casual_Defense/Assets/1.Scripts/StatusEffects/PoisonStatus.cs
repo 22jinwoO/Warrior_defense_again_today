@@ -12,6 +12,10 @@ public class PoisonStatus : Abs_StatusEffect
 
         thisUnit._status_Effect_Poison.SetActive(false);
 
+        yield return new WaitForSecondsRealtime(0.2f);
+
+        thisUnit._status_Effect_Poison.SetActive(true);
+
         for (int i = 0; i < (int)duration; i++)
         {
             float times = 0f;
@@ -28,7 +32,6 @@ public class PoisonStatus : Abs_StatusEffect
 
                 yield return null;
             }
-            thisUnit._status_Effect_Poison.SetActive(true);
 
             thisUnit._unitData.hp -= statusValue;
             Debug.LogWarning("타겟 유닛 피" + i + " " + thisUnit._unitData.hp);

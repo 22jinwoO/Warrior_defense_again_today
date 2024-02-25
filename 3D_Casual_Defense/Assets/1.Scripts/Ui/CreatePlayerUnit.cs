@@ -64,6 +64,16 @@ public class CreatePlayerUnit : MonoBehaviour
     [SerializeField]
     private Player playerCs;
 
+
+    [SerializeField]
+    private AudioSource audioPlayer;
+
+
+    [SerializeField]
+    private AudioClip[] audioSources;
+
+
+
     private void Awake()
     {
         clickUnitFreeBtn.onClick.AddListener(ClickUnitFree);
@@ -71,6 +81,10 @@ public class CreatePlayerUnit : MonoBehaviour
 
         print(UnitDataManager.Instance._unitInfo_Dictionary.Keys);
 
+        if (TryGetComponent(out AudioSource audioSource))
+        {
+            audioPlayer = audioSource;
+        }
 
 
 
@@ -122,6 +136,9 @@ public class CreatePlayerUnit : MonoBehaviour
 
     public void SpawnSummon(Vector3 Pos,int btnIndex)
     {
+        audioPlayer.PlayOneShot(audioSources[2]);
+
+
         // 포탈 스폰위치에 복사 후 생성
         GameObject portal =Instantiate(summonPortal, Pos+new Vector3(0f,0.5f,0f),Quaternion.Euler(-90f,0f,0f));
         SummonUnit summonCs = portal.GetComponent<SummonUnit>();
@@ -231,6 +248,7 @@ public class CreatePlayerUnit : MonoBehaviour
         {
             return;
         }
+        audioPlayer.PlayOneShot(audioSources[1]);
         playerCs.unitCtrlCanvas.SetActive(false);
         print("클릭한 유닛 자유모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
@@ -251,10 +269,14 @@ public class CreatePlayerUnit : MonoBehaviour
 
     private void ClickUnitHold()
     {
+
         if (clikUnitInfo == null)
         {
             return;
         }
+
+        audioPlayer.PlayOneShot(audioSources[0]);
+
         playerCs.unitCtrlCanvas.SetActive(false);
 
         print("클릭한 유닛 홀드모드");

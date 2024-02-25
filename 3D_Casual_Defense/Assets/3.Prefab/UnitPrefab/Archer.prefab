@@ -1710,6 +1710,9 @@ MonoBehaviour:
   _hit_Effect_SlashAtk_Vfxs: []
   _hit_Effect_PierceAtk_Vfxs: []
   _hit_Effect_CrushAtk_Vfxs: []
+  use_Sfxs:
+  - {fileID: 8300000, guid: 5b3ed31f256c3794381e5bde07123693, type: 3}
+  - {fileID: 8300000, guid: a5d7ce79866ab7548863a479c96b119f, type: 3}
   hit_Sfxs:
   - {fileID: 8300000, guid: 7cbd6cd765888ff418d01d98bd1ce9c2, type: 3}
   - {fileID: 8300000, guid: 9d3f2fa6767d05847a24fd6e7e62991c, type: 3}
@@ -1740,8 +1743,8 @@ MonoBehaviour:
   cloaking_someMtr: []
   cloaking_bodyMtr: {fileID: 0}
   sprCol: {fileID: 0}
-  atkSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  atkSoundPlayer: {fileID: 0}
+  hitSoundPlayer: {fileID: 0}
   soundPos: {fileID: 0}
   holdObPref: {fileID: 3462556803876994634, guid: 97209c46dff9ee845a27e20365814fff, type: 3}
   holdOb: {fileID: 0}

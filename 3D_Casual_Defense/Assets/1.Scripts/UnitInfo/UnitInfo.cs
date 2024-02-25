@@ -146,6 +146,11 @@ public abstract class UnitInfo : MonoBehaviour
     [Header("분쇄 공격 피격 시 생성되는 이펙트 오브젝트 풀링")]
     public List<GameObject> _hit_Effect_CrushAtk_Vfxs;   // 스킬 공격 가능 불가능 확인하는 변수
 
+
+    [Header("공격, 사망 사운드")]
+    public AudioClip[] use_Sfxs;
+
+
     [Header("피격 사운드 - 0 : 베기 공격 / 1 : 관통 공격 / 2: 분쇄 공격")]
     [SerializeField]
     private AudioClip[] hit_Sfxs;
@@ -221,11 +226,11 @@ public abstract class UnitInfo : MonoBehaviour
 
     [Header("공격 사운드")]
     [SerializeField]
-    public AudioSource atkSound;
+    public AudioSource atkSoundPlayer;
 
     [Header("피격 사운드")]
     [SerializeField]
-    public AudioSource hitSound;
+    public AudioSource hitSoundPlayer;
 
     [SerializeField]
     public Transform soundPos;
@@ -447,14 +452,14 @@ public abstract class UnitInfo : MonoBehaviour
         }
 
         //히트 사운드 피치 조절
-        hitSound.pitch = UnityEngine.Random.Range(0.7f, 1.4f);
+        hitSoundPlayer.pitch = UnityEngine.Random.Range(0.7f, 1.4f);
 
         // 히트 사운드 볼륨 조절
-        hitSound.volume = SoundManager.Instance.VolumeCheck(transform);
+        hitSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
 
         yield return null;
 
-        hitSound.PlayOneShot(hitSfx);
+        hitSoundPlayer.PlayOneShot(hitSfx);
 
 
         Vector3 direction = atkSkill.unitInfoCs.transform.position - transform.position;

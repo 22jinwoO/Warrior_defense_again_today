@@ -165,6 +165,8 @@ public class SkillDataManager : MonoBehaviour
 
             case "poison01":
                 skill._link_Skill = new PoisonStatus();
+                Debug.LogWarning("독 할당");
+
                 break;
 
             case "burn01":

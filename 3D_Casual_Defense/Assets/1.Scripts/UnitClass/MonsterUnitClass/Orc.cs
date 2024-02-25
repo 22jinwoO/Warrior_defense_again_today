@@ -93,8 +93,8 @@ public class Orc : MonsterUnitClass, IActByUnit
 
 
         // 사운드 오디오 소스 할당
-        atkSound = GetComponents<AudioSource>()[0];
-        hitSound = GetComponents<AudioSource>()[1];
+        atkSoundPlayer = GetComponents<AudioSource>()[0];
+        hitSoundPlayer = GetComponents<AudioSource>()[1];
         _nav.SetDestination(castleTr.position); // 성으로 이동
 
         //NavMeshPath path = new NavMeshPath();
@@ -209,12 +209,12 @@ public class Orc : MonsterUnitClass, IActByUnit
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
-        _unitData.attackRange = 5f;
+        _unitData.attackRange = 2f;
         //_unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
         //_unitData.criticRate = character_Data.criticRate;
-        _unitData.criticRate = 50;
+        _unitData.criticRate = 10;
 
 
         // 일반스킬
@@ -364,7 +364,7 @@ public class Orc : MonsterUnitClass, IActByUnit
                     _anim.SetBool("isMove", false);
                     delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
 
-                    if (delayTime >= 5f)  // 딜레이타임이 1초 이상 됐을 때
+                    if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
                     {
                         if (_nav.isOnNavMesh)
                         {
@@ -409,7 +409,7 @@ public class Orc : MonsterUnitClass, IActByUnit
     }
     #endregion
 
-    #region # Act_NormalMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
+    #region # Act_CastleMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
     private void Act_Atk_CastlePhase()
     {
         _nav.isStopped = true;

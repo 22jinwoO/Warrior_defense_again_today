@@ -23,7 +23,8 @@ public class Knight : PlayerUnitClass
         _isClick = false;
         sprCol=GetComponent<SphereCollider>();
 
-        atkSound = GetComponent<AudioSource>();
+        atkSoundPlayer = GetComponents<AudioSource>()[0];
+        hitSoundPlayer = GetComponents<AudioSource>()[1];
 
 
         Init_Vfx();
@@ -210,11 +211,11 @@ public class Knight : PlayerUnitClass
         _unitData.moveSpeed = character_Data.moveSpeed;
 
         // 시야 범위
-        _unitData.sightRange = 24f;
+        _unitData.sightRange = 5f;
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
-        _unitData.attackRange = 5f;
+        _unitData.attackRange = 1f;
         //_unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
