@@ -76,6 +76,12 @@ public class SkillDataManager : MonoBehaviour
             Set_Link_Skill(genral_Skills[i]);
         }
 
+        for (int i = 0; i < special_Skills.Length; i++)
+        {
+            Debug.LogWarning(special_Skills[i]._link_Id);
+            Set_Link_Skill(special_Skills[i]);
+        }
+
         // 세팅 완료된 스킬 할당
         Add_Set_Skill_Dictionary();
 
@@ -91,8 +97,9 @@ public class SkillDataManager : MonoBehaviour
         Set_skill_Dictionary.Add(key: "1_302", value: genral_Skills[2]);
 
         // 스폐셜 스킬
-        Set_skill_Dictionary.Add(key: "2_303", value: special_Skills[0]);
-        Set_skill_Dictionary.Add(key: "2_304", value: special_Skills[1]);
+        Set_skill_Dictionary.Add(key: "2_202", value: special_Skills[0]);
+        Set_skill_Dictionary.Add(key: "2_303", value: special_Skills[1]);
+        Set_skill_Dictionary.Add(key: "2_304", value: special_Skills[2]);
     }
     #endregion
 
@@ -124,18 +131,18 @@ public class SkillDataManager : MonoBehaviour
             
         }
         // 링크 스킬 스턴
-        for (int i = 4; i <= 5; i++)
+        for (int i = 3; i <= 5; i++)
         {
             //스킬 딕셔너리에 스킬 아이디를 키, 스킬의 제이슨 파일 데이터를 값으로 갖는 딕셔너리에 값을 추가
             _skill_Dictionary.Add(key: all_Skill_Datas.SkillDatas[i].skill_id, value: all_Skill_Datas.SkillDatas[i]);
 
             // 일반스킬에 링크스킬 연결
-            special_Skills[i - 4].Set_Init_Skill(all_Skill_Datas.SkillDatas[i]);
+            special_Skills[i - 3].Set_Init_Skill(all_Skill_Datas.SkillDatas[i]);
 
             // 일반 스킬의 공격 타입 할당
-            special_Skills[i-4]._skill_AtkType = _skill_AtkType_Dictionary[special_Skills[i - 4]._damgeType];
+            special_Skills[i-3]._skill_AtkType = _skill_AtkType_Dictionary[special_Skills[i - 3]._damgeType];
 
-            Instantiate(special_Skills[i - 4], transform);
+            Instantiate(special_Skills[i - 3], transform);
 
 
         }

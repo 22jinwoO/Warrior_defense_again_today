@@ -10,10 +10,10 @@ public class Rush : SpecialSkill
     private bool isArrive;
 
     [SerializeField]
-    private float slerpValue=3f;
+    private float slerpValue=1.5f;
 
     [SerializeField]
-    private float lerpValue = 8f;
+    private float lerpValue = 4f;
 
 
     [SerializeField]
@@ -46,6 +46,7 @@ public class Rush : SpecialSkill
     public override void Attack_Skill()
     {
         _target_BodyTr = unitTargetSearchCs._targetUnit;
+        print(gameObject.name);
         StartCoroutine(Rush_Attack());
 
     }
@@ -81,7 +82,7 @@ public class Rush : SpecialSkill
             yield return null;
         }
 
-        for (float t = 0; t < 0.5f; t += Time.deltaTime * lerpValue)
+        for (float t = 0; t < 1f; t += Time.deltaTime * lerpValue)
         {
             transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
             yield return null;

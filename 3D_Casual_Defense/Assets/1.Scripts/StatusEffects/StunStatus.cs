@@ -83,6 +83,7 @@ public class StunStatus : Abs_StatusEffect
 
 
             thisUnit._nav.speed = defaultSpd;
+            Debug.LogWarning("기본이속"+ defaultSpd);
             thisUnit._nav.acceleration = defaultAcc;
 
         }

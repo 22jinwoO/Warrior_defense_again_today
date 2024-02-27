@@ -27,8 +27,6 @@ public abstract class PlayerUnitClass : UnitInfo
 
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
-
-
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수, IActByUnit 인터페이스 함수 정의
 
     public void Act_By_Unit()  // 유닛 행동 구분지어주는 함수
@@ -64,8 +62,6 @@ public abstract class PlayerUnitClass : UnitInfo
 
         if (holdOb!=null)
             holdOb.SetActive(false);
-
-
 
         switch (_enum_Unit_Action_State)     // 현재 유닛 행동
         {
@@ -121,10 +117,16 @@ public abstract class PlayerUnitClass : UnitInfo
         }
     }
     #endregion
+    public IEnumerator Change_PlayerState(eUnit_Action_States next_Action_State)
+    {
+        _enum_Unit_Action_State = next_Action_State;
 
+        yield return new WaitForSeconds(0.5f);
+    }
     #region # Act_HoldMode() : 플레이어 유닛이 홀드모드일 때 호출되는 함수, 구현된 행동 : 대기(탐지), 공격, 홀드(제자리 경계)
     private void Act_HoldMode()
     {
+        
         navObs.enabled = true;
         _nav.enabled = false;
         if (holdOb==null)

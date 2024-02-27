@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4313466910236783343}
   - component: {fileID: 5063281556003278518}
   m_Layer: 0
-  m_Name: ShiledPush
+  m_Name: Spc_ShiledPush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

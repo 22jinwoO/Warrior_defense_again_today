@@ -252,17 +252,19 @@ public abstract class UnitInfo : MonoBehaviour
         // 스킬 공격이 가능한지 확인
         _can_SpcSkill_Attack = _unitData._unit_Current_Skill_CoolTime >= _unitData._unit_Skill_CoolTime ? true : false;
 
-        //현재 스킬 공격 쿨타임이 유닛의 스킬 공격 쿨타임 보다 낮다면 쿨타임 돌려주기
-        if (_unitData._unit_Skill_CoolTime >= _unitData._unit_Current_Skill_CoolTime)
-        {
-            _unitData._unit_Current_Skill_CoolTime += Time.deltaTime;
-        }
 
         //현재 기본 공격 쿨타임이 유닛의 기본 공격속도 보다 낮다면 쿨타임 돌려주기
         if (_unitData._unit_Attack_Speed >= _unitData._unit_Attack_CoolTime)
         {
             _unitData._unit_Attack_CoolTime += Time.deltaTime;
         }
+
+        //현재 스킬 공격 쿨타임이 유닛의 스킬 공격 쿨타임 보다 낮다면 쿨타임 돌려주기
+        if (_unitData._unit_Skill_CoolTime >= _unitData._unit_Current_Skill_CoolTime)
+        {
+            _unitData._unit_Current_Skill_CoolTime += Time.deltaTime;
+        }
+
     }
     #endregion
 
@@ -460,6 +462,17 @@ public abstract class UnitInfo : MonoBehaviour
                 break;
         }
 
+        Vector3 direction = atkSkill.unitInfoCs.transform.position - transform.position;
+        print(transform.gameObject);
+        Quaternion vfxRot;
+        vfxRot = Quaternion.LookRotation(direction.normalized);
+
+        vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
+
+
+        yield return new WaitForSecondsRealtime(0.1f);
+        vfx.transform.position = transform.position + Vector3.up * 0.5f + vfx.transform.forward * 0.7f;
+
         //히트 사운드 피치 조절
         hitSoundPlayer.pitch = UnityEngine.Random.Range(0.7f, 1.4f);
 
@@ -471,26 +484,6 @@ public abstract class UnitInfo : MonoBehaviour
         hitSoundPlayer.PlayOneShot(hitSfx);
 
 
-        Vector3 direction = atkSkill.unitInfoCs.transform.position - transform.position;
-        print(transform.gameObject);
-        Quaternion vfxRot;
-        vfxRot = Quaternion.LookRotation(direction.normalized);
-
-        //vfx.transform.rotation = vfxRot;
-        vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
-
-
-        //vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
-        yield return new WaitForSecondsRealtime(0.1f);
-        //vfx.transform.position = (transform.position + Vector3.up * 0.5f) + sfxPos * 0.7f;
-        vfx.transform.position = transform.position + Vector3.up * 0.5f + vfx.transform.forward * 0.7f;
-
-        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, Mathf.Abs(vfx.transform.position.z));
-        Debug.LogWarning("362" + vfx.transform.position);
-        //vfx.transform.position = new Vector3(vfx.transform.position.x, vfx.transform.position.y, -vfx.transform.position.z);
-        Debug.LogWarning("365" + vfx.transform.position);
-
-        //vfx.transform.forward = ;
 
         vfx.SetActive(true);
         yield return new WaitForSecondsRealtime(0.5f);

@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4207909174940573578}
-  - component: {fileID: -8724978611186274115}
+  - component: {fileID: 1618354488932789791}
   m_Layer: 0
-  m_Name: SniperArrow
+  m_Name: Spc_PoisonArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8724978611186274115
+--- !u!114 &1618354488932789791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,28 +41,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 7371116363651018338}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb5611494174b39438df92814d939594, type: 3}
+  m_Script: {fileID: 11500000, guid: 594de286df88aef44a6754c663343c2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skill_Id: 1_201
-  skill_Name: "\uC800\uACA9 \uD654\uC0B4"
-  skill_Description: "\uD55C \uBA85\uC758 \uD0C0\uAC9F\uC744 \uC800\uACA9\uD558\uC5EC
-    \uAC15\uB825\uD55C \uD798\uC73C\uB85C \uC0C1\uB300\uC5D0\uAC8C \uAD00\uD1B5 \uD53C\uD574\uB97C
-    \uC8FC\uB294 \uD654\uC0B4 \uACF5\uACA9\uC785\uB2C8\uB2E4. \uCE58\uBA85\uD0C0\uC2DC
-    \uAE30\uC808 \uD6A8\uACFC\uB97C \uC801\uC6A9\uD569\uB2C8\uB2E4."
-  _skill_CoolTm: 1
-  _target_Type: target
+  skill_Id: 
+  skill_Name: 
+  skill_Description: 
+  _skill_CoolTm: 0
+  _target_Type: 
   _use_Range: 
-  _casting_Type: instant
-  _trace_Type: trajectory
-  _area_Shape: point
+  _casting_Type: 
+  _trace_Type: 
+  _area_Shape: 
   _area_Length: 0
   _area_Width: 0
-  _damgeType: pierce
-  _skill_AtkType: 2
-  _base_Value: 10
-  _critical_Dmg: 1
-  _link_Id: poison01
+  _damgeType: 
+  _skill_AtkType: 0
+  _base_Value: 0
+  _critical_Dmg: 0
+  _link_Id: 
   _projectile_Prefab: {fileID: 6721835609700710605, guid: 37811021cdfa76d4583cfcd3c04b9eb4, type: 3}
   unitInfoCs: {fileID: 0}
   unitTargetSearchCs: {fileID: 0}

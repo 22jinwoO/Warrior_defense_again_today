@@ -61,7 +61,6 @@ public class Knight : PlayerUnitClass
 
         //Rigidbody asd = GetComponent<Rigidbody>();
         //InitUnitInfoSetting();  // 유닛 정보 초기화 시켜주는 함수
-
     }
     private void OnEnable()
     {
@@ -117,6 +116,8 @@ public class Knight : PlayerUnitClass
     //}
     public void Update()
     {
+        Unit_Attack_Skill_CoolTime();
+
         if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
             _isSearch = false;
@@ -137,7 +138,7 @@ public class Knight : PlayerUnitClass
 
         //    //_nav.velocity = new Vector3(_nav.velocity.x / 2, _nav.velocity.y / 2, _nav.velocity.z / 2);
         //}
-        if (_can_SpcSkill_Attack)
+        if (_can_SpcSkill_Attack&&_enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
         {
             _unitData.attackRange = _unitData.sightRange;
         }
@@ -150,17 +151,17 @@ public class Knight : PlayerUnitClass
 
             //}
 
-        if (_isClick&&Input.GetMouseButtonDown(1))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //if (_isClick&&Input.GetMouseButtonDown(1))
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                _movePos = hit.point;
-                _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-            }
-        }
-        Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
+        //    if (Physics.Raycast(ray, out RaycastHit hit))
+        //    {
+        //        _movePos = hit.point;
+        //        _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
+        //    }
+        //}
+        //Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
     }
 
     private void FixedUpdate()
@@ -220,7 +221,7 @@ public class Knight : PlayerUnitClass
 
         // 크리티컬 확률
         //_unitData.criticRate = character_Data.criticRate;
-        _unitData.criticRate = 50;
+        _unitData.criticRate = character_Data.criticRate;
 
 
         // 일반스킬
@@ -229,35 +230,57 @@ public class Knight : PlayerUnitClass
         // 일반스킬 이름
         _unitData.generalSkillName = character_Data.generalSkillName;
 
+
+        // 일반스킬 이름
+        _unitData.generalSkillName = character_Data.generalSkillName;
+        gen_skill = Instantiate(character_Data.unit_Gen_Skill, transform);
+        gen_skill.gameObject.name = _unitData.generalSkillName;
+        gen_skill._link_Skill = character_Data.unit_Gen_Skill._link_Skill;
+        gen_skill.unitInfoCs = this;
+
         // 특수 스킬 , 자유모드 일 때 사용하는 스킬
         _unitData.specialSkill1 = character_Data.specialSkill1;
 
-        // 특수 스킬 1 이름
         _unitData.specialSkill1Name = character_Data.specialSkill1Name;
+        spe_skill_1 = Instantiate(character_Data.unit_Spc_Skill, transform);
+        spe_skill_1.gameObject.name = _unitData.specialSkill1Name;
+        spe_skill_1._link_Skill = character_Data.unit_Spc_Skill._link_Skill;
+        spe_skill_1.unitInfoCs = this;
+
 
         // 특수 스킬 , 홀드모드 일 때 사용하는 스킬
         _unitData.specialSkill2 = character_Data.specialSkill2;
 
-        // 특수 스킬 2 이름
         _unitData.specialSkill2Name = character_Data.specialSkill2Name;
+        spe_skill_2 = Instantiate(character_Data.unit_Spc_Skill2, transform);
+        spe_skill_2.gameObject.name = _unitData.specialSkill2Name;
+        spe_skill_2._link_Skill = character_Data.unit_Spc_Skill2._link_Skill;
+        print(spe_skill_2._link_Skill);
+        spe_skill_2.unitInfoCs = this;
+
 
         // 유닛 타겟 설정 타입
         _unitData.targetSelectType = character_Data.targetSelectType;
 
-        // 일반스킬 할당
-        gen_skill = character_Data.unit_Gen_Skill;
-        print(gen_skill.unitInfoCs);
+        //// 일반스킬 할당
+        //gen_skill = character_Data.unit_Gen_Skill;
+        //print(gen_skill.unitInfoCs);
 
-        gen_skill.unitInfoCs = this;
+        //gen_skill.unitInfoCs = this;
 
-        // 특수 스킬 할당
-        spe_skill_1 = character_Data.unit_Spc_Skill;
-        spe_skill_1.unitInfoCs = this;
+        //// 특수 스킬 할당
+        //spe_skill_1 = character_Data.unit_Spc_Skill;
+        //spe_skill_1.unitInfoCs = this;
 
-        // 특수 스킬 할당
-        spe_skill_2 = character_Data.unit_Spc_Skill2;
-        spe_skill_2.unitInfoCs = this;
+        //// 특수 스킬 할당
+        //spe_skill_2 = character_Data.unit_Spc_Skill2;
+        //spe_skill_2.unitInfoCs = this;
 
+        gen_skill.unitTargetSearchCs = this.unitTargetSearchCs;
+        print(unitTargetSearchCs);
+        print(gen_skill.unitTargetSearchCs);
+        spe_skill_1.unitTargetSearchCs = this.unitTargetSearchCs;
+        spe_skill_2.unitTargetSearchCs = this.unitTargetSearchCs;
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = character_Data.unit_Armor_property;
@@ -294,8 +317,8 @@ public class Knight : PlayerUnitClass
         //_unitData.sightRange = 8f;                                                     // 유닛 시야
         //_unitData.attackRange = 4f;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
-        _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
-        _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
+        _unitData._unit_Attack_CoolTime = 3f;                                                // 유닛 기본 공격 쿨타임
+        _unitData._unit_Skill_CoolTime = 5f;                                                 // 유닛 스킬 공격 쿨타임
 
         //_unitData.unit_Id = "hum_warr01";
     }

@@ -155,10 +155,14 @@ public class UnitDataManager : Singleton<UnitDataManager>
     public void Set_UnitData(string unit_ID)
     {
         _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
-        print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
-        print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2]);
-        _unitInfo_Dictionary[unit_ID].unit_Spc_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1];
-        _unitInfo_Dictionary[unit_ID].unit_Spc_Skill2 = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2];
+        if (unit_ID!= "orc_warr01")
+        {
+            print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
+            print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2]);
+
+            _unitInfo_Dictionary[unit_ID].unit_Spc_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1];
+            _unitInfo_Dictionary[unit_ID].unit_Spc_Skill2 = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2];
+        }
         print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Id);
         print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
         _unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[_unitInfo_Dictionary[unit_ID].defenseType];

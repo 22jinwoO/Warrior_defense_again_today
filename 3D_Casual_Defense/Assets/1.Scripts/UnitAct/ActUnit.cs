@@ -61,11 +61,75 @@ public class ActUnit : MonoBehaviour
         //    nav.isStopped = true;
         //}
         // 기본 스킬로 공격
-        if (unitInfoCs._can_genSkill_Attack)
+        if (unitInfoCs._can_SpcSkill_Attack&& !gameObject.CompareTag("Monster"))
         {
             if (nav.enabled)
             {
                 nav.isStopped = true;  // 이동 가능 상태로 변환
+            }
+            anim.ResetTrigger("isSkillAtk");
+            Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
+
+            Quaternion rot2 = Quaternion.LookRotation(_target_Direction.normalized);
+
+            unitInfoCs.transform.rotation = rot2;
+
+            unitInfoCs.transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
+
+
+            Debug.Log("스킬공격!!!");
+            if (unitTargetSearchCs._targetUnit == null)
+            {
+                return;
+            }
+            anim.SetTrigger("isSkillAtk");
+
+            //if (unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+            //    unitInfoCs.spe_skill_1.Attack_Skill();
+
+            //else
+            //    unitInfoCs.spe_skill_2.Attack_Skill();
+
+            //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+            unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
+
+            // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
+            if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
+            {
+                StartCoroutine(Change_MonsterState(next_Action_State));
+            }
+
+            // 플레이어 유닛은 바로 다음상 상태로 변환
+            else
+            {
+                float asdf = 0f;
+                while (asdf < 0.5f)
+                {
+                    asdf += Time.deltaTime;
+                }
+                unitInfoCs._enum_Unit_Action_State = next_Action_State;
+
+            }
+            return; // 함수 탈출
+
+
+
+            //anim.ResetTrigger("isAttack");
+
+        }
+
+        else
+        {
+            anim.ResetTrigger("isAttack");
+
+            Debug.Log("기본공격!!!");
+            print("88오브젝트이름 " + unitInfoCs.gameObject.name);
+
+            print("88크리티컬 확률 " + unitInfoCs._unitData.criticRate);
+
+            if (unitTargetSearchCs._targetUnit == null)
+            {
+                return;
             }
 
             Vector3 _target_Direction = unitTargetSearchCs._targetUnit.position - unitInfoCs.transform.position;
@@ -77,62 +141,33 @@ public class ActUnit : MonoBehaviour
             unitInfoCs.transform.rotation = Quaternion.Euler(0, rot2.eulerAngles.y, 0);
 
 
+            anim.SetTrigger("isAttack");
 
-            if (unitInfoCs._can_SpcSkill_Attack&&gameObject.name=="Knight(Clone)")    // 스킬은 근거리 원거리 나눌 필요 x, UseSkill 함수 호출 플레이어 유닛이라면 
+            unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
+
+
+            // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
+            if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
             {
-                Debug.Log("스킬공격!!!");
-                if (unitTargetSearchCs._targetUnit == null)
-                {
-                    return;
-                }
-                anim.SetTrigger("isAttack");
-                unitInfoCs.spe_skill_2.Attack_Skill();
-
-                unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-
-                // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
-                if (gameObject.CompareTag("Monster")&&unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
-                {
-                    StartCoroutine(Change_MonsterState(next_Action_State));
-                }
-
-                // 플레이어 유닛은 바로 다음상 상태로 변환
-                else
-                    unitInfoCs._enum_Unit_Action_State = next_Action_State;
-
-                return; // 함수 탈출
-
+                StartCoroutine(Change_MonsterState(next_Action_State));
             }
-
+            // 플레이어 유닛은 바로 다음상 상태로 변환
             else
             {
-                Debug.Log("기본공격!!!");
-                print("88오브젝트이름 " + unitInfoCs.gameObject.name);
-
-                print("88크리티컬 확률 " + unitInfoCs._unitData.criticRate);
-
-                if (unitTargetSearchCs._targetUnit == null)
+                float asdf = 0f;
+                while (asdf<0.5f)
                 {
-                    return;
+                    asdf += Time.deltaTime;
                 }
-                anim.SetTrigger("isAttack");
-                
-                unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
-
-
-                // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
-                if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
-                {
-                    StartCoroutine(Change_MonsterState(next_Action_State));
-                }
-                // 플레이어 유닛은 바로 다음상 상태로 변환
-                else
-                    unitInfoCs._enum_Unit_Action_State = next_Action_State;
+                unitInfoCs._enum_Unit_Action_State = next_Action_State;
 
             }
-            //anim.ResetTrigger("isAttack");
+            //StartCoroutine(unitInfoCs.GetComponent<PlayerUnitClass>().Change_PlayerState(next_Action_State));
+            //unitInfoCs._enum_Unit_Action_State = next_Action_State;
 
         }
+
+
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
             //print(nav.gameObject.name);
@@ -205,6 +240,40 @@ public class ActUnit : MonoBehaviour
         //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
     }
     #endregion
+
+    #region # AnimEvent_SKill_Atk() : 특수 스킬 애니메이션 동작 시 호출되는 애니메이션 이벤트 함수
+    public void AnimEvent_SKill_Atk()  // 일반 스킬 사용 시 호출되는 애니메이션
+    {
+        if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
+        {
+            nav.isStopped = true;
+        }
+
+        if (unitInfoCs.atkSoundPlayer != null)
+        {
+            //unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.atkSoundPlayer.GetComponent<AudioClip>());
+
+            // 사운드 오디오 소스 할당
+            unitInfoCs.atkSoundPlayer.pitch = Random.Range(0.7f, 1.4f);
+            //unitInfoCs.atkSoundPlayer.volume = Random.Range(0.2f, 0.4f);
+
+            // 거리에 따른 볼륨 크기 조절
+            unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
+
+            // 오디오 클립 변수 생성하고 어웨이크문에서 오디오 클립 할당하도록 수정하기
+            unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[0]);
+
+        }
+        // 특수 스킬 사용
+        if (unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+            unitInfoCs.spe_skill_1.Attack_Skill();
+
+        else
+            unitInfoCs.spe_skill_2.Attack_Skill();
+    }
+    #endregion
+
+
 
     #region # float CheckCritical(Abs_Skill skill, float atkDmg) : 크리티컬 확률 체크하는 함수
     private float CheckCritical(UnitInfo attacker, Abs_Skill skill, float atkDmg)

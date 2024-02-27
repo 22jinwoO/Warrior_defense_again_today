@@ -80,13 +80,6 @@ public class Archer : PlayerUnitClass
 
     private void Start()
     {
-        gen_skill._projectile_Prefab = Instantiate(_projectile_Prefab);
-        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = this;
-
-        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_General_Skill_Dmg;
-        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
-
-        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill;
 
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
@@ -104,97 +97,9 @@ public class Archer : PlayerUnitClass
             _enum_Unit_Action_Mode = _enum_pUnit_Action_BaseMode;
             _enum_Unit_Action_State = _enum_pUnit_Action_BaseState;
         }
-
-        //if (_isClick && Input.GetMouseButtonDown(1))
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //    if (Physics.Raycast(ray, out RaycastHit hit))
-        //    {
-        //        _movePos = hit.point;
-        //        _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-
-        //    }
-        //}
-
-        //if (_isClick)
-        //{
-        //    Touch touch = Input.GetTouch(0);
-
-        //    if (player.isChoice && touch.phase == TouchPhase.Moved && Input.touchCount == 1)
-        //    {
-        //        player.textMeshProUGUI.text = "드래그중";
-
-        //        Vector3 mouseInput = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        //        if (player.isChoice && touch.phase == TouchPhase.Ended && Input.touchCount == 1)
-        //        {
-        //            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //            if (Physics.Raycast(ray, out RaycastHit hit))
-        //            {
-        //                mouseInput=new Vector3(mouseInput.x, 0f, mouseInput.z);
-        //                _movePos = mouseInput;
-        //                _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-        //                player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point + "\n월드좌표 : " + mouseInput;
-        //                player.isChoice = false;
-        //                _isClick = false;
-        //            }
-
-        //        }
-        //    }
-
-
-        //    //Vector3 mouseInput = Camera.main.ScreenToWorldPoint(hit.point);
-
-        //    //if (player.isChoice&&touch.phase==TouchPhase.Ended&&Input.touchCount == 1)
-        //    //{
-        //    //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //    //    if (Physics.Raycast(ray, out RaycastHit hit))
-        //    //    {
-        //    //        player.isChoice = false;
-
-        //    //        Vector3 mouseInput = Camera.main.ScreenToWorldPoint(hit.point);
-
-        //    //        _movePos = mouseInput;
-        //    //        _enum_Unit_Action_State = eUnit_Action_States.unit_Move;
-        //    //        player.textMeshProUGUI.text = gameObject.name + "\n사용자 지정 가능여부 " + player.isChoice + "\n 유닛이동 가능 여부 " + _isClick + " 이동 : " + hit.point + "\n월드좌표 : " + mouseInput;
-
-        //    //    }
-
-        //    //}
-        //}
-
-        //Instantiate(_projectile_Prefab);
         Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
 
     }
-
-    //IEnumerator Get_DamagedBody()
-    //{
-    //    print("V키 눌림");
-    //    //Material asdf = GetComponentInChildren<Material>();
-
-    //    //Material asdfd= aaa;
-    //    for (int i = 0; i < someMaterials.Length; i++)
-    //    {
-    //        someMaterials[i].material.color = Color.gray;
-
-    //    }
-    //    bodyMaterials.material.color = Color.gray;
-
-    //    // aaa = asdf;
-    //    yield return new WaitForSeconds(0.1f);
-    //    for (int i = 0; i < someMaterials.Length; i++)
-    //    {
-    //        someMaterials[i].material.color = Color.white;
-    //        someMaterials[i].material.color = Color.white;
-
-    //    }
-    //    bodyMaterials.material.color = Color.white;
-
-    //}
 
     private void FixedUpdate()
     {
@@ -217,7 +122,7 @@ public class Archer : PlayerUnitClass
         Castle.Instance.OnCastleDown += OnCastleDown;
 
         canAct = true;
-        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
+        //Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
 
@@ -263,28 +168,89 @@ public class Archer : PlayerUnitClass
         gen_skill.gameObject.name = _unitData.generalSkillName;
         gen_skill._link_Skill= character_Data.unit_Gen_Skill._link_Skill;
         gen_skill.unitInfoCs = this;
-        Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
-        Debug.LogWarning(gen_skill._link_Skill.link_name);
+        //Debug.LogWarning(character_Data.unit_Gen_Skill._link_Skill.link_name);
+        //Debug.LogWarning(gen_skill._link_Skill.link_name);
         print(gen_skill.unitInfoCs);
 
 
-        // 특수 스킬 , 자유모드 일 때 사용하는 스킬
+        // 특수 스킬1 , 자유모드 일 때 사용하는 스킬
         _unitData.specialSkill1 = character_Data.specialSkill1;
 
-        // 특수 스킬 1 이름
         _unitData.specialSkill1Name = character_Data.specialSkill1Name;
+        spe_skill_1 = Instantiate(character_Data.unit_Spc_Skill, transform);
+        spe_skill_1.gameObject.name = _unitData.specialSkill1Name;
+        spe_skill_1._link_Skill = character_Data.unit_Spc_Skill._link_Skill;
+        spe_skill_1.unitInfoCs = this;
 
-        // 특수 스킬 , 홀드모드 일 때 사용하는 스킬
+
+        // 특수 스킬1 , 자유모드 일 때 사용하는 스킬
         _unitData.specialSkill2 = character_Data.specialSkill2;
 
-        // 특수 스킬 2 이름
         _unitData.specialSkill2Name = character_Data.specialSkill2Name;
+        spe_skill_2 = Instantiate(character_Data.unit_Spc_Skill2, transform);
+        spe_skill_2.gameObject.name = _unitData.specialSkill2Name;
+        spe_skill_2._link_Skill = character_Data.unit_Spc_Skill2._link_Skill;
+        spe_skill_2.unitInfoCs = this;
 
-        // 유닛 타겟 설정 타입
-        _unitData.targetSelectType = character_Data.targetSelectType;
+
+        print(character_Data.unit_Spc_Skill._link_Skill);
+        print(spe_skill_1._link_Skill);
+
+        gen_skill._projectile_Prefab = Instantiate(_projectile_Prefab);
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = this;
+
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_General_Skill_Dmg;
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
+
+        gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill;
+
+
+        spe_skill_1._projectile_Prefab = Instantiate(_projectile_Prefab);
+        spe_skill_1._projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = this;
+
+        spe_skill_1._projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_Special_Skill_Dmg;
+        spe_skill_1._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
+
+        spe_skill_1._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = spe_skill_1;
+
+
+
+        spe_skill_2._projectile_Prefab = Instantiate(_projectile_Prefab);
+        spe_skill_2._projectile_Prefab.GetComponent<Abs_Bullet>().unitInfoCs = this;
+
+        spe_skill_2._projectile_Prefab.GetComponent<Abs_Bullet>().atkDmg = _unitData._unit_Special_Skill_Dmg;
+        spe_skill_2._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
+
+        spe_skill_2._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = spe_skill_2;
+
+
+
+        gen_skill.unitTargetSearchCs = unitTargetSearchCs;
+        spe_skill_1.unitTargetSearchCs = unitTargetSearchCs;
+        spe_skill_2.unitTargetSearchCs = unitTargetSearchCs;
+
+
+
+        //// 특수 스킬 , 홀드모드 일 때 사용하는 스킬
+        //_unitData.specialSkill2 = character_Data.specialSkill2;
+
+        //// 특수 스킬 2 이름
+        //_unitData.specialSkill2Name = character_Data.specialSkill2Name;
+
+        //// 유닛 타겟 설정 타입
+        //_unitData.targetSelectType = character_Data.targetSelectType;
 
         //// 일반스킬 할당
         //gen_skill = character_Data.unit_Gen_Skill;
+        //gen_skill.unitInfoCs = this;
+        
+        
+        //// 특수스킬 할당
+        //spe_skill_1 = character_Data.unit_Spc_Skill;
+        //spe_skill_1.unitInfoCs = this;
+
+        //spe_skill_2 = character_Data.unit_Spc_Skill2;
+        //spe_skill_2.unitInfoCs = this;
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
@@ -293,8 +259,9 @@ public class Archer : PlayerUnitClass
         _this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
 
         // 유닛 타겟 설정 타입 할당
-        _unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
-        _eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
+        print(character_Data.targetSelectType);
+        _unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[character_Data.targetSelectType];
+        _eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[character_Data.targetSelectType];
 
 
         // 유닛 자유 모드
@@ -312,7 +279,7 @@ public class Archer : PlayerUnitClass
         //_unitData._unit_Name = "궁수";                                                        // 유닛 이름
         //_unitData._unit_maxHealth = 200f;                                                       // 유닛 체력
         _unitData._eUnit_genSkill_Property = eUnit_Attack_Property_States.slash_Attack;      // 유닛 공격속성
-        _unitData._unit_General_Skill_Dmg = 1f;                                                  // 유닛 공격 데미지
+        _unitData._unit_General_Skill_Dmg = 3f;                                                  // 유닛 공격 데미지
         _unitData._unit_Special_Skill_Dmg = 6f;                                            // 유닛 공격 데미지
         //_unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;    // 유닛 방어속성
         //_unitData._unit_Description = "궁수입니다";                                           // 유닛 설명
@@ -321,8 +288,8 @@ public class Archer : PlayerUnitClass
         //_unitData.sightRange = _unitData.sightRange;                                                     // 유닛 시야
         //_unitData.attackRange = _unitData.attackRange;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
-        _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
-        _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
+        _unitData._unit_Attack_CoolTime = 3f;                                                // 유닛 기본 공격 쿨타임
+        _unitData._unit_Skill_CoolTime = 5f;                                                 // 유닛 스킬 공격 쿨타임
 
         //_enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         //_enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
