@@ -8,8 +8,11 @@ public class Knight : PlayerUnitClass
 {
     [SerializeField]
     private bool isCollision;
+
     //Abs_StatusEffect asd = new Abs_StatusEffect();
+
     Abs_StatusEffect asd = new PoisonStatus();
+
     private void Awake()
     {
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
@@ -149,7 +152,7 @@ public class Knight : PlayerUnitClass
         //{
         //            _nav.velocity = new Vector3(_nav.velocity.x/2, _nav.velocity.y/2, _nav.velocity.z/2);
 
-            //}
+        //}
 
         //if (_isClick&&Input.GetMouseButtonDown(1))
         //{
@@ -162,6 +165,24 @@ public class Knight : PlayerUnitClass
         //    }
         //}
         //Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
+
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            Collider[] colls = Physics.OverlapSphere(transform.position, 10f, unitTargetSearchCs._layerMask);
+            print("B눌림");
+            for (int i = 0; i < colls.Length; i++)
+            {
+                UnitInfo unitInfo = colls[i].GetComponent<UnitInfo>();
+                print(colls[i].name);
+                unitInfo.unitTargetSearchCs._targetUnit = transform;
+                //unitInfo.unitTargetSearchCs._target_Body = this.transform;
+
+                unitInfo._enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
+                unitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
+                //unitInfo.unitTargetSearchCs._target_Body = 
+
+            }
+        }
     }
 
     private void FixedUpdate()
