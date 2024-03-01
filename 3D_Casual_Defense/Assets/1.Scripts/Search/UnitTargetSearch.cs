@@ -234,7 +234,7 @@ public class UnitTargetSearch : MonoBehaviour
 
         Quaternion _fireRotation = Quaternion.Euler(0, _lookRotation.eulerAngles.y, 0); // 유닛이 발사할 수 있는 방향의 각도
         Debug.LogWarning("몬스터 성 공격219");
-
+        unitInfoCs._anim.ResetTrigger("canCastleAtk");
         if (Quaternion.Angle(transform.localRotation, _fireRotation) <= 5f&& unitInfoCs._can_genSkill_Attack)   //각도 차이 값이 5f보다 작거나 같아졌을 때 유닛 공격
         {
 
@@ -247,7 +247,7 @@ public class UnitTargetSearch : MonoBehaviour
                 return;
             Debug.LogWarning("몬스터 성 공격228");
 
-            unitInfoCs._anim.SetBool("canCastleAtk", true);
+            unitInfoCs._anim.SetTrigger("canCastleAtk");
 
 
 

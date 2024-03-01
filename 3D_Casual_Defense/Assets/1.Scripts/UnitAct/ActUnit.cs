@@ -61,7 +61,7 @@ public class ActUnit : MonoBehaviour
         //    nav.isStopped = true;
         //}
         // 기본 스킬로 공격
-        if (unitInfoCs._can_SpcSkill_Attack&& !gameObject.CompareTag("Monster"))
+        if (unitInfoCs._can_SpcSkill_Attack && !gameObject.CompareTag("Monster"))
         {
             if (nav.enabled)
             {
@@ -415,7 +415,7 @@ public class ActUnit : MonoBehaviour
         unitInfoCs.bodyMeshRener.material = unitInfoCs._damaged_Mtr;
 
         // aaa = asdf;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
 
         // 다시 원래 머태리얼로 할당
         for (int i = 0; i < unitInfoCs.someMeshReners.Length; i++)

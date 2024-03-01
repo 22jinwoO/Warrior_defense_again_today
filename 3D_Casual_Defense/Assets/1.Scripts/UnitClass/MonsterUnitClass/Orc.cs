@@ -18,15 +18,6 @@ public class Orc : MonsterUnitClass, IActByUnit
     [SerializeField]
     Transform pointTr;
 
-    [SerializeField]
-    private bool isChangeState=true; // 상태 변환 체크하는 변수
-
-    [SerializeField]
-    private Transform castleTr; // 성 트랜스폼
-
-    [Header("몬스터 대기 시간")]
-    [SerializeField]
-    private float delayTime;    // 대기 시간
 
 
     [SerializeField]
@@ -50,7 +41,6 @@ public class Orc : MonsterUnitClass, IActByUnit
     void Awake()
     {
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
-
         print(MonsterKind);
         rgb = GetComponent<Rigidbody>();
         _nav = GetComponent<NavMeshAgent>();
@@ -61,7 +51,7 @@ public class Orc : MonsterUnitClass, IActByUnit
 
         Init_Vfx();
 
-        _this_Unit_ArmorCalculateCs = new ChainArmor();
+        //_this_Unit_ArmorCalculateCs = new ChainArmor();
         _enum_Unit_Action_Mode = eUnit_Action_States.monster_NormalPhase;
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs = GetComponent<ActUnit>();
@@ -103,6 +93,8 @@ public class Orc : MonsterUnitClass, IActByUnit
         //print(path.corners.Length);
         //_nav.SetPath(path);
         //_nav.SetDestination(castleTr.position); // 성으로 이동
+        StartCoroutine(Test());
+
     }
 
     private void OnEnable()
@@ -143,7 +135,9 @@ public class Orc : MonsterUnitClass, IActByUnit
             unitTargetSearchCs._target_Body = null;
             _enum_Unit_Action_Mode = _enum_mUnit_Action_BaseMode;
             _enum_Unit_Action_State = _enum_mUnit_Action_BaseState;
+
             _nav.SetDestination(castleTr.position);
+            print("모드 전환");
         }
 
 
@@ -168,7 +162,7 @@ public class Orc : MonsterUnitClass, IActByUnit
         _nav.enabled = true;
         _isSearch = false;
         _isDead = false;
-        _nav.speed = 1f;
+        _nav.speed = 3.5f;
         _nav.acceleration = 8f;
 
     }
@@ -281,7 +275,7 @@ public class Orc : MonsterUnitClass, IActByUnit
         //_unitData._eUnit_Defense_Property = eUnit_Defense_Property_States.padding_Armor;    // 유닛 방어속성
         //_unitData._unit_Description = "용사입니다";                                           // 유닛 설명
         //_unitData._unit_Type = "용사";                                                       // 유닛 타입
-        _unitData._unit_MoveSpeed = 1f;                                                      // 유닛 이동속도
+        _unitData._unit_MoveSpeed = 3.5f;                                                      // 유닛 이동속도
         //_unitData.sightRange = 8f;                                                     // 유닛 시야
         //_unitData.attackRange = 4f;                                                   // 유닛 공격 범위
         _unitData._unit_Attack_Speed = 3f;                                                   // 유닛 공격 속도
@@ -310,132 +304,6 @@ public class Orc : MonsterUnitClass, IActByUnit
         SetStructValue(character_Data);
     }
     #endregion
-    #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수
-    public void Act_By_Unit()
-    {
-        switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
-        {
-            case eUnit_Action_States.monster_NormalPhase: // 몬스터 이동 모드일 때 행동
-                Act_NormalPhase();
-                break;
-
-            case eUnit_Action_States.monster_AngryPhase:
-                Act_AngryPhase();
-                break;
-
-            case eUnit_Action_States.monster_AttackCastlePhase:
-                Act_Atk_CastlePhase();
-                break;
-        }
-    }
-    #endregion
-
-    #region # Act_NormalMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
-    private void Act_NormalPhase()
-    {
-        switch (_enum_Unit_Action_State)     // 현재 유닛 행동
-        {
-            case eUnit_Action_States.unit_Move: // 유닛 이동
-
-                if (isChangeState)  // 상태가 변환됐을 때
-                {
-                    _isSearch = false;
-
-                    //StartCoroutine(Test());
-                    unitTargetSearchCs._targetUnit = null;
-                    print("애니메이션 실행");
-                    float time = 0f;
-
-                    while (time < 0.3f)
-                    {
-                        time += Time.deltaTime;
-                    }
-                    isChangeState = false;
-                }
-                //_nav.SetDestination(castleTr.position); // 성으로 이동
-
-                //unitTargetSearchCs._unitModelTr.LookAt(castleTr.position);
-                //unitTargetSearchCs._unitModelTr.localRotation = Quaternion.Euler(0f, transform.rotation.y, transform.rotation.z);
-                //_nav.isStopped = false;
-
-                _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-                if (_nav.velocity.magnitude <= 0.3f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
-                {
-                    _anim.SetBool("isMove", false);
-                    delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
-
-                    if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
-                    {
-                        if (_nav.isOnNavMesh)
-                        {
-                            _nav.isStopped = false;
-                        }
-                        _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
-                        _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-                        delayTime = 0f;
-                    }
-
-                }
-
-                break;
-        }
-    }
-    #endregion
-
-    #region # Act_NormalMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
-    private void Act_AngryPhase()
-    {
-        switch (_enum_Unit_Action_State)     // 현재 유닛 행동
-        {
-            case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
-                _nav.isStopped = true;
-                if (!_isSearch)  // 적 탐지 않았을 때만 실행
-                {
-                    actUnitCs.SearchTarget(target_Search_Type: _eUnit_Target_Search_Type);
-                }
-                break;
-
-            case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-                actUnitCs.TrackingTarget(next_ActionState: eUnit_Action_States.unit_Move);
-                break;
-
-            case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-                if (unitTargetSearchCs._targetUnit != null)
-                {
-                    actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
-                }
-                break;
-        }
-    }
-    #endregion
-
-    #region # Act_CastleMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
-    private void Act_Atk_CastlePhase()
-    {
-        _nav.isStopped = true;
-        switch (_enum_Unit_Action_State)     // 현재 유닛 행동
-        {
-            case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
-                float _distance = Vector3.Distance(transform.position, transform.position);
-
-                unitTargetSearchCs.Look_At_The_Castle(next_Action_State : eUnit_Action_States.unit_Attack);
-                Debug.LogWarning("몬스터 성 공격");
-                //if (unitTargetSearchCs._targetUnit != null)
-                //{
-                //    actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
-                //}
-                break;
-        }
-    }
-
-    #endregion
-    IEnumerator Test()
-    {
-        print("오크 길변환");
-        _nav.ResetPath();
-        yield return new WaitForSeconds(5f);
-        Test();
-    }
 
 
     private void OnTriggerEnter(Collider other)

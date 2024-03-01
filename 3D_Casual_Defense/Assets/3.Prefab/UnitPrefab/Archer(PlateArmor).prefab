@@ -808,8 +808,8 @@ MonoBehaviour:
   spe_skill_1: {fileID: 0}
   spe_skill_2: {fileID: 0}
   canAct: 0
-  _unit_NomralMtr: {fileID: 2100000, guid: dccf8e44ede71db42b49378af93c5fb7, type: 2}
-  _unit_CloakingMtr: {fileID: 2100000, guid: 098b04fdd77cbf14e8017fa790f89f7c, type: 2}
+  _unit_NomralMtr: {fileID: 2100000, guid: cf1fa6c73dc509448863697c25254027, type: 2}
+  _unit_CloakingMtr: {fileID: 2100000, guid: 77cfa342e595d4b4d9a7aab14efe404c, type: 2}
   _damaged_Mtr: {fileID: 2100000, guid: 542d0ee2870fb2f4faf1337daa090865, type: 2}
   someMeshReners:
   - {fileID: 5163019830220402665}

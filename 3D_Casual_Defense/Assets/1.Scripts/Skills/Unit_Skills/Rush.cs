@@ -63,6 +63,7 @@ public class Rush : SpecialSkill
         startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
 
+
         for (float t = 0; t < 0.5f; t += Time.deltaTime * slerpValue)
         {
 

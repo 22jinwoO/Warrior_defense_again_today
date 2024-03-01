@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Castle : Singleton<Castle>
 {
@@ -38,6 +39,7 @@ public class Castle : Singleton<Castle>
     [SerializeField]
     private GameObject downVfxs;
 
+    public float halfColiderValue;
 
     //델리게이트 선언
     public delegate void CastleDownHandler();
@@ -50,6 +52,7 @@ public class Castle : Singleton<Castle>
     {
         isDown = false;
         _boxCollider = GetComponent<BoxCollider>();
+        halfColiderValue = GetComponent<NavMeshObstacle>().size.z / 2;
         //_anim = GetComponent<Animator>();
         _source = GetComponent<AudioSource>();
         //_hitCaslteClip = _source.GetComponent<AudioClip>();

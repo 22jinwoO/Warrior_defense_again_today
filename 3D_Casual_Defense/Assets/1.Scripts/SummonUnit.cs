@@ -50,6 +50,7 @@ public class SummonUnit : MonoBehaviour
         }
         print(unitFactory);
         print(unitFactory.playerUnitFactorys[1]);
+        // 버튼인덱스에 해당하는 플레이어 유닛 팩토리 찾아서 유닛 생산
         PlayerUnitClass unit = unitFactory.playerUnitFactorys[btnIndex].CreatePlayerUnit();
 
         print(unit.name);
