@@ -119,6 +119,7 @@ public abstract class MonsterUnitClass : UnitInfo
         {
             case eUnit_Action_States.unit_Idle: // 유닛 대기 상태
                 _nav.isStopped = true;
+                _anim.SetBool("isMove", false);
                 if (!_isSearch)  // 적 탐지 않았을 때만 실행
                 {
                     actUnitCs.SearchTarget(target_Search_Type: _eUnit_Target_Search_Type);

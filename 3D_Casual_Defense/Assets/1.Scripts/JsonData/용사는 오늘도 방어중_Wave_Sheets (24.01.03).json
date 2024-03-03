@@ -262,7 +262,7 @@
       "specialSkill2": "2_201",
       "specialSkill2Name": "가시 폭발 덫",
       "unitMode": null,
-      "targetSelectType": "성"
+      "targetSelectType": "타겟 고정"
     },
     {
       "no": "5",
@@ -302,7 +302,7 @@
       "specialSkill2": "2_101",
       "specialSkill2Name": "맹렬한 칼날",
       "unitMode": null,
-      "targetSelectType": "성"
+      "targetSelectType": "타겟 고정"
     },
     {
       "no": "7",

@@ -118,7 +118,7 @@ public class ActUnit : MonoBehaviour
 
         }
 
-        else
+        else if (unitInfoCs._can_genSkill_Attack)
         {
             anim.ResetTrigger("isAttack");
 
@@ -340,6 +340,11 @@ public class ActUnit : MonoBehaviour
 
         float attack_Dmg = skill._base_Value;
 
+        Debug.LogWarning(myAtkType);
+        Debug.LogWarning(damagedUnitData);
+        Debug.LogWarning(attacker);
+        Debug.LogWarning(skill);
+        Debug.LogWarning(attack_Dmg);
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
 
@@ -589,7 +594,13 @@ public class ActUnit : MonoBehaviour
         {
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
-            if (unitInfoCs._can_genSkill_Attack)
+
+            if (!gameObject.CompareTag("Monster")&&unitInfoCs._can_SpcSkill_Attack)
+            {
+                unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
+
+            }
+            else if (unitInfoCs._can_genSkill_Attack)
             {
                 unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
 

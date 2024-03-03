@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnitDataManager;
 
 public class UnitDataManager : Singleton<UnitDataManager>
 {
@@ -87,6 +86,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Set_UnitData("hum_warr01");
         Set_UnitData("hum_arch01");
+        Set_UnitData("orc_hunt01");
         Set_UnitData("orc_warr01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
@@ -133,6 +133,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
         public ArmorCalculate unit_ArmorCalculateCs;
         public eUnit_targetSelectType unit_targetSelectType;
 
+        
         //= Instance._skill_Dictionary.TryGetValue();
 
         //public eUnit_Defense_Property_States unit_Armor_property;
@@ -144,7 +145,8 @@ public class UnitDataManager : Singleton<UnitDataManager>
         //_this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
 
         //// 유닛 타겟 설정 타입 할당
-        //_unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
+        
+        //_unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
 
         //_eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
 
@@ -155,8 +157,9 @@ public class UnitDataManager : Singleton<UnitDataManager>
     public void Set_UnitData(string unit_ID)
     {
         _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
-        if (unit_ID!= "orc_warr01")
+        if (unit_ID!= "orc_warr01"&& unit_ID != "orc_hunt01")
         {
+            print(unit_ID);
             print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
             print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2]);
 
@@ -223,8 +226,12 @@ public class UnitDataManager : Singleton<UnitDataManager>
         // 기사 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[1].char_id, value : All_character_Datas.CharacterDatas[1]);
 
+        // 오크 헌터 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[3].char_id, value: All_character_Datas.CharacterDatas[3]);
+
         // 오크 전사 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[5].char_id, value: All_character_Datas.CharacterDatas[5]);
+
     }
     #endregion
 

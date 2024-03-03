@@ -175,6 +175,7 @@ public class Knight : PlayerUnitClass
                 UnitInfo unitInfo = colls[i].GetComponent<UnitInfo>();
                 print(colls[i].name);
                 unitInfo.unitTargetSearchCs._targetUnit = transform;
+                unitInfo.unitTargetSearchCs._target_Body = body_Tr;
                 //unitInfo.unitTargetSearchCs._target_Body = this.transform;
 
                 unitInfo._enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
