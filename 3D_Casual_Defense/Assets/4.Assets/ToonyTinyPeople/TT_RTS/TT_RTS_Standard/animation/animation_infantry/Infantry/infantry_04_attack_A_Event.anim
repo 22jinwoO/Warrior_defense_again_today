@@ -36540,7 +36540,7 @@ AnimationClip:
   - time: 0.6
     functionName: AnimEvent_Normal_Atk
     data: 
-    objectReferenceParameter: {fileID: 3783625495759935545, guid: 144078c21bb42904a8bb2a77b6c196e3, type: 3}
+    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

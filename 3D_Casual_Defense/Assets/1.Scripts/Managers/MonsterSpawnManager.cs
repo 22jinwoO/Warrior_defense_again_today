@@ -76,14 +76,14 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         //{
         //    print(datas.waveDatas[3].interval);
         //}
-        print("이거 오류 맞음??"+nms.name);
+        //print("이거 오류 맞음??"+nms.name);
         txtManager = Stage1_TextManager.Instance;
     }
     // Start is called before the first frame update
     void Start()
     {
         // 몬스터 네비메쉬 서페이스 5초마다 초기화
-        StartCoroutine(C_DynamicBake());
+        //StartCoroutine(C_DynamicBake());
 
     }
 

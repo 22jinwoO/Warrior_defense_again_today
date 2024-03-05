@@ -234,7 +234,7 @@ public class Knight : PlayerUnitClass
         _unitData.moveSpeed = character_Data.moveSpeed;
 
         // 시야 범위
-        _unitData.sightRange = 5f;
+        _unitData.sightRange = 10f;
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위

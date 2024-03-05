@@ -189,6 +189,7 @@ public class OrcHunter : MonsterUnitClass
         gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._start_Pos = _projectile_startPos;
 
         gen_skill._projectile_Prefab.GetComponent<Abs_Bullet>()._skill = gen_skill;
+        //gen_skill._projectile_Prefab.SetActive(false);
 
 
         // 유닛 타겟 설정 타입

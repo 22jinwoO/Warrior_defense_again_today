@@ -40,6 +40,7 @@ public abstract class Abs_Skill : MonoBehaviour
 
     public bool isRush;
 
+    public GameObject skillVfx;
     public abstract void Attack_Skill();
 
     public void Set_Init_Skill(SkillDataManager.SkillData skillData)

@@ -498,6 +498,23 @@
       "link_id": null
     },
     {
+      "skill_id": "1_202",
+      "skill_name": "망치 때리기",
+      "skill_script": "한 명의 적에게 망치로 때려 분쇄 피해를 주는 망치 공격입니다.",
+      "coolTm": "2",
+      "targetType": "area",
+      "useRange": "attack",
+      "castingType": "instant",
+      "traceType": "melee",
+      "areaShape": "point",
+      "areaLength": "2",
+      "areaWidth": null,
+      "damageType": "crush",
+      "baseValue": "5",
+      "criticDamage": "1.5",
+      "link_id": null
+    },
+    {
       "skill_id": "2_202",
       "skill_name": "독 화살",
       "skill_script": "적을 중독시키는 화살을 발사하여 관통 피해를 주는 화살 공격입니다. 치명타시 중독 효과를 적용합니다.",
@@ -549,21 +566,21 @@
       "link_id": "stun01"
     },
     {
-      "skill_id": "2_310",
-      "skill_name": "대지 분쇄",
-      "skill_script": "앞에 있는 지역을 도리깨로 내리쳐 주변 적들에게 분쇄 피해를 주는 무기 공격입니다. 치명타시 기절 효과를 적용합니다.",
-      "coolTm": "5",
-      "targetType": "area",
-      "useRange": "attack",
+      "skill_id": "2_901",
+      "skill_name": "위협적인 포효",
+      "skill_script": "주변 반경의 적을 향해 위협적인 포효를 외쳐 적들이 공포에 떨게 만듭니다. 포효를 들은 적들은 이동 속도가 3초간 감소합니다.",
+      "coolTm": "8",
+      "targetType": "enemy",
+      "useRange": "sight",
       "castingType": "instant",
       "traceType": "melee",
-      "areaShape": "circle",
-      "areaLength": "2",
-      "areaWidth": null,
+      "areaShape": "point",
+      "areaLength": "5",
+      "areaWidth": "90",
       "damageType": "crush",
-      "baseValue": "5",
-      "criticDamage": "1",
-      "link_id": "stun01"
+      "baseValue": "0",
+      "criticDamage": "0",
+      "link_id": "slow01"
     }
   ],
   "SkillLinkDatas": [

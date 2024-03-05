@@ -86,6 +86,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Set_UnitData("hum_warr01");
         Set_UnitData("hum_arch01");
+        Set_UnitData("hum_warr02");
         Set_UnitData("orc_hunt01");
         Set_UnitData("orc_warr01");
 
@@ -225,6 +226,10 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         // 기사 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key : All_character_Datas.CharacterDatas[1].char_id, value : All_character_Datas.CharacterDatas[1]);
+
+        // 망치 기사 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[2].char_id, value: All_character_Datas.CharacterDatas[2]);
+
 
         // 오크 헌터 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[3].char_id, value: All_character_Datas.CharacterDatas[3]);
