@@ -19,7 +19,7 @@ public class OrcFactory : AbsMonsterUnitFactory
         {
             case OrcClass.Orc:
                 print("오크 생산");
-                MonsterUnit = Instantiate(orcPrefab, spawnPoint,Quaternion.identity);
+                MonsterUnit = Instantiate(orcPrefab, new Vector3(5.1f, 8.5f, 5.9f), Quaternion.identity);
                 MonsterUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_warr01"]);
                 break;
 

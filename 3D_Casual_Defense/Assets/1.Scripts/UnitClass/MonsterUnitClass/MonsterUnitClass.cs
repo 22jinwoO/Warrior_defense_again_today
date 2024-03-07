@@ -74,7 +74,7 @@ public abstract class MonsterUnitClass : UnitInfo
                 resetWayTime += Time.deltaTime;
                 while (resetWayTime>=3f)
                 {
-                    _nav.ResetPath();
+                    //_nav.ResetPath();
                     _nav.SetDestination(castleTr.position);
                     resetWayTime = 0f;
                     delayTime = 0f;

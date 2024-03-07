@@ -80,7 +80,8 @@ public class Archer : PlayerUnitClass
 
     private void Start()
     {
-
+        //_nav.ResetPath();
+        _nav.enabled = false;
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
         //print(_unitData.sightRange);
@@ -103,6 +104,10 @@ public class Archer : PlayerUnitClass
 
     private void FixedUpdate()
     {
+        if (_nav.isOnNavMesh)
+            print("이동가능");
+        else
+            print("이동불가능");
         if (canAct)
         {
             Act_By_Unit();  // 유닛 행동 함수

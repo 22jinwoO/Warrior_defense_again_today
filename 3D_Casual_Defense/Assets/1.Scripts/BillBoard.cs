@@ -10,13 +10,15 @@ public class BillBoard : MonoBehaviour
     void Start()
     {
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //transform.forward = mainCamera.transform.forward;
-        transform.LookAt(mainCamera.transform);
+        transform.forward = mainCamera.transform.forward;
+
+        //transform.LookAt(mainCamera.transform);
         //transform.Rotate(transform.eulerAngles.x, 0f, 180);
     }
 }

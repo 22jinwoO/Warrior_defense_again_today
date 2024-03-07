@@ -120,7 +120,7 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         currentWave = wave;
         //intervalTxt.text = currentWave.wave_interval.ToString();
         // 현재 웨이브 시작
-        StartCoroutine(SpawnMonster());
+        //StartCoroutine(SpawnMonster());
     }
 
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수

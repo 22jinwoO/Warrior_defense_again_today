@@ -228,7 +228,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
 
-                transform.position = new Vector3(hit.point.x, 0f, hit.point.z);
+                transform.position = new Vector3(hit.point.x, 8.6f, hit.point.z);
                 flagTr.position = transform.position;
                 textMeshProUGUI.text = $"{hit.point}\n{transform.position}";
             }
@@ -248,17 +248,44 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     {
         if (isChoice&& isMove)
         {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+
+                transform.position = new Vector3(hit.point.x, 8.6f, hit.point.z);
+                if (hit.transform.CompareTag("Stairs"))
+                {
+                    transform.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
+
+                    flagTr.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
+                    clickUnitInfo._movePos = new Vector3(hit.point.x, 12.96f, hit.point.z);
+                    clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
+                    clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+                    print("계단");
+                }
+                else
+                {
+                    flagTr.position = transform.position;
+                    clickUnitInfo._movePos = transform.position;
+                    clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
+                    clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+
+                }
+                textMeshProUGUI.text = $"{hit.point}\n{transform.position}";
+            }
+
+
             _flag_Material.color = Color.blue;
 
-            clickUnitInfo._movePos = transform.position;
+            
             clickUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Move;
 
             textMeshProUGUI.text = $"드래그끝\n유닛이 이동할 좌표 : {transform.position}";
 
             clickUnitInfo.arriveFlag.SetParent(emptyParent);
 
-            clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
-            clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+            
 
             clickUnitInfo._isClick = false;
             clickUnitInfo = null;
