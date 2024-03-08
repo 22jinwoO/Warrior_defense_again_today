@@ -28,7 +28,7 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         {
             player.isMove = true;
 
-            spawnPoint.position = new Vector3(hit.point.x, 8.560284f, hit.point.z);
+            spawnPoint.position = new Vector3(hit.point.x, 8.5f, hit.point.z);
         }
 
     }
