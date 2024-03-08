@@ -10,10 +10,10 @@ public class Rush : SpecialSkill
     private bool isArrive;
 
     [SerializeField]
-    private float slerpValue=1.5f;
+    private float slerpValue;
 
     [SerializeField]
-    private float lerpValue = 4f;
+    private float lerpValue;
 
 
     [SerializeField]
@@ -40,6 +40,7 @@ public class Rush : SpecialSkill
 
     private void Awake()
     {
+        slerpValue = 0.5f;
         lerpValue = 8f;
     }
 
@@ -57,19 +58,19 @@ public class Rush : SpecialSkill
         endPosition = _target_BodyTr.position;  // 발사체 도착 위치
 
         center = (startPosition + endPosition) * 0.5f;  // 시작위치와 도착위치를 합한 값 /2 를 하여 중간 위치값 구하기
+        //center = unitInfoCs.transform.position;  // 시작위치와 도착위치를 합한 값 /2 를 하여 중간 위치값 구하기
+        center.y += 5; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
 
-        center.y -= 5; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
-
-        startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
-        endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+        //startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+        //endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
 
 
-        for (float t = 0; t < 0.5f; t += Time.deltaTime * slerpValue)
+        for (float t = 0; t < 1f; t += Time.deltaTime)
         {
 
-            Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
+            unitInfoCs.transform.position = Vector3.Lerp(unitInfoCs.transform.position, center, t);
 
-            point += center;
+            //point += center;
             //transform.position = point;
             // 화살 촉이 다음에 이동할 위치 바라보도록
             //_target_Direction = point - unitInfoCs.transform.position;
@@ -78,14 +79,21 @@ public class Rush : SpecialSkill
 
             //unitInfoCs.transform.rotation = rot;
             print(t);
-            unitInfoCs.transform.position = point;
+            //unitInfoCs.transform.position = point;
             //print(transform.gameObject);
             yield return null;
         }
+        center.y -= 5; // 포물선이 위로 그려져야 하므로 y 값 - 해주기
 
-        for (float t = 0; t < 1f; t += Time.deltaTime * lerpValue)
+        startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+        endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
+
+        for (float t = 0; t < 0.5f; t += Time.deltaTime*0.05f)
         {
-            transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
+            Vector3 point = Vector3.Lerp(startPosition, endPosition, t);
+
+            point += center;
+            unitInfoCs.transform.position = point;
             yield return null;
         }
 
