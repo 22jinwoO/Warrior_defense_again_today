@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static UnitDataManager;
 using UnityEngine.AI;
+using UnityEditor;
 
 public class HammerKnight : PlayerUnitClass
 {
@@ -12,7 +13,7 @@ public class HammerKnight : PlayerUnitClass
     private void Awake()
     {
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
-
+        Debug.LogWarning(transform.position);
         navObs = GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
         _this_Unit_ArmorCalculateCs = new PaddingArmor();
@@ -53,10 +54,13 @@ public class HammerKnight : PlayerUnitClass
 
         }
         cloaking_bodyMtr = Instantiate(_unit_CloakingMtr);
-
-        InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["hum_warr02"]);
+        //InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["hum_warr02"]);
     }
 
+    private void Start()
+    {
+        _nav.enabled = true;
+    }
     private void OnEnable()
     {
         bodyMeshRener.material = bodyMtr;
@@ -130,6 +134,7 @@ public class HammerKnight : PlayerUnitClass
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
+        Debug.LogWarning("해머나이트 생성!!");
         if (Castle.Instance._castle_Hp.Equals(0))
         {
             OnCastleDown();

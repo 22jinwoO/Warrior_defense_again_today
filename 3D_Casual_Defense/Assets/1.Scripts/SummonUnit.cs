@@ -56,8 +56,11 @@ public class SummonUnit : MonoBehaviour
         print(unit.name);
         unit.gameObject.SetActive(true);
         unit.transform.position = unitTr;
-
+        print(unit.transform.position);
+        print(unitTr);
         yield return null;
+        print(unit.transform.position);
+        print(unitTr);
         Destroy(gameObject);
     }
 }
