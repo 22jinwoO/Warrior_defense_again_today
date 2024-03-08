@@ -7,7 +7,8 @@ public abstract class AbsMonsterUnitFactory : MonoBehaviour
     [SerializeField]
     public Vector3 spawnPoint = new Vector3(5.1f, 8.5f, 5.9f);
 
-
+    // 오크 프리팹
+    public MonsterUnitClass monsterPrefab;
     public enum OrcClass
     {
         Default = 0,

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class OrcFactory : AbsMonsterUnitFactory
 {
-    // 오크 프리팹
-    public Orc orcPrefab;
 
 
 
@@ -19,7 +17,7 @@ public class OrcFactory : AbsMonsterUnitFactory
         {
             case OrcClass.Orc:
                 print("오크 생산");
-                MonsterUnit = Instantiate(orcPrefab, new Vector3(5.1f, 8.5f, 5.9f), Quaternion.identity);
+                MonsterUnit = Instantiate(monsterPrefab, new Vector3(5.1f, 8.5f, 5.9f), Quaternion.identity);
                 MonsterUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_warr01"]);
                 break;
 
