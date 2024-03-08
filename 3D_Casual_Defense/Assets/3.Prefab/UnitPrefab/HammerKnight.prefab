@@ -789,7 +789,7 @@ Transform:
   m_GameObject: {fileID: 2050820920103705845}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.413527, y: 8.627417, z: 52.33393}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -918,7 +918,7 @@ MonoBehaviour:
   initPos: {fileID: 0}
   initPos2: {x: 0, y: 0, z: 0}
   _isClick: 0
-  arriveFlag: {fileID: 2638627691131609120, guid: 55c3df59e026d714c988f7fafd079be8, type: 3}
+  arriveFlag: {fileID: 4013999140445837847}
   isCollision: 0
 --- !u!114 &3651244616220253567
 MonoBehaviour:
@@ -984,7 +984,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050820920103705845}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.46
   m_Speed: 3.5

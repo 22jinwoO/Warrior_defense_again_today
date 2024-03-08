@@ -58,7 +58,7 @@ public abstract class PlayerUnitClass : UnitInfo
     private void Act_FreeMode()
     {
         navObs.enabled = false;
-        _nav.enabled = true;
+        //_nav.enabled = true;
 
         if (holdOb!=null)
             holdOb.SetActive(false);

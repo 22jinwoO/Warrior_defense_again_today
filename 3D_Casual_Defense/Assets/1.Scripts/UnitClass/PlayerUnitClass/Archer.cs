@@ -75,13 +75,15 @@ public class Archer : PlayerUnitClass
         atkSoundPlayer = GetComponents<AudioSource>()[0];
         hitSoundPlayer = GetComponents<AudioSource>()[1];
 
-
     }
 
     private void Start()
     {
+
+        _nav.enabled = true;
+
         //_nav.ResetPath();
-        _nav.enabled = false;
+        //_nav.enabled = false;
         //transform.eulerAngles = Vector3.zero;
         //_nav.SetDestination(Castle.Instance.transform.position);
         //print(_unitData.sightRange);

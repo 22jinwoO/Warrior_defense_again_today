@@ -86,6 +86,7 @@ public class Knight : PlayerUnitClass
     }
     private void Start()
     {
+        _nav.enabled=true;
         print(_nav+gameObject.name);
         //asd.unit_Data = _unitData;
         //StartCoroutine(asd.Apply_Status_Effect(this, "", 2, 5));
