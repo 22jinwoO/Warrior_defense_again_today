@@ -48,8 +48,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     [SerializeField]
     private CreatePlayerUnit clickUnitCs;
 
-    [SerializeField]
-    private PlayerUnitClass clickUnitInfo;
+    public PlayerUnitClass clickUnitInfo;
 
     public Transform flagTr;
 

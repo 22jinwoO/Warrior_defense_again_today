@@ -26,6 +26,13 @@ public class CameraMove : MonoBehaviour
 
     public float speed = 15f;
 
+    public MonsterSpawnManager spawnManagerCs;
+
+    private void Awake()
+    {
+        StartCoroutine(CameraProduction());
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -38,21 +45,29 @@ public class CameraMove : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if(player.isChoice)
         {
-            transform.Translate(-speed * Time.deltaTime, 0, 0);
+            transform.position = new Vector3(transform.position.x, transform.position.y, player.clickUnitInfo.transform.position.z);
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        else
         {
-            transform.Translate(speed * Time.deltaTime, 0, 0);
-        }
-        else if (Input.GetKey(KeyCode.UpArrow))
-        {
-            transform.Translate(0, 0, speed * Time.deltaTime);
-        }
-        else if (Input.GetKey(KeyCode.DownArrow))
-        {
-            transform.Translate(0, 0, -speed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+            else if (Input.GetKey(KeyCode.UpArrow))
+            {
+                transform.Translate(0, 0, speed * Time.deltaTime);
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                transform.Translate(0, 0, -speed * Time.deltaTime);
+            }
+
         }
 
         float wheelInput = Input.GetAxis("Mouse ScrollWheel");
@@ -162,6 +177,28 @@ public class CameraMove : MonoBehaviour
             textMeshProUGUI.text = "카메라 줌\n" + mainCam.fieldOfView;
 
         }
+
+    }
+
+    // 시작 시 카메라 연출 기능하는 스크립트
+    private IEnumerator CameraProduction()
+    {
+        while(transform.position.z>3) 
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y,transform.position.z-1);
+            yield return new WaitForSecondsRealtime(0.04f);
+        }
+
+        yield return new WaitForSecondsRealtime(1.5f);
+
+
+        while (54>transform.position.z)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
+            yield return new WaitForSecondsRealtime(0.04f);
+        }
+
+        spawnManagerCs.gameObject.SetActive(true);
 
     }
 }
