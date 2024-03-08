@@ -22,6 +22,10 @@ public class UI_PopUpManager : MonoBehaviour
     private Button usePopUpBtn;
 
     [SerializeField]
+    private Button usePopDownBtn;
+
+
+    [SerializeField]
     public bool isUseShop;
 
     [SerializeField]
@@ -39,6 +43,7 @@ public class UI_PopUpManager : MonoBehaviour
 
         // 홈으로 이동하는 함수 연결
         usePopUpBtn.onClick.AddListener(()=>StartCoroutine(UseUnitPopUp()));
+        usePopDownBtn.onClick.AddListener(()=>StartCoroutine(UseUnitPopDown()));
     }
 
     //홈버튼에서 호출되는 함수
@@ -57,6 +62,11 @@ public class UI_PopUpManager : MonoBehaviour
 
     public IEnumerator UseUnitPopUp()
     {
+        usePopUpBtn.gameObject.SetActive(false);
+        yield return null;
+
+        usePopDownBtn.gameObject.SetActive(true);
+
         if (isUseShop)
         {
             while (buyUnitPopUp.anchoredPosition.y < 0f)
@@ -69,6 +79,15 @@ public class UI_PopUpManager : MonoBehaviour
             isUseShop = false;
             yield break;
         }
+    }
+
+    public IEnumerator UseUnitPopDown()
+    {
+        usePopDownBtn.gameObject.SetActive(false);
+        yield return null;
+
+        usePopUpBtn.gameObject.SetActive(true);
+
 
         if (!isUseShop)
         {
@@ -83,6 +102,7 @@ public class UI_PopUpManager : MonoBehaviour
 
         }
     }
+
 
     public void PlayerWinPopUp()
     {
