@@ -87,8 +87,12 @@ public class UnitDataManager : Singleton<UnitDataManager>
         Set_UnitData("hum_warr01");
         Set_UnitData("hum_arch01");
         Set_UnitData("hum_warr02");
+
+        //
         Set_UnitData("orc_hunt01");
         Set_UnitData("orc_warr01");
+        Set_UnitData("orc_sham01");
+        Set_UnitData("orc_boss01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
@@ -158,7 +162,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
     public void Set_UnitData(string unit_ID)
     {
         _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
-        if (unit_ID!= "orc_warr01"&& unit_ID != "orc_hunt01")
+        if (unit_ID!= "orc_warr01"&& unit_ID != "orc_hunt01" && unit_ID != "orc_sham01" && unit_ID != "orc_boss01")
         {
             print(unit_ID);
             print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
@@ -234,9 +238,14 @@ public class UnitDataManager : Singleton<UnitDataManager>
         // 오크 헌터 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[3].char_id, value: All_character_Datas.CharacterDatas[3]);
 
+        // 오크 주술사 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[4].char_id, value: All_character_Datas.CharacterDatas[4]);
+
         // 오크 전사 데이터 키, 값 할당
         _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[5].char_id, value: All_character_Datas.CharacterDatas[5]);
 
+        // 오크 보스 데이터 키, 값 할당
+        _unitInfo_Dictionary.Add(key: All_character_Datas.CharacterDatas[6].char_id, value: All_character_Datas.CharacterDatas[6]);
     }
     #endregion
 
