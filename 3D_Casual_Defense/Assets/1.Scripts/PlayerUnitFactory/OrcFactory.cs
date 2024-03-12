@@ -6,9 +6,7 @@ using UnityEngine;
 public class OrcFactory : AbsMonsterUnitFactory
 {
 
-
-
-    // 오크 클래스마다 생산될 유닛을 결정해주는 구상 생산자
+     // 오크 클래스마다 생산될 유닛을 결정해주는 구상 생산자
     public override MonsterUnitClass CreateMonsterUnit()
     {
         MonsterUnitClass MonsterUnit = null;

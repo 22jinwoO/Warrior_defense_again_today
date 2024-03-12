@@ -42,10 +42,9 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
     public MonsterUnitClass[] monsters;
 
     [Header("몬스터 종류 딕셔너리 (Key :string / Value : MonsterUnitClass)")]
-    public SerializableDictionary<string, MonsterUnitClass> d_MonsterDictonary=new SerializableDictionary<string, MonsterUnitClass>();
+    public SerializableDictionary<string, AbsMonsterUnitFactory> d_MonsterDictonary=new SerializableDictionary<string, AbsMonsterUnitFactory>();
 
-    [SerializeField]
-    private WaveSystem waveSys;
+    public WaveSystem waveSys;
 
 
     public TextAsset data;  // Json 데이터 에셋  이 파일은 유니티 상에서 드래그해서 넣어줍니다.
@@ -66,7 +65,10 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
     {
         //print(monsters[0]);
         //print(d_MonsterDictonary);
-        d_MonsterDictonary.Add("ORC_war01", monsterUnitFactorys[0].monsterPrefab);
+        d_MonsterDictonary.Add("orc_warr01", monsterUnitFactorys[0]);
+        d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1]);
+        d_MonsterDictonary.Add("orc_sham01", monsterUnitFactorys[2]);
+        d_MonsterDictonary.Add("orc_boss01", monsterUnitFactorys[3]);
         //d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1].monsterPrefab);
 
         waveSys=GetComponent<WaveSystem>();
@@ -104,8 +106,11 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
             
         }
 
-        if (currentWave.wave_maxMonsterCount==currentWave.deathMonsterCnt)
+        // 여기서 현재 웨이브 시작함
+        if (waveSys.currentWaveIndex!=-1&& currentWave.wave_maxMonsterCount==currentWave.deathMonsterCnt)
         {
+            print("여기서 시작인가요");
+            print($"{waveSys.currentWaveIndex}");
             currentWave.deathMonsterCnt = 0;
             print("웨이브 변경");
             waveSys.StartWave();
@@ -160,7 +165,7 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
             while (currentMonsterCount < currentWave.wave_monsterClasses.Count)
                 {
 
-                    CheckSpawnMonster();
+                    CheckSpawnMonster(currentMonsterCount);
                     currentMonsterCount++;
                     spawnMonsterCount++;
 
@@ -180,26 +185,45 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         spawnMonsterCount = 0;
     }
 
-    private void CheckSpawnMonster()
+    private void CheckSpawnMonster(int monsterCnt)
     {
         // 오크 종류 확인하는 게 아니라 딕셔너리 키 밸류를 키로 몬스터아이디, 밸류로 해당 몬스터 팩토리 연결하도록 해서 몬스터팩토리.createMonster하도록설정하기
-        List<MonsterUnitClass> monsterSpawnFactorys = currentWave.wave_monsterClasses;
-        int monsterKindsIndex = currentWave.monsterKindIndex;
-        CreateOrc();
-        switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
-        {
-            case Orc:
-                
-                break;
+        //List<MonsterUnitClass> monsterSpawnList = currentWave.wave_monsterClasses;
+        print(currentWave.wave_monsterClasses[monsterCnt]);
+        CreateMonster(currentWave.wave_monsterClasses[monsterCnt]);
+        //CreateOrc();
+        //switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
+        //{
+        //    case Orc:
 
-        }
+        //        break;
+
+        //}
+    }
+
+    //오크 생산자
+    private void CreateMonster(string monsterUnitId)
+    {
+        // 몬스터 종류 리스트 인덱스에 해당하는 팩토리 찾은 후 팩토리.CreateMonster로 반환받은 몬스터 소환하기
+        // 몬스터 종류 리스트에서 인덱스가 증가하면서 종류 리스트 스트링을 인덱스 값에 해당하는 팩토리를 찾아서 createmonsterUnit해주기 
+        //GameObject spawnOrc = null;
+        bool cantSetActive = false;
+        //  유닛 생산자
+        spawnMonster = d_MonsterDictonary[monsterUnitId].CreateMonsterUnit();
+        spawnMonster.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary[monsterUnitId]);
+        spawnMonster.transform.position = d_MonsterDictonary[monsterUnitId].spawnPoint;
+        print("네비메쉬 위에 있는지 확인" + spawnMonster._nav.isOnNavMesh);
+        //spawnMonster.transform.position = spawnPoint;
+        spawnMonster.gameObject.name = monsterUnitId;
+        spawnMonster.transform.SetParent(orcPrefab_Objects);
+        spawnMonster = null;    //spawnMonster 변수 값 초기화
     }
 
     //오크 생산자
     private void CreateOrc()
     {
         //GameObject spawnOrc = null;
-        bool cantSetActive=false;
+        bool cantSetActive = false;
         //  유닛 생산자
         print("스페이스 바 눌림!");
 

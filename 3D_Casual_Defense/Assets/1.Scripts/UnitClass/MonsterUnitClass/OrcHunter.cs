@@ -53,7 +53,7 @@ public class OrcHunter : MonsterUnitClass
         _nav.SetDestination(castleTr.position); // 성으로 이동
 
         //StartCoroutine(Test());
-        InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_hunt01"]);
+        //InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_hunt01"]);
     }
 
     private void OnEnable()
