@@ -347,8 +347,8 @@ public class ActUnit : MonoBehaviour
         Debug.LogWarning(attack_Dmg);
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
-
-        DeadCheck();
+        if(!unitInfoCs._isDead)
+            DeadCheck();
     }
     #endregion
 
@@ -358,6 +358,9 @@ public class ActUnit : MonoBehaviour
         // 피격 받은 우닛의 Hp가 0 이하가 됐을 때
         if (unitInfoCs.canAct && unitInfoCs._unitData.hp <= 0f)
         {
+            Debug.LogError(gameObject.name);
+
+            unitInfoCs._isDead = true;
             unitInfoCs.canAct = false;
             unitInfoCs._nav.speed = 0f;
             unitInfoCs._nav.acceleration = 0f;
@@ -499,7 +502,8 @@ public class ActUnit : MonoBehaviour
         {
             unitInfoCs.GetComponent<PlayerUnitClass>().holdOb.SetActive(false);
         }
-        else
+
+        else if (unitInfoCs.gameObject.tag.Equals("Monster"))
         {
             MonsterSpawnManager.Instance.currentWave.deathMonsterCnt++;
 
