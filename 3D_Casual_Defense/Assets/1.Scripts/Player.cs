@@ -57,6 +57,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
     public bool isChoice;
     public bool isMove;
+    public bool canPlay;
 
     [SerializeField]
     private Transform emptyParent;
@@ -83,93 +84,98 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
 
         _flag_Material = flagTr.GetComponent<Material>();
+        canPlay = false;
     }
     // Update is called once per frame
     void Update()
     {
-        // 유닛 클릭 지속 시 이동상태로 전환시켜주는 구문
-        if (isChoice && Input.GetMouseButton(0) && !isMove)
+        if (canPlay)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            // 유닛 클릭 지속 시 이동상태로 전환시켜주는 구문
+            if (isChoice && Input.GetMouseButton(0) && !isMove)
             {
-                if (hit.transform.CompareTag("Player"))
-                {
-                    times += Time.deltaTime;
-                    if (times >= 0.6f)
-                    {
-                        isMove = true;
-                        StartCoroutine(FlagAnim());
-                        times = 0f;
-                    }
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    if (hit.transform.CompareTag("Player"))
+                    {
+                        times += Time.deltaTime;
+                        if (times >= 0.6f)
+                        {
+                            isMove = true;
+                            StartCoroutine(FlagAnim());
+                            times = 0f;
+                        }
+
+                    }
                 }
             }
-        }
 
-        if (!isMove&&Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (!isMove && Input.GetMouseButtonDown(0))
             {
-                if (hit.transform.CompareTag("Player"))
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+
+                if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    if (!isChoice)
+                    if (hit.transform.CompareTag("Player"))
                     {
-                        audioPlayer.PlayOneShot(audioSources[0]);
-                        clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+                        if (!isChoice)
+                        {
+                            audioPlayer.PlayOneShot(audioSources[0]);
+                            clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
 
-                        clickUnitInfo._isClick = true;
-                        clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
-                        //isMove = true;
-                        _flag_Material = _Materials[0];
+                            clickUnitInfo._isClick = true;
+                            clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+                            //isMove = true;
+                            _flag_Material = _Materials[0];
 
-                        // 플레이어 조작 창 활성화
-                        unitCtrlCanvas.transform.position = transform.position;
-                        unitCtrlCanvas.SetActive(true);
+                            // 플레이어 조작 창 활성화
+                            unitCtrlCanvas.transform.position = transform.position;
+                            unitCtrlCanvas.SetActive(true);
 
-                        //플레이어 선택창 활성화
-                        flagTr.position = transform.position;
-                        flagTr.gameObject.SetActive(true);
+                            //플레이어 선택창 활성화
+                            flagTr.position = transform.position;
+                            flagTr.gameObject.SetActive(true);
 
-                        textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
-                        isChoice = true;
+                            textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
+                            isChoice = true;
 
-                    }
-                    //if(isChoice)
-                    //{
-                    //    times += Time.deltaTime;
-                    //    if (times>=0.3f)
-                    //    {
-                    //        isMove = true;
-                    //        StartCoroutine(FlagAnim());
-                    //        times = 0f;
-                    //    }
-                    //}
-                }
-
-                else if(!hit.transform.tag.Equals("UnitUI"))
-                {
-                    print("다른거 맞음");
-                    isChoice = false;
-                    flagTr.gameObject.SetActive(false);
-
-                    if (clickUnitInfo != null)
-                    {
-                        clickUnitInfo._isClick = false;
+                        }
+                        //if(isChoice)
+                        //{
+                        //    times += Time.deltaTime;
+                        //    if (times>=0.3f)
+                        //    {
+                        //        isMove = true;
+                        //        StartCoroutine(FlagAnim());
+                        //        times = 0f;
+                        //    }
+                        //}
                     }
 
-                    clickUnitInfo = null;
-                    unitCtrlCanvas.SetActive(false);
+                    else if (!hit.transform.tag.Equals("UnitUI"))
+                    {
+                        print("다른거 맞음");
+                        isChoice = false;
+                        flagTr.gameObject.SetActive(false);
 
-                    clickUnitCs.clikUnitInfo = null;
-                    isChoice = false;
+                        if (clickUnitInfo != null)
+                        {
+                            clickUnitInfo._isClick = false;
+                        }
+
+                        clickUnitInfo = null;
+                        unitCtrlCanvas.SetActive(false);
+
+                        clickUnitCs.clikUnitInfo = null;
+                        isChoice = false;
+                    }
                 }
             }
+
         }
 
         if (isChoice&&!isMove)

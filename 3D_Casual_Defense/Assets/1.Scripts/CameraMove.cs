@@ -36,7 +36,9 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Application.platform==RuntimePlatform.Android)
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Clamp(transform.position.z, 3f, 55f));
+
+        if (Application.platform==RuntimePlatform.Android&&!player.isChoice && player.canPlay)
         {
             OnCameraMove();
             OnCameraZoomMode();
@@ -45,11 +47,12 @@ public class CameraMove : MonoBehaviour
 
         }
 
-        if(player.isChoice)
+        if(player.isChoice && player.canPlay)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, player.clickUnitInfo.transform.position.z);
         }
-        else
+
+        if (!player.isChoice &&player.canPlay)
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
@@ -197,8 +200,8 @@ public class CameraMove : MonoBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
             yield return new WaitForSecondsRealtime(0.04f);
         }
-
-        spawnManagerCs.gameObject.SetActive(true);
+        spawnManagerCs.waveSys.StartWave();
+        player.canPlay = true;
 
     }
 }
