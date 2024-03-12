@@ -231,7 +231,7 @@ public class OrcHunter : MonsterUnitClass
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
-        if (Castle.Instance._castle_Hp.Equals(0))
+        if (Castle._castle_Hp.Equals(0))
         {
             OnCastleDown();
         }
