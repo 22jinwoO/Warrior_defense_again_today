@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class UI_PopUpManager : MonoBehaviour
 {
+    public Player playerCs;
+
     [SerializeField]
     private GameObject popUp_Message;
 
@@ -31,9 +33,17 @@ public class UI_PopUpManager : MonoBehaviour
     [SerializeField]
     private RectTransform buyUnitPopUp;
 
+    public Image castleHpBar;
+
+
     private void Awake()
     {
         isUseShop = true;
+
+        //castleHpBar.maxValue = Castle.Instance._castle_Hp;
+        //castleHpBar.value = Castle.Instance._castle_Hp;
+
+        txtManager.ShowCastleHpTxt();
 
         // 로비로 가는 버튼 함수 연결
         goLobbyBtn.onClick.AddListener(GoLobbyBtn);
@@ -62,22 +72,26 @@ public class UI_PopUpManager : MonoBehaviour
 
     public IEnumerator UseUnitPopUp()
     {
-        usePopUpBtn.gameObject.SetActive(false);
-        yield return null;
-
-        usePopDownBtn.gameObject.SetActive(true);
-
-        if (isUseShop)
+        if (playerCs.canPlay)
         {
-            while (buyUnitPopUp.anchoredPosition.y < 0f)
-            {
-                buyUnitPopUp.anchoredPosition += new Vector2(0, +10f);
-                print(buyUnitPopUp.anchoredPosition.y);
+            usePopUpBtn.gameObject.SetActive(false);
+            yield return null;
 
-                yield return null;
+            usePopDownBtn.gameObject.SetActive(true);
+
+            if (isUseShop)
+            {
+                while (buyUnitPopUp.anchoredPosition.y < 0f)
+                {
+                    buyUnitPopUp.anchoredPosition += new Vector2(0, +10f);
+                    print(buyUnitPopUp.anchoredPosition.y);
+
+                    yield return null;
+                }
+                isUseShop = false;
+                yield break;
             }
-            isUseShop = false;
-            yield break;
+
         }
     }
 

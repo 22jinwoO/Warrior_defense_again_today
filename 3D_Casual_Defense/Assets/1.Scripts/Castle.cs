@@ -9,7 +9,8 @@ public class Castle : Singleton<Castle>
     public Transform _castle_Pos;
     [SerializeField]
     private Transform caslteModel;
-    public float _castle_Hp;
+    public float _castle_maxHp;
+    public static float _castle_Hp;
     public Animator _anim;
 
     [SerializeField]
@@ -50,6 +51,9 @@ public class Castle : Singleton<Castle>
 
     private void Awake()
     {
+        _castle_maxHp= 100f;
+        _castle_Hp = 100f;
+
         isDown = false;
         _boxCollider = GetComponent<BoxCollider>();
         halfColiderValue = GetComponent<NavMeshObstacle>().size.z / 2;
@@ -60,7 +64,6 @@ public class Castle : Singleton<Castle>
 
         txtManager = Stage1_TextManager.Instance;
 
-        _castle_Hp = 100f;
 
         txtManager.ShowCastleHpTxt();
     }
