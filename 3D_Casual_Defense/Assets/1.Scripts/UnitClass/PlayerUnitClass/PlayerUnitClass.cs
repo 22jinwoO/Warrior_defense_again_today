@@ -58,7 +58,8 @@ public abstract class PlayerUnitClass : UnitInfo
     private void Act_FreeMode()
     {
         navObs.enabled = false;
-        //_nav.enabled = true;
+        if(_nav.enabled==false)
+            _nav.enabled = true;
 
         if (holdOb!=null)
             holdOb.SetActive(false);
@@ -129,17 +130,17 @@ public abstract class PlayerUnitClass : UnitInfo
         
         navObs.enabled = true;
         _nav.enabled = false;
-        if (holdOb==null)
+        if (holdOb == null)
         {
             print(gameObject.name);
-            holdOb=Instantiate(holdObPref,transform.position,Quaternion.identity);
+            holdOb = Instantiate(holdObPref, transform.position, Quaternion.identity);
             holdOb.transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
             holdOb.gameObject.name = "홀드발판";
         }
         else
         {
             holdOb.SetActive(true);
-            holdOb.transform.position = new Vector3(transform.position.x,0.27f,transform.position.z);
+            holdOb.transform.position = transform.position;
         }
         initPos = transform;
         initPos2 = transform.position;
