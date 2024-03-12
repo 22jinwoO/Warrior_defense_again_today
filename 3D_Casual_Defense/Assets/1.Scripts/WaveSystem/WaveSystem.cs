@@ -62,21 +62,21 @@ public class WaveSystem : MonoBehaviour
             waves[i].wave_RepeatNum = spawnManager.datas.waveDatas[i].repeatNum;
 
             // 몬스터 종류 리스트 초기화
-            waves[i].wave_monsterClasses = new List<MonsterUnitClass>();
+            waves[i].wave_monsterClasses = new List<string>();
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 첫번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character1.Equals("") && !spawnManager.datas.waveDatas[i].character1.Equals(null))
 
                 // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 첫번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
                 // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character1]);
+                waves[i].wave_monsterClasses.Add(spawnManager.datas.waveDatas[i].character1);
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 값이 공백 && Null 이 아닐 때
             if (!spawnManager.datas.waveDatas[i].character2.Equals("") && !spawnManager.datas.waveDatas[i].character2.Equals(null))
 
                 // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
                 // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character2]);
+                waves[i].wave_monsterClasses.Add(spawnManager.datas.waveDatas[i].character2);
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 두번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
             // for문의 다음 i번째 값을 실행하도록 함
@@ -88,7 +88,7 @@ public class WaveSystem : MonoBehaviour
 
                 // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 세번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
                 // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character3]);
+                waves[i].wave_monsterClasses.Add(spawnManager.datas.waveDatas[i].character3);
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 세번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
             // for문의 다음 i번째 값을 실행하도록 함
@@ -100,7 +100,7 @@ public class WaveSystem : MonoBehaviour
 
                 // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 네번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
                 // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character4]);
+                waves[i].wave_monsterClasses.Add(spawnManager.datas.waveDatas[i].character4);
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 네번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
             // for문의 다음 i번째 값을 실행하도록 함
@@ -112,7 +112,7 @@ public class WaveSystem : MonoBehaviour
 
                 // 스폰 매니저의 딕셔너리 Key값에 웨이브 데이터 Json파일 배열 i번째 값의 다섯번째 종류 몬스터 이름에 해당하는 몬스터를 찾아서 
                 // waves[i]의 몬스터 종류 리스트에 해당 몬스터 추가
-                waves[i].wave_monsterClasses.Add(spawnManager.d_MonsterDictonary[spawnManager.datas.waveDatas[i].character5]);
+                waves[i].wave_monsterClasses.Add(spawnManager.datas.waveDatas[i].character5);
 
             // 웨이브 데이터 Json파일 배열 i번째 값의 다섯번째 종류 몬스터 값이 공백 && Null 일 떄 아래 값들도 없으므로
             // for문의 다음 i번째 값을 실행하도록 함
@@ -136,7 +136,8 @@ public class WaveSystem : MonoBehaviour
         // Waver가 없다면 클리어 UI 호출
         else
         {
-            // 플레이어 승리 시 팝업창 활성화
+            // 플레이어 승리 시 팝업창 활
+            // 성화
             uiManager.PlayerWinPopUp();
         }
     }
@@ -155,7 +156,7 @@ public struct Wave  // Wave 구조체
     public int wave_StartTime;    // 몬스터 생성 주기
 
     [Header("몬스터 종류")]
-    public List<MonsterUnitClass> wave_monsterClasses; // 몬스터 종류
+    public List<string> wave_monsterClasses; // 몬스터 종류
 
     [Header("유닛 스폰되는 몬스터 종류 리스트 인덱스")]
     public int monsterKindIndex;  // 유닛 스폰되는 몬스터 종류 리스트 인덱스
