@@ -7,7 +7,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 //
@@ -65,6 +64,7 @@ public class ActUnit : MonoBehaviour
         {
             if (nav.enabled)
             {
+                nav.avoidancePriority = 51;
                 nav.isStopped = true;  // 이동 가능 상태로 변환
             }
             anim.ResetTrigger("isSkillAtk");
@@ -170,6 +170,8 @@ public class ActUnit : MonoBehaviour
 
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
+            nav.avoidancePriority = 50;
+
             //print(nav.gameObject.name);
             nav.isStopped = false;  // 이동 가능 상태로 변환
         }
