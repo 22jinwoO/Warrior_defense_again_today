@@ -12,10 +12,17 @@ public class UnitTargetSearch : MonoBehaviour
 
     public Transform _unitModelTr;
 
+    [SerializeField]
+    private MonsterUnitClass monsterUnit;
+
     private void Awake()
     {
         unitInfoCs = GetComponent<UnitInfo>();
         actUnitCs = GetComponent<ActUnit>();
+        if (TryGetComponent(out MonsterUnitClass Mc))
+        {
+            monsterUnit = Mc;
+        }
         //if (gameObject.CompareTag("Monster"))
         //{
         //    actUnitCs = GetComponent<ActUnit>();
@@ -222,7 +229,7 @@ public class UnitTargetSearch : MonoBehaviour
     #region # Look_At_The_Castle() : 몬스터가 성이랑 충돌했을 때 성을 바라보게 하는 함수
     public void Look_At_The_Castle(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     {
-        Vector3 dir = Castle.Instance.transform.position - transform.position;
+        Vector3 dir = monsterUnit.castleTr.position - transform.position;
         //dir.Normalize();
         //dir.y = 0;
 
@@ -268,7 +275,7 @@ public class UnitTargetSearch : MonoBehaviour
         unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[0]);
 
         unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
-        Castle.Instance.Damaged_Castle();
+        Castle.Instance.Damaged_Castle(monsterUnit.castleTr);
     }
 
     public void Change_Atk_Anim()
