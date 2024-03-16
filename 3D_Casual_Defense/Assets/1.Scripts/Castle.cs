@@ -7,10 +7,17 @@ using UnityEngine.AI;
 public class Castle : Singleton<Castle>
 {
     public Transform _castle_Pos;
-    [SerializeField]
-    private Transform caslteModel;
+
+    public Transform[] caslteModels;
+    //
+    //
     public float _castle_maxHp;
-    public static float _castle_Hp;
+
+    public float _castle_Hp;
+
+    [SerializeField]
+
+
     public Animator _anim;
 
     [SerializeField]
@@ -38,7 +45,7 @@ public class Castle : Singleton<Castle>
     private Stage1_TextManager txtManager;
 
     [SerializeField]
-    private GameObject downVfxs;
+    private GameObject[] downVfxs;
 
     public float halfColiderValue;
 
@@ -53,14 +60,24 @@ public class Castle : Singleton<Castle>
     {
         _castle_maxHp= 100f;
         _castle_Hp = 100f;
+        //caslteModels=new Transform[3];
+
+        //// 자식 성들 멀쩡한지 확인
+        //for (int i = 0; i < caslteModels.Length; i++)
+        //{
+        //    caslteModels[i] = transform.GetChild(i);
+        //    print("성입니다"+caslteModels[i]);
+        //}
+
 
         isDown = false;
-        _boxCollider = GetComponent<BoxCollider>();
-        halfColiderValue = GetComponent<NavMeshObstacle>().size.z / 2;
+        //_boxCollider = GetComponent<BoxCollider>();
+        //halfColiderValue = GetComponent<NavMeshObstacle>().size.x / 2;
+        halfColiderValue = 1.4f;
         //_anim = GetComponent<Animator>();
         _source = GetComponent<AudioSource>();
         //_hitCaslteClip = _source.GetComponent<AudioClip>();
-        caslteModel.position = new Vector3(caslteModel.position.x - 0.1f, caslteModel.position.y, caslteModel.position.z);
+        //caslteModel.position = new Vector3(caslteModel.position.x - 0.1f, caslteModel.position.y, caslteModel.position.z);
 
         txtManager = Stage1_TextManager.Instance;
 
@@ -74,6 +91,8 @@ public class Castle : Singleton<Castle>
             StartCoroutine(DownCaslte());
             isDown = true;
         }
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            StartCoroutine(DownCaslte());
     }
 
     // 성 내구도 0 이 됐을 때 무너지는 연출 구현한 함수
@@ -82,39 +101,44 @@ public class Castle : Singleton<Castle>
         //이벤트 호출
         OnCastleDown();
 
-        downVfxs.SetActive(true);
-        _boxCollider.enabled = false;
+        for(int i=0; i<downVfxs.Length;i++)
+        {
+            downVfxs[i].SetActive(true);
+        }
+        //_boxCollider.enabled = false;
         _source.PlayOneShot(_downCaslteClip);
 
-        yield return new WaitForSecondsRealtime(8f);
-
-        while (transform.position.y>=-12f)
+        while (transform.localPosition.y>=-6.5f)
         {
             UnityEngine.Debug.LogWarning("성다운");
 
-            StartCoroutine(HitCastle(0.3f));
-            transform.position = new Vector3(transform.position.x, transform.position.y- 0.1f, transform.position.z);
+            StartCoroutine(HitCastle(0.3f,transform));
+            transform.position = new Vector3(transform.position.x, transform.position.y - 0.05f, transform.position.z);
+
             yield return new WaitForSecondsRealtime(0.1f);
+        }
+
+        for (int i = 0; i < downVfxs.Length; i++)
+        {
+            downVfxs[i].SetActive(false);
         }
 
         //플레이어 패배시 팝업창 활성화
         uiManager.DownCastlePopUp();
-        downVfxs.SetActive(false);
-
     }
 
-    public void Damaged_Castle()
+    public void Damaged_Castle(Transform castleTr)
     {
         //_anim.SetBool("isHit", true);
         _source.pitch = Random.Range(0.6f, 1.1f);
         // 카메라 거리에 따른 히트 사운드 볼륨 값 조절
-        _source.volume=SoundManager.Instance.VolumeCheck(transform);
+        _source.volume=SoundManager.Instance.VolumeCheck(castleTr);
 
         // 히트사운드 실행
         _source.PlayOneShot(_hitCaslteClip);
 
         // 피격 연출 실행
-        StartCoroutine(HitCastle(0.1f));
+        StartCoroutine(HitCastle(0.1f, castleTr));
 
         // 피격시 성 내구도 -1
         _castle_Hp -= 1;
@@ -124,30 +148,27 @@ public class Castle : Singleton<Castle>
     }
 
     // 성 피격 연출 함수
-    private IEnumerator HitCastle(float shakeValue)
+    private IEnumerator HitCastle(float shakeValue,Transform castleNum)
     {
         UnityEngine.Debug.LogWarning("성흔ㄷ르림");
-        caslteModel.position = new Vector3(caslteModel.position.x - shakeValue, caslteModel.position.y, caslteModel.position.z);
+        castleNum.position = new Vector3(castleNum.position.x - shakeValue, castleNum.position.y, castleNum.position.z);
         yield return new WaitForSecondsRealtime(0.03f);
-        caslteModel.position = transform.position;
         yield return null;
 
-        caslteModel.position = new Vector3(caslteModel.position.x + shakeValue, caslteModel.position.y, caslteModel.position.z);
+        castleNum.position = new Vector3(castleNum.position.x + shakeValue, castleNum.position.y, castleNum.position.z);
         yield return new WaitForSecondsRealtime(0.03f);
-        caslteModel.position = transform.position;
         yield return null;
 
-        caslteModel.position = new Vector3(caslteModel.position.x, caslteModel.position.y, caslteModel.position.z - shakeValue);
+        castleNum.position = new Vector3(castleNum.position.x, castleNum.position.y, castleNum.position.z - shakeValue);
         yield return new WaitForSecondsRealtime(0.03f);
 
-        caslteModel.position = transform.position;
         yield return null;
 
-        caslteModel.position = new Vector3( caslteModel.position.x, caslteModel.position.y, caslteModel.position.z + shakeValue);
+        castleNum.position = new Vector3( castleNum.position.x, castleNum.position.y, castleNum.position.z + shakeValue);
         yield return new WaitForSecondsRealtime(0.03f);
 
-        caslteModel.position = transform.position;
         yield return null;
+
     }
 
     private void OnTriggerEnter(Collider other)
