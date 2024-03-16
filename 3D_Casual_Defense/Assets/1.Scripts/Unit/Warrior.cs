@@ -72,14 +72,14 @@ public class Warrior : UnitInfo
 //}
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
-    }
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
+    //}
     private void OnTriggerEnter(Collider other)
     {
 
