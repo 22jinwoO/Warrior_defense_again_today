@@ -26,6 +26,9 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
     //====================================================
 
     [SerializeField]
+    private Transform[] spawnPoints;
+
+    [SerializeField]
     private MonsterUnitClass spawnMonster;  //스폰된 몬스터
 
     public Wave currentWave;   // 현재 웨이브
@@ -63,6 +66,7 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
     private void Awake()
     {
+        //StartCoroutine(C_DynamicBake());
         //print(monsters[0]);
         //print(d_MonsterDictonary);
         d_MonsterDictonary.Add("orc_warr01", monsterUnitFactorys[0]);
@@ -211,7 +215,9 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         //  유닛 생산자
         spawnMonster = d_MonsterDictonary[monsterUnitId].CreateMonsterUnit();
         spawnMonster.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary[monsterUnitId]);
-        spawnMonster.transform.position = d_MonsterDictonary[monsterUnitId].spawnPoint;
+        int rand = Random.Range(0, 3);
+        spawnMonster.transform.position = spawnPoints[rand].position;
+
         print("네비메쉬 위에 있는지 확인" + spawnMonster._nav.isOnNavMesh);
         //spawnMonster.transform.position = spawnPoint;
         spawnMonster.gameObject.name = monsterUnitId;
