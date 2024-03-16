@@ -22,7 +22,9 @@ public abstract class PlayerUnitClass : UnitInfo
     [Header("유닛을 클릭했는지 확인하는 변수")]
     public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
 
-
+    [SerializeField]
+    public float changeTime = 0f;
+    
     public Transform arriveFlag;
 
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
@@ -40,14 +42,23 @@ public abstract class PlayerUnitClass : UnitInfo
             case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
                 _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_FreeMode;
                 //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Idle;
-                Act_FreeMode(); // 자유모드일 때 호출되는 함수
+                if(changeTime<=3f)
+                {
+                    changeTime += Time.deltaTime;
+                }
+                else
+                    Act_FreeMode(); // 자유모드일 때 호출되는 함수
                 break;
 
             case eUnit_Action_States.unit_HoldMode:
                 _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_HoldMode;
                 //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Boundary;
-
-                Act_HoldMode(); // 홀드모드일 때 호출되는 함수
+                if (changeTime <= 3f)
+                {
+                    changeTime += Time.deltaTime;
+                }
+                else
+                    Act_HoldMode(); // 홀드모드일 때 호출되는 함수
                 break;
         }
     }

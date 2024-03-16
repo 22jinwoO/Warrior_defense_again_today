@@ -251,6 +251,8 @@ public class CreatePlayerUnit : MonoBehaviour
         audioPlayer.PlayOneShot(audioSources[1]);
         playerCs.unitCtrlCanvas.SetActive(false);
         print("클릭한 유닛 자유모드");
+        clikUnitInfo.changeTime = 0f;
+
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
         //likUnitInfo.transform.position = initPos;
@@ -278,6 +280,7 @@ public class CreatePlayerUnit : MonoBehaviour
         audioPlayer.PlayOneShot(audioSources[0]);
 
         playerCs.unitCtrlCanvas.SetActive(false);
+        clikUnitInfo.changeTime = 0f;
 
         print("클릭한 유닛 홀드모드");
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
