@@ -40,6 +40,7 @@ public class Stage1_TextManager : Singleton<Stage1_TextManager>
     {
         hpTimeValue = 30f;
     }
+
     public void PlayerWinTxt()
     {
         popUpMessageTxt.text = "플레이어가 승리하셨습니다!!";
@@ -58,15 +59,15 @@ public class Stage1_TextManager : Singleton<Stage1_TextManager>
 
     public void ShowCastleHpTxt()
     {
-        popUpManager.castleHpBar.fillAmount = Castle._castle_Hp/Castle.Instance._castle_maxHp;
+        popUpManager.castleHpBar.fillAmount = Castle.Instance._castle_Hp / Castle.Instance._castle_maxHp;
 
         // hp 바 연출 코드 -1씩 되서 적용이 안됨
         //popUpManager.castleHpBar.fillAmount = Mathf.Lerp(popUpManager.castleHpBar.fillAmount, Castle.Instance._castle_Hp/Castle.Instance._castle_maxHp, Time.deltaTime* hpTimeValue);
 
-        if (Castle._castle_Hp <= 25f)
+        if (Castle.Instance._castle_Hp <= 25f)
             popUpManager.castleHpBar.color = Color.red;
-        else if(Castle._castle_Hp <= 50f)
+        else if(Castle.Instance._castle_Hp <= 50f)
             popUpManager.castleHpBar.color = new Color(1, 0.395f, 0);
-        castleHpTxt.text = ($"{Castle._castle_Hp} / {Castle.Instance._castle_maxHp}");
+        castleHpTxt.text = ($"{Castle.Instance._castle_Hp} / {Castle.Instance._castle_maxHp}");
     }
 }
