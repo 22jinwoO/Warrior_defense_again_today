@@ -18,7 +18,13 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public Transform spawnPoint;
 
+    [SerializeField]
+    private PlayerUnitSpawnPoint spawnPointCs;
 
+    private void Awake()
+    {
+        spawnPointCs= spawnPoint.GetComponent<PlayerUnitSpawnPoint>();
+    }
     public void OnDrag(PointerEventData eventData)
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -35,6 +41,8 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        spawnPointCs.SetBase();
+
         spawnPoint.gameObject.SetActive(true);
 
         //unitFactory.playerUnit = unitFactory.RedayUnit(playerUnitId);
@@ -42,11 +50,18 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if(spawnPointCs.canCreate)
+        {
+            unitFactory.SpawnSummon(spawnPoint.position, btnIndex);
+
+
+        }
         //playerUnitId = null;
-        unitFactory.SpawnSummon(spawnPoint.position, btnIndex);
-        spawnPoint.gameObject.SetActive(false);
         //spawnPoint = null;
         player.isMove = false;
+
+        spawnPoint.gameObject.SetActive(false);
+
         //eventData.worldPosition;
 
     }

@@ -14,6 +14,8 @@ public class CreateButton_2 : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     [SerializeField]
     private PlayerUnitClass playerUnit;
 
+    [SerializeField]
+    private PlayerUnitSpawnPoint spawnPointCs;
 
     public void OnDrag(PointerEventData eventData)
     {

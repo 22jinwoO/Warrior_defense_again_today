@@ -259,24 +259,25 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
             {
 
                 transform.position = new Vector3(hit.point.x, 8.6f, hit.point.z);
-                if (hit.transform.CompareTag("Stairs"))
-                {
-                    transform.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
+                //if (hit.transform.CompareTag("Stairs"))
+                //{
+                //    transform.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
 
-                    flagTr.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
-                    clickUnitInfo._movePos = new Vector3(hit.point.x, 12.96f, hit.point.z);
-                    clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
-                    clickUnitInfo.arriveFlag.gameObject.SetActive(true);
-                    print("계단");
-                }
-                else
-                {
-                    flagTr.position = transform.position;
-                    clickUnitInfo._movePos = transform.position;
-                    clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
-                    clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+                //    flagTr.position = new Vector3(hit.point.x, 12.96f, hit.point.z);
+                //    clickUnitInfo._movePos = new Vector3(hit.point.x, 12.96f, hit.point.z);
+                //    clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
+                //    clickUnitInfo.arriveFlag.gameObject.SetActive(true);
+                //    print("계단");
+                //}
+                //else
+                flagTr.position = transform.position;
+                clickUnitInfo._movePos = transform.position;
+                clickUnitInfo.arriveFlag.position = clickUnitInfo._movePos;
+                clickUnitInfo.arriveFlag.gameObject.SetActive(true);
 
-                }
+                //{
+
+                //}
                 textMeshProUGUI.text = $"{hit.point}\n{transform.position}";
             }
 
