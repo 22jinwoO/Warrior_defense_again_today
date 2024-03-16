@@ -36,7 +36,7 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Clamp(transform.position.z, 3f, 55f));
+        transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Clamp(transform.position.z, 0f, 55f));
 
         if (Application.platform==RuntimePlatform.Android&&!player.isChoice && player.canPlay)
         {
@@ -186,7 +186,7 @@ public class CameraMove : MonoBehaviour
     // 시작 시 카메라 연출 기능하는 스크립트
     private IEnumerator CameraProduction()
     {
-        while(transform.position.z>3) 
+        while(transform.position.z>0) 
         {
             transform.position = new Vector3(transform.position.x, transform.position.y,transform.position.z-1);
             yield return new WaitForSecondsRealtime(0.04f);
