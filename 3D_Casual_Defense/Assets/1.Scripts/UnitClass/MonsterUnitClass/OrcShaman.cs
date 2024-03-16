@@ -20,7 +20,7 @@ public class OrcShaman : MonsterUnitClass
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
         actUnitCs = GetComponent<ActUnit>();
         _anim = GetComponent<Animator>();
-        castleTr = Castle.Instance.transform;
+        castleTr = Castle.Instance.caslteModels[0];
         canAct = true;
 
         sprCol = GetComponent<SphereCollider>();
@@ -156,7 +156,7 @@ public class OrcShaman : MonsterUnitClass
 
 
         // 시야 범위
-        _unitData.sightRange = 24f;
+        _unitData.sightRange = 60f;
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
@@ -222,7 +222,7 @@ public class OrcShaman : MonsterUnitClass
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
-        if (Castle._castle_Hp.Equals(0))
+        if (Castle.Instance._castle_Hp.Equals(0))
         {
             OnCastleDown();
         }

@@ -7,6 +7,8 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using static UnitDataManager;
 using EnumTypes;
+using static UnityEngine.GraphicsBuffer;
+
 public class Orc : MonsterUnitClass, IActByUnit
 {
     [SerializeField]
@@ -57,7 +59,9 @@ public class Orc : MonsterUnitClass, IActByUnit
         actUnitCs = GetComponent<ActUnit>();
         _anim =GetComponent<Animator>();
         //InitUnitInfoSetting();
-        castleTr = Castle.Instance.transform;
+        castleTr = Castle.Instance.caslteModels[0];
+
+
         canAct = true;
 
         sprCol = GetComponent<SphereCollider>();
@@ -85,18 +89,41 @@ public class Orc : MonsterUnitClass, IActByUnit
         // 사운드 오디오 소스 할당
         atkSoundPlayer = GetComponents<AudioSource>()[0];
         hitSoundPlayer = GetComponents<AudioSource>()[1];
-        _nav.SetDestination(castleTr.position); // 성으로 이동
+        //_nav.SetDestination(castleTr.position); // 성으로 이동
+
+
+        //if (path.status == NavMeshPathStatus.PathPartial)
+        //{
+        //    Debug.LogError("분노모드로 전환");
+        //    _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
+        //    _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+        //}
 
         //NavMeshPath path = new NavMeshPath();
         //_nav.CalculatePath(castleTr.position, path);
         //print(_nav.CalculatePath(castleTr.position, path));
         //print(path.corners.Length);
         //_nav.SetPath(path);
-        //_nav.SetDestination(castleTr.position); // 성으로 이동
-        StartCoroutine(Test());
+        //NavMesh.CalculatePath(transform.position,new Vector3(12f,0.37f,-2.3f),NavMesh.AllAreas,path);
+
+
+        _nav.SetDestination(castleTr.position); // 성으로 이동
+        Debug.LogWarning(_nav.remainingDistance);
+
+        //StartCoroutine(Test());
 
     }
+    //private void Start()
+    //{
+    //    print("성 개수 인식이 왜 안되지 " + Castle.Instance.caslteModels.Length);
+    //    print("성 다른거 출력해보기 " + Castle.Instance._castle_Hp);
+    //    NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+    //    path = new NavMeshPath();
 
+    //    _nav.CalculatePath(Castle.Instance.caslteModels[0].position, path);
+    //    _nav.SetPath(path);
+    //    Debug.LogError(path.status);
+    //}
     private void OnEnable()
     {
         bodyMeshRener.material = bodyMtr;
@@ -116,7 +143,7 @@ public class Orc : MonsterUnitClass, IActByUnit
             cloaking_someMtr[j].color = cloaking_Mtr_Color;
             //0.157f
         }
-        _nav.SetDestination(castleTr.position);
+        //_nav.SetDestination(castleTr.position);
 
     }
 
@@ -140,12 +167,11 @@ public class Orc : MonsterUnitClass, IActByUnit
             print("모드 전환");
         }
 
-
     }
 
     private void FixedUpdate()
     {
-        if (canAct&&_nav.isOnNavMesh)
+        if (canAct)
         {
             Act_By_Unit();  // 유닛 행동 구분지어 주는 함수
         }
@@ -199,7 +225,7 @@ public class Orc : MonsterUnitClass, IActByUnit
 
 
         // 시야 범위
-        _unitData.sightRange = 24f;
+        _unitData.sightRange = 60f;
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
@@ -289,7 +315,7 @@ public class Orc : MonsterUnitClass, IActByUnit
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
-        if (Castle._castle_Hp.Equals(0))
+        if (Castle.Instance._castle_Hp.Equals(0))
         {
             OnCastleDown();
         }
