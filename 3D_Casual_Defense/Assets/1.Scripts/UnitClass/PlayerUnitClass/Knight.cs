@@ -200,7 +200,7 @@ public class Knight : PlayerUnitClass
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
-        if (Castle._castle_Hp.Equals(0))
+        if (Castle.Instance._castle_Hp.Equals(0))
         {
             OnCastleDown();
         }
@@ -377,12 +377,12 @@ public class Knight : PlayerUnitClass
 
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.sightRange);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
-    }
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, _unitData.attackRange);
+    //}
 }

@@ -123,7 +123,7 @@ public class HammerKnight : PlayerUnitClass
 
     private void FixedUpdate()
     {
-        if (canAct && _nav.isOnNavMesh)
+        if (canAct)
         {
             Act_By_Unit();  // 유닛 행동 함수
 
@@ -135,7 +135,7 @@ public class HammerKnight : PlayerUnitClass
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
         Debug.LogWarning("해머나이트 생성!!");
-        if (Castle._castle_Hp.Equals(0))
+        if (Castle.Instance._castle_Hp.Equals(0))
         {
             OnCastleDown();
         }
