@@ -159,6 +159,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
     Android: com.DefaultCompany.The_warrior_is_on_defense_again_today
+    Standalone: com.DefaultCompany.The-warrior-is-on-defense-again-today
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -375,7 +376,7 @@ PlayerSettings:
       m_SubKind: 
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
-    m_StaticBatching: 1
+    m_StaticBatching: 0
     m_DynamicBatching: 0
   - m_BuildTarget: tvOS
     m_StaticBatching: 1
