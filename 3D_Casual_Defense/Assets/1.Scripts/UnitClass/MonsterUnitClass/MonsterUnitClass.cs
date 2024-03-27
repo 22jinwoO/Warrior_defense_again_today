@@ -9,9 +9,6 @@ public abstract class MonsterUnitClass : UnitInfo
     [Header("몬스터 유닛 머태리얼")]
     public Material mosterUnitMtr;
 
-    [SerializeField]
-    private bool isChangeState = true; // 상태 변환 체크하는 변수
-
     public Transform castleTr; // 성 트랜스폼
 
     [Header("몬스터 대기 시간")]
@@ -24,7 +21,14 @@ public abstract class MonsterUnitClass : UnitInfo
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
     public NavMeshPath path;
-
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            print("스탑해제");
+            _nav.isStopped = false;
+        }
+    }
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수
     public void Act_By_Unit()
     {
@@ -186,6 +190,7 @@ public abstract class MonsterUnitClass : UnitInfo
 
                     _nav.SetDestination(castleTr.position);
 
+                    print(_nav.remainingDistance);
                     if (_nav.pathEndPosition.magnitude< castleTr.position.magnitude-3f)//62/64
                     {
                         Debug.LogError("2" + _nav.pathEndPosition);
@@ -207,24 +212,33 @@ public abstract class MonsterUnitClass : UnitInfo
                     resetWayTime = 0f;
                 }
 
-                _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-                //if (_nav.velocity.magnitude <= 0.3f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
+
+                //if(_nav.velocity.Equals(Vector3.zero)&& resetWayTime<3f) 
                 //{
-                //    _anim.SetBool("isMove", false);
-                //    delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
-
-                //    if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
-                //    {
-                //        if (_nav.isOnNavMesh)
-                //        {
-                //            _nav.isStopped = false;
-                //        }
-                //        _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
-                //        _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-                //        delayTime = 0f;
-                //    }
-
+                //    _nav.ResetPath();
+                //    _nav.SetDestination(castleTr.position);
                 //}
+
+                _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
+
+                if (_nav.velocity.magnitude <= 1f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
+                {
+                    //_anim.SetBool("isMove", false);
+                    delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
+
+                    if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
+                    {
+                        _anim.SetBool("isMove", false);
+                        if (_nav.isOnNavMesh)
+                        {
+                            _nav.isStopped = false;
+                        }
+                        _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
+                        _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+                        delayTime = 0f;
+                    }
+
+                }
 
                 //
                 if (Vector3.Distance(transform.position, castleTr.position) <= _unitData.attackRange + Castle.Instance.halfColiderValue)
@@ -256,7 +270,30 @@ public abstract class MonsterUnitClass : UnitInfo
                 break;
 
             case eUnit_Action_States.unit_Tracking: // 유닛이 몬스터 추적
-                actUnitCs.TrackingTarget(next_ActionState: eUnit_Action_States.unit_Move);
+
+                //if (_nav.velocity.magnitude <= 0.3f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
+                //{
+                //    _anim.SetBool("isMove", false);
+                //    delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
+
+                //    if (delayTime >= 2f)  // 딜레이타임이 2초 이상 됐을 때
+                //    {
+                //        if (_nav.isOnNavMesh)
+                //        {
+                //            _nav.isStopped = false;
+                //        }
+                //        _isSearch = false;
+                //        unitTargetSearchCs._targetUnit = null;
+                //        unitTargetSearchCs._target_Body = null;
+                //        _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+                //        delayTime = 0f;
+                //    }
+                //}
+
+                if (unitTargetSearchCs._targetUnit != null)
+                {
+                    actUnitCs.TrackingTarget(next_ActionState: eUnit_Action_States.unit_Tracking);
+                }
                 break;
 
             case eUnit_Action_States.unit_Attack:   // 유닛이 몬스터 공격
