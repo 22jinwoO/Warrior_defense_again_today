@@ -34,6 +34,10 @@ public class Bullet_ : Abs_Bullet
     {
         transform.position=Vector3.Lerp(transform.position, _target_Unit.position, t);
 
+        if (_target_BodyTr == null || _target_Unit == null || _target_Unit.GetComponent<SphereCollider>().enabled == false)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
