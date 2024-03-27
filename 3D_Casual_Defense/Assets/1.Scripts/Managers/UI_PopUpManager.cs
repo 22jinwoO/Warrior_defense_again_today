@@ -35,6 +35,14 @@ public class UI_PopUpManager : MonoBehaviour
 
     public Image castleHpBar;
 
+    [SerializeField]
+    private MonsterSpawnManager monsterSpawnManager;
+
+    [SerializeField]
+    private Button allDeadMonsterBtn;
+
+    [SerializeField]
+    private Button skipWaveTimeBtn;
 
     private void Awake()
     {
@@ -54,6 +62,9 @@ public class UI_PopUpManager : MonoBehaviour
         // 홈으로 이동하는 함수 연결
         usePopUpBtn.onClick.AddListener(()=>StartCoroutine(UseUnitPopUp()));
         usePopDownBtn.onClick.AddListener(()=>StartCoroutine(UseUnitPopDown()));
+
+        allDeadMonsterBtn.onClick.AddListener(monsterSpawnManager.DeadAllMonster);
+        skipWaveTimeBtn.onClick.AddListener(monsterSpawnManager.SkipWaveStartTime);
     }
 
     //홈버튼에서 호출되는 함수
