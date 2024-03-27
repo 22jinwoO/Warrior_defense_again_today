@@ -22,6 +22,7 @@ public class HammerKnight : PlayerUnitClass
         actUnitCs = GetComponent<ActUnit>();
         _isClick = false;
         sprCol = GetComponent<SphereCollider>();
+        //chageModeVfx = Instantiate(chageModeVfx);
 
         atkSoundPlayer = GetComponents<AudioSource>()[0];
         hitSoundPlayer = GetComponents<AudioSource>()[1];
@@ -100,7 +101,7 @@ public class HammerKnight : PlayerUnitClass
         }
         else
             _unitData.attackRange = 2f;
-
+        CheckChangeMode();
         //if (Input.GetKeyDown(KeyCode.B))
         //{
         //    Collider[] colls = Physics.OverlapSphere(transform.position, 10f, unitTargetSearchCs._layerMask);

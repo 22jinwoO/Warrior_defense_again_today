@@ -11,11 +11,10 @@ public class Knight : PlayerUnitClass
 
     //Abs_StatusEffect asd = new Abs_StatusEffect();
 
-    Abs_StatusEffect asd = new PoisonStatus();
-
     private void Awake()
     {
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
+        //chageModeVfx = Instantiate(chageModeVfx);
 
         navObs = GetComponent<NavMeshObstacle>();
         _anim = GetComponent<Animator>();
@@ -121,7 +120,7 @@ public class Knight : PlayerUnitClass
     public void Update()
     {
         Unit_Attack_Skill_CoolTime();
-
+        CheckChangeMode();
         if (unitTargetSearchCs._targetUnit != null && unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
             _isSearch = false;

@@ -26,7 +26,7 @@ public class Archer : PlayerUnitClass
         someMtr = new Material[someMeshReners.Length];
         soundPos = GameObject.FindGameObjectWithTag("SoundPos").transform;
         player= GameObject.Find("Player").GetComponent<Player>();
-
+        //chageModeVfx = Instantiate(chageModeVfx);
         for (int i = 0; i < someMeshReners.Length; i++)
         {
             someMeshReners[i].material = Instantiate(_unit_NomralMtr);
@@ -102,21 +102,21 @@ public class Archer : PlayerUnitClass
         }
         Unit_Attack_Skill_CoolTime();   // 유닛 기본 공격, 스킬 공격 쿨타임 돌려주는 함수
 
+        CheckChangeMode();
     }
 
     private void FixedUpdate()
     {
-        if (_nav.isOnNavMesh)
-            print("이동가능");
-        else
-            print("이동불가능");
         if (canAct)
         {
             Act_By_Unit();  // 유닛 행동 함수
 
         }
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.LogWarning("충돌됨");
+    }
 
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)

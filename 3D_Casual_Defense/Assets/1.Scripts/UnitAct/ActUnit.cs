@@ -29,6 +29,9 @@ public class ActUnit : MonoBehaviour
 
     private Stage1_TextManager txtManager;
 
+    private MonsterUnitClass monsterClass;
+
+    private PlayerUnitClass playerClass;
     
     private void Awake()
     {
@@ -40,9 +43,23 @@ public class ActUnit : MonoBehaviour
         unitTargetSearchCs = GetComponent<UnitTargetSearch>();
 
         txtManager = Stage1_TextManager.Instance;
+
+
+        if(TryGetComponent(out MonsterUnitClass monster))
+        {
+            monsterClass = monster;
+        }
+
+
+        if (TryGetComponent(out PlayerUnitClass player))
+        {
+            playerClass = player;
+        }
     }
     public void Update()
     {
+        if (unitInfoCs._isDead && unitInfoCs._unitData.hp <= 0)
+            Debug.LogWarning("유닛이 안죽는 버그발생");
         if (Input.GetKeyDown(KeyCode.V))
         {
             StartCoroutine(Get_DamagedBody());
@@ -59,12 +76,12 @@ public class ActUnit : MonoBehaviour
         //{
         //    nav.isStopped = true;
         //}
-        // 기본 스킬로 공격
+        // 특수 스킬로 공격
         if (unitInfoCs._can_SpcSkill_Attack && !gameObject.CompareTag("Monster"))
         {
             if (nav.enabled)
             {
-                nav.avoidancePriority = 51;
+                nav.avoidancePriority = 48;
                 nav.isStopped = true;  // 이동 가능 상태로 변환
             }
             anim.ResetTrigger("isSkillAtk");
@@ -94,22 +111,33 @@ public class ActUnit : MonoBehaviour
             unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
 
             // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
-            if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
+            if (gameObject.CompareTag("Monster"))
             {
                 StartCoroutine(Change_MonsterState(next_Action_State));
             }
 
             // 플레이어 유닛은 바로 다음상 상태로 변환
-            else
-            {
-                float asdf = 0f;
-                while (asdf < 0.5f)
-                {
-                    asdf += Time.deltaTime;
-                }
-                unitInfoCs._enum_Unit_Action_State = next_Action_State;
+            //else
+            //{
+            //    if (nav.enabled&& gameObject.CompareTag("Monster"))
+            //    {
+            //        nav.avoidancePriority = 50;
+            //        nav.isStopped = false;  // 이동 가능 상태로 변환
+            //    }
+            //    else
+            //    {
+            //        nav.avoidancePriority = 49;
+            //        float asdf = 0f;
+            //        while (asdf < 0.5f)
+            //        {
+            //            asdf += Time.deltaTime;
+            //        }
+            //        unitInfoCs._enum_Unit_Action_State = next_Action_State;
+            //    }
 
-            }
+
+            //}
+            nav.avoidancePriority = 49;
             return; // 함수 탈출
 
 
@@ -145,14 +173,6 @@ public class ActUnit : MonoBehaviour
 
             unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
 
-
-            // 몬스터 유닛일 땐 공격 후 딜레이를 주어 다음 상태로 변환
-            if (gameObject.CompareTag("Monster") && unitInfoCs._enum_Unit_Action_Mode.Equals(eUnit_Action_States.monster_NormalPhase))
-            {
-                StartCoroutine(Change_MonsterState(next_Action_State));
-            }
-            // 플레이어 유닛은 바로 다음상 상태로 변환
-            else
             {
                 float asdf = 0f;
                 while (asdf<0.5f)
@@ -167,14 +187,23 @@ public class ActUnit : MonoBehaviour
 
         }
 
+        //if (nav.enabled && gameObject.CompareTag("Monster"))
+        //{
+        //    nav.avoidancePriority = 50;
+        //    nav.isStopped = false;  // 이동 가능 상태로 변환
+        //}
 
-        if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
-        {
-            nav.avoidancePriority = 50;
+        //else if (nav.enabled && gameObject.CompareTag("Player"))    // 네비메쉬 에이전트가 활성화 되어 있다면
+        //{
+        //    nav.avoidancePriority = 49;
 
-            //print(nav.gameObject.name);
+        //    //print(nav.gameObject.name);
+        //    nav.isStopped = false;  // 이동 가능 상태로 변환
+        //}
+        if(nav.enabled)
             nav.isStopped = false;  // 이동 가능 상태로 변환
-        }
+        Debug.LogWarning(gameObject.name);
+        nav.avoidancePriority = 49;
     }
     #endregion
 
@@ -182,11 +211,10 @@ public class ActUnit : MonoBehaviour
     #region # Change_MonsterState(eUnit_Action_States next_Action_State) : 몬스터가 공격 후 다음 상태로 변환 시 딜레이를 주기 호출되는 함수
     IEnumerator Change_MonsterState(eUnit_Action_States next_Action_State)
     {
-        unitInfoCs._isSearch = false;
-        unitTargetSearchCs._targetUnit = null;
+
         yield return new WaitForSeconds(1.5f);
 
-        nav.isStopped = true;
+        nav.isStopped = false;
 
         unitInfoCs._enum_Unit_Action_State = next_Action_State;
     }
@@ -195,15 +223,6 @@ public class ActUnit : MonoBehaviour
     #region # AnimEvent_Normal_Atk() : 일반 스킬 애니메이션 동작 시 호출되는 애니메이션 이벤트 함수
     public void AnimEvent_Normal_Atk()  // 일반 스킬 사용 시 호출되는 애니메이션
     {
-        //if (!unitInfoCs._enum_Unit_Attack_Type.Equals(eUnit_Action_States.close_Range_Atk))
-        //    return;
-        //print("애니메이션 호출 함수");
-
-        // 여기서부터 10에서 0으로 바뀜,,
-        //print("165오브젝트이름 " + unitInfoCs.gameObject.name);
-        //print("165크리티컬 확률 " + unitInfoCs._unitData.criticRate);
-
-        //unitInfoCs.gen_skill.unitInfoCs = unitInfoCs;   // 나중에 유닛 awake 문에서 한번만 실행하도록 변경하기
 
         if (nav.enabled)    // 네비메쉬 에이전트가 활성화 되어 있다면
         {
@@ -214,8 +233,6 @@ public class ActUnit : MonoBehaviour
 
         if (unitInfoCs.atkSoundPlayer!=null)
         {
-            //unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.atkSoundPlayer.GetComponent<AudioClip>());
-
             // 사운드 오디오 소스 할당
             unitInfoCs.atkSoundPlayer.pitch = Random.Range(0.7f, 1.4f);
             //unitInfoCs.atkSoundPlayer.volume = Random.Range(0.2f, 0.4f);
@@ -229,17 +246,6 @@ public class ActUnit : MonoBehaviour
         }
         // 일반 스킬 사용
         unitInfoCs.gen_skill.Attack_Skill();
-
-
-        ////unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(,unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_General_Skill_Dmg);
-        //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
-        //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-
-
-        // 스킬 공격
-        //unitTargetSearchCs._targetUnit.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(unitTargetSearchCs._targetUnit, unitInfoCs._unitData._unit_Special_Skill_Dmg);
-        //unitInfoCs._unitData._unit_Current_Skill_CoolTime = 0f;
-        //unitInfoCs._unitData._unit_Attack_CoolTime = 0f;
     }
     #endregion
 
@@ -253,7 +259,6 @@ public class ActUnit : MonoBehaviour
 
         if (unitInfoCs.atkSoundPlayer != null)
         {
-            //unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.atkSoundPlayer.GetComponent<AudioClip>());
 
             // 사운드 오디오 소스 할당
             unitInfoCs.atkSoundPlayer.pitch = Random.Range(0.7f, 1.4f);
@@ -333,53 +338,59 @@ public class ActUnit : MonoBehaviour
 
         // 피해 입을 때 몸에 피격상태 나타내주는 함수 실행
         StartCoroutine(Get_DamagedBody());
-        Vector3 direction = attacker.transform.position - transform.position;
-        //StartCoroutine(unitInfoCs.Damaged_Vfx_On(skill));
-
 
         // 피격자의 유닛 데이터 가져오기
         unit_Data damagedUnitData = other.GetComponent<UnitInfo>()._unitData;
 
         float attack_Dmg = skill._base_Value;
 
-        Debug.LogWarning(myAtkType);
-        Debug.LogWarning(damagedUnitData);
-        Debug.LogWarning(attacker);
-        Debug.LogWarning(skill);
-        Debug.LogWarning(attack_Dmg);
         // 데미지 계산하는 함수 실행
         unitInfoCs._unitData.hp -= unitInfoCs._this_Unit_ArmorCalculateCs.CalculateDamaged(attackType: myAtkType, ArmorType: damagedUnitData, attack_Dmg: CheckCritical(attacker, skill, attack_Dmg));
+
         if(!unitInfoCs._isDead)
             DeadCheck();
     }
     #endregion
 
 
+    #region # DeadCheck() : 피격 받은 유닛의 사망 시 호출되는 함수
     public void DeadCheck()
     {
         // 피격 받은 우닛의 Hp가 0 이하가 됐을 때
-        if (unitInfoCs.canAct && unitInfoCs._unitData.hp <= 0f)
+        if (unitInfoCs._unitData.hp <= 0f)
         {
-            Debug.LogError(gameObject.name);
-
+            // 유닛 사망상태로 전환
             unitInfoCs._isDead = true;
+
+            // 유닛 행동 불가능한 상태로 전환
             unitInfoCs.canAct = false;
+
+            // 유닛의 네비메쉬 속도 값 조정
             unitInfoCs._nav.speed = 0f;
             unitInfoCs._nav.acceleration = 0f;
 
             unitInfoCs._nav.velocity = Vector3.zero;
 
-            //unitInfoCs._nav.enabled = false;
+            // 유닛의 네비메쉬가 활성화 되어 있으면 isStop으로 멈추기
             if (unitInfoCs._nav.isOnNavMesh)
             {
                 unitInfoCs._nav.isStopped = true;
             }
+
+            // 유닛의 네비메쉬 컴포넌트 비활성화
+            unitInfoCs._nav.enabled = false;
+
+            // 유닛의 클래스가 플레이어 유닛 클래스라면
+            if (monsterClass==null)
+                // 네비메쉬 옵스태클 컴포넌트 비활성화
+                playerClass.navObs.enabled = false;
+
             anim.ResetTrigger("isDie");
 
-            //unitInfoCs._isDead = true;
-            //attacker._isTargetDead = true;
+
             if (unitInfoCs.gameObject.tag.Equals("Player"))
             {
+                unitInfoCs.GetComponent<PlayerUnitClass>().holdObPref.transform.SetParent(unitInfoCs.transform);
                 unitInfoCs._enum_Unit_Action_Mode = unitInfoCs._enum_pUnit_Action_BaseMode;
                 unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_pUnit_Action_BaseState;
             }
@@ -390,10 +401,14 @@ public class ActUnit : MonoBehaviour
                 unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_mUnit_Action_BaseState;
 
             }
+
+            // 죽음 애니메이션 실행
             anim.SetTrigger("isDie");
+
+            // 죽었을 때 실행되야 하는 함수 호출
             StartCoroutine(DieUnit());
 
-            //UnitTargetSearch asdf = attacker.unitTargetSearchCs;
+            // 타겟 탐지 없음으로 전환
             unitInfoCs._isSearch = false;
 
             unitTargetSearchCs._targetUnit = null;
@@ -402,20 +417,10 @@ public class ActUnit : MonoBehaviour
 
         }
     }
+    #endregion
+
     IEnumerator Get_DamagedBody()
     {
-        print("피격당한 유닛 이름 : " + gameObject.name);
-        //Material asdf = GetComponentInChildren<Material>();
-        //Material asdfd= aaa;
-
-
-        // 임시 머태리얼 할당
-        //for (int i = 0; i < unitInfoCs.someMeshReners.Length; i++)
-        //{
-        //    unitInfoCs.someMtr[i] = unitInfoCs.someMeshReners[i].material;
-        //    //0.157f
-        //}
-
         // 바디, 바디이외의 머태리얼 피격 머태리얼로 변환
         for (int i = 0; i < unitInfoCs.someMeshReners.Length; i++)
         {
@@ -424,7 +429,6 @@ public class ActUnit : MonoBehaviour
         }
         unitInfoCs.bodyMeshRener.material = unitInfoCs._damaged_Mtr;
 
-        // aaa = asdf;
         yield return new WaitForSeconds(0.05f);
 
         // 다시 원래 머태리얼로 할당
@@ -433,27 +437,9 @@ public class ActUnit : MonoBehaviour
             unitInfoCs.someMeshReners[i].material = unitInfoCs.someMtr[i];
         }
         unitInfoCs.bodyMeshRener.material = unitInfoCs.bodyMtr;
-
-        //for (int i = 0; i < unitInfoCs.someMeshReners.Length; i++)
-        //{
-        //    unitInfoCs.someMeshReners[i].material.color = new Color(1f, 0.238555f, 0f);
-        //    //0.157f
-        //}
-        //unitInfoCs.bodyMeshRener.material.color = new Color(1f, 0.238555f, 0f);
-
-        //// aaa = asdf;
-        //yield return new WaitForSeconds(0.1f);
-        //for (int i = 0; i < unitInfoCs.someMeshReners.Length; i++)
-        //{
-        //    unitInfoCs.someMeshReners[i].material.color = Color.white;
-        //    unitInfoCs.someMeshReners[i].material.color = Color.white;
-
-        //}
-        //unitInfoCs.bodyMeshRener.material.color = Color.white;
-
     }
 
-
+    #region
     IEnumerator DieUnit()
     {
         unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
@@ -541,6 +527,7 @@ public class ActUnit : MonoBehaviour
         }
 
     }
+    #endregion
 
     #region # SearchTarget(매개변수 : 유닛 탐지 타입) : 유닛이 Idle 상태일 때 타겟 탐지 시 호출되는 함수
     public void SearchTarget(eUnit_targetSelectType target_Search_Type = eUnit_targetSelectType.Default)  // 유닛 탐지
@@ -589,28 +576,35 @@ public class ActUnit : MonoBehaviour
         //print(distance);
         unitTargetSearchCs.Look_At_The_Target(next_ActionState);
 
-        if (distance > unitInfoCs._unitData.attackRange && distance <= unitInfoCs._unitData.sightRange)   // 유닛 시야범위보다 작다면
+        if (distance > 0.5f+unitInfoCs._unitData.attackRange && distance <= unitInfoCs._unitData.sightRange)   // 유닛 시야범위보다 작다면
         {
+            if (nav.velocity.Equals(0))
+                print("오크이동안됨");
             anim.SetBool("isMove", true);
-            nav.SetDestination(unitTargetSearchCs._targetUnit.position);
+            if(gameObject.CompareTag("Monster"))
+            {
+                print("몬스터 이동");
+                nav.SetDestination(unitTargetSearchCs._targetUnit.position-new Vector3(0f,0f,unitInfoCs._unitData.attackRange-1f));
+            }
+            else if(gameObject.CompareTag("Player"))
+            {
+                nav.SetDestination(unitTargetSearchCs._targetUnit.position);
+                print(unitInfoCs._nav.isStopped);
+                print(unitTargetSearchCs._targetUnit.position);
+
+            }
         }
 
         // 공격 범위에 적이 들어왔을 때
-        else if (distance <= unitInfoCs._unitData.attackRange)
+        else if (distance <= unitInfoCs._unitData.attackRange+0.5f)
         {
             nav.SetDestination(transform.position);
             anim.SetBool("isMove", false);
 
-            if (!gameObject.CompareTag("Monster")&&unitInfoCs._can_SpcSkill_Attack)
-            {
-                unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
 
-            }
-            else if (unitInfoCs._can_genSkill_Attack)
-            {
-                unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
+            unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
 
-            }
+
             //unitInfoCs._enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
         }
 
