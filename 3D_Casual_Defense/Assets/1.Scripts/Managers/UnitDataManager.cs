@@ -84,15 +84,15 @@ public class UnitDataManager : Singleton<UnitDataManager>
         Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
 
 
-        Set_UnitData("hum_warr01");
-        Set_UnitData("hum_arch01");
-        Set_UnitData("hum_warr02");
+        Set_UnitSkillData("hum_warr01");
+        Set_UnitSkillData("hum_arch01");
+        Set_UnitSkillData("hum_warr02");
 
         //
-        Set_UnitData("orc_hunt01");
-        Set_UnitData("orc_warr01");
-        Set_UnitData("orc_sham01");
-        Set_UnitData("orc_boss01");
+        Set_UnitSkillData("orc_hunt01");
+        Set_UnitSkillData("orc_warr01");
+        Set_UnitSkillData("orc_sham01");
+        Set_UnitSkillData("orc_boss01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
@@ -159,7 +159,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
     }
 
     // 링크스킬, 스킬데이터가 장착된 스킬들을 유닛 데이터에 할당
-    public void Set_UnitData(string unit_ID)
+    public void Set_UnitSkillData(string unit_ID)
     {
         _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
         if (unit_ID!= "orc_warr01"&& unit_ID != "orc_hunt01" && unit_ID != "orc_sham01" && unit_ID != "orc_boss01")
