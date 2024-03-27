@@ -47,6 +47,9 @@ public class Castle : Singleton<Castle>
     [SerializeField]
     private GameObject[] downVfxs;
 
+    [SerializeField]
+    private GameObject[] downSmokes;
+
     public float halfColiderValue;
 
     //델리게이트 선언
@@ -105,10 +108,14 @@ public class Castle : Singleton<Castle>
         {
             downVfxs[i].SetActive(true);
         }
+        for (int i = 0; i < downSmokes.Length; i++)
+        {
+            downSmokes[i].SetActive(true);
+        }
         //_boxCollider.enabled = false;
         _source.PlayOneShot(_downCaslteClip);
 
-        while (transform.localPosition.y>=-6.5f)
+        while (transform.localPosition.y>=-6f)
         {
             UnityEngine.Debug.LogWarning("성다운");
 
@@ -121,6 +128,11 @@ public class Castle : Singleton<Castle>
         for (int i = 0; i < downVfxs.Length; i++)
         {
             downVfxs[i].SetActive(false);
+        }
+        
+        for (int i = 0; i < downSmokes.Length; i++)
+        {
+            downSmokes[i].SetActive(false);
         }
 
         //플레이어 패배시 팝업창 활성화
