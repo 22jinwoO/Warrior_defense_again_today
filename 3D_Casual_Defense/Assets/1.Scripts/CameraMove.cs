@@ -189,7 +189,7 @@ public class CameraMove : MonoBehaviour
         while(transform.position.z>0) 
         {
             transform.position = new Vector3(transform.position.x, transform.position.y,transform.position.z-1);
-            yield return new WaitForSecondsRealtime(0.04f);
+            yield return new WaitForSecondsRealtime(0.035f);
         }
 
         yield return new WaitForSecondsRealtime(1.5f);
@@ -198,7 +198,7 @@ public class CameraMove : MonoBehaviour
         while (54>transform.position.z)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1);
-            yield return new WaitForSecondsRealtime(0.04f);
+            yield return new WaitForSecondsRealtime(0.035f);
         }
         spawnManagerCs.waveSys.StartWave();
         player.canPlay = true;
