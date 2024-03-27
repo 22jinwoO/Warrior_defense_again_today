@@ -8,7 +8,7 @@ public class SummonUnit : MonoBehaviour
     protected float curGage; //* 현재 체력
     public float maxGage; //* 최대 체력
 
-    public Slider gageSlider;
+    //public Slider gageSlider;
 
     public string playerID;
 
@@ -22,8 +22,8 @@ public class SummonUnit : MonoBehaviour
 
     private void Awake()
     {
-        curGage = 3f;
-        maxGage = curGage;
+        //curGage = 3f;
+        //maxGage = curGage;
         //transform.position = unitTr;
     }
 
@@ -42,9 +42,9 @@ public class SummonUnit : MonoBehaviour
 
         while (time <= 3f)
         {
-            gageSlider.value = time / maxGage;
+            //gageSlider.value = time / maxGage;
             time += Time.deltaTime;
-            print(time);
+            //print(time);
             yield return null;
             //
         }
@@ -53,14 +53,11 @@ public class SummonUnit : MonoBehaviour
         // 버튼인덱스에 해당하는 플레이어 유닛 팩토리 찾아서 유닛 생산
         PlayerUnitClass unit = unitFactory.playerUnitFactorys[btnIndex].CreatePlayerUnit();
 
-        print(unit.name);
         unit.gameObject.SetActive(true);
         unit.transform.position = unitTr;
-        print(unit.transform.position);
-        print(unitTr);
+
         yield return null;
-        print(unit.transform.position);
-        print(unitTr);
+
         Destroy(gameObject);
     }
 }
