@@ -146,8 +146,8 @@ public class OrcHunter : MonsterUnitClass
         _unitData.level = character_Data.level;
 
         // 체력
-        _unitData.maxHp = character_Data.hp;
-        _unitData.hp = character_Data.hp;
+        _unitData.maxHp = character_Data.hp * 2;
+        _unitData.hp = character_Data.hp * 2;
 
         // 방어 타입
         _unitData.defenseType = character_Data.defenseType;
@@ -162,8 +162,7 @@ public class OrcHunter : MonsterUnitClass
         //_unitData.sightRange = character_Data.sightRange;
 
         // 공격 범위
-        _unitData.attackRange = 10f;
-        //_unitData.attackRange = character_Data.attackRange;
+        _unitData.attackRange = character_Data.attackRange;
 
         // 크리티컬 확률
         //_unitData.criticRate = character_Data.criticRate;

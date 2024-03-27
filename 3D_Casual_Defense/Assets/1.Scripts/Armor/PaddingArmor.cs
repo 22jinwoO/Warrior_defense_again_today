@@ -16,7 +16,7 @@ public class PaddingArmor : ArmorCalculate
             return 0f;
         }
 
-        switch (attackType)  // 공격 타입 구분
+        switch (attackType)  // 상대방의 스킬 공격 타입 구분
         {
             case eUnit_Attack_Property_States.slash_Attack: // 베기 공격 일 때
                 attack_Dmg *= 1.5f;

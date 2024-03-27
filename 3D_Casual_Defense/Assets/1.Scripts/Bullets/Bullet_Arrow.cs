@@ -6,57 +6,46 @@ using static UnityEngine.GraphicsBuffer;
 public class Bullet_Arrow : Abs_Bullet
 {
     [SerializeField]
-    private Vector3 startPosition;
+    private Vector3 startPosition;  // 시작 위치
 
     [SerializeField]
-    private Vector3 endPosition;
+    private Vector3 endPosition;    // 도착 위치
 
     [SerializeField]
-    private Vector3 center;
+    private Vector3 center;     // 시작위치와 도착위치의 중간 위치값
 
     [Range(0, 1)]
-    public float t;
+    public float _t; // 시간
 
-    LineRenderer lr;
+    private bool isArrive = false;  // 도착했는지 확인하기 위한 변수
 
-    bool isArrive = false;
-
+    // Slerp 함수로 이동할 시 의 속도 값
     [SerializeField]
     private float slerpValue;
 
+    // Lerp 함수로 이동할 시 의 속도 값
     [SerializeField]
     private float lerpValue;
 
     private void Awake()
     {
-        //unitInfoCs = transform.parent.GetComponent<UnitInfo>();
-        //_start_Pos = unitInfoCs._projectile_startPos;
-
         slerpValue = 4f;
         lerpValue = 8f;
-        //print(_start_Pos.rotation);
-        //transform.SetParent(_start_Pos.transform.parent);
         transform.position = _start_Pos.position;
         transform.rotation = unitInfoCs.transform.rotation;
-        Debug.LogWarning(unitInfoCs.gameObject.name);
-        //_target_Direction = _target_BodyTr.position - transform.position;
-        //print(_target_Direction.normalized);
-        //Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
-        //transform.rotation = rot;
 
-        //print(_start_Pos.localRotation.y);
-        //transform.rotation = UnityEngine.Quaternion.Euler(-90, _start_Pos.transform.eulerAngles.y, _start_Pos.transform.eulerAngles.z);
         StartCoroutine(Move_Slerp());
-        lr = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 발사체가 타겟의 위치까지 중간까지 도착했을 때 Lerp함수를 통해 타겟까지 이동
         if (isArrive)
         {
             if (_target_Direction != Vector3.zero)
             {
+                // 타겟을 향한 방향 정규화
                 _target_Direction = _target_Direction.normalized;
             }
             Quaternion rot = Quaternion.LookRotation(_target_Direction);
@@ -64,34 +53,41 @@ public class Bullet_Arrow : Abs_Bullet
             transform.position = Vector3.Lerp(transform.position, _target_BodyTr.position, Time.deltaTime * lerpValue);
             
         }
+
+        // 타겟이 죽었을 경우 발사체 파괴
         if (_target_BodyTr == null || _target_Unit == null || _target_Unit.GetComponent<SphereCollider>().enabled == false)
         {
             Destroy(gameObject);
         }
-        //if (unitInfoCs.unitTargetSearchCs._targetUnit == null)
-        //{
-        //    Destroy(gameObject);
-        //}
-        //if (_target_BodyTr.gameObject.activeSelf==false)
-        //{
-        //    print("타겟죽음");
-        //    Destroy(gameObject);
-        //}
+        if (unitInfoCs.unitTargetSearchCs._targetUnit == null)
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        // 타겟과 발사체 충돌 시 실행
         if (other.transform.Equals(_target_Unit))
         {
-            Debug.LogWarning(other.name);
-            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(_skill, _skill._skill_AtkType,ref unitInfoCs,other.transform);
+            //타겟의 데미지 입는 함수 호출
+            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(skill: _skill, myAtkType: _skill._skill_AtkType, attacker: ref unitInfoCs, other: other.transform);
+
+            // 도착 변수 false로 변경
             isArrive = false;
+
+            // 발사체가 타겟을 따라다녀야 하기 떄문에, 발사체를 타겟의 자식으로 넣어줌
             transform.SetParent(_target_Unit.transform);
+
+            // 발사체 4초뒤 파괴
             Destroy(gameObject,4f);
         }
     }
 
-    IEnumerator Move_Slerp()
+    #region # Move_Slerp : 곡선이동 기능 구현한 함수
+    // 곡선이동 기능 구현한 함수
+    private IEnumerator Move_Slerp()
     {
         startPosition = _start_Pos.position;    // 발사체 시작 위치
         endPosition = _target_BodyTr.position;  // 발사체 도착 위치
@@ -103,6 +99,7 @@ public class Bullet_Arrow : Abs_Bullet
         startPosition -= center;    //startposition 위치값을 center값을 기준으로 나타내기 위해 빼줌
         endPosition -= center;  //endPosition 위치값을 center값을 기준으로 나타내기 위해 빼줌
 
+        // t의 값이 0.55보다 작을 때 동안 화살이동 (중간지점 까지 이동)
         for (float t = 0; t < 0.55f; t += Time.deltaTime* slerpValue)
             {
                 Vector3 point = Vector3.Slerp(startPosition, endPosition, t);
@@ -112,6 +109,7 @@ public class Bullet_Arrow : Abs_Bullet
                 // 화살 촉이 다음에 이동할 위치 바라보도록
                 _target_Direction = point - transform.position;
 
+                // 타겟을 향한 방향 바라보는 각도 구하기
                 Quaternion rot = Quaternion.LookRotation(_target_Direction.normalized);
 
                 transform.rotation = rot;
@@ -122,4 +120,5 @@ public class Bullet_Arrow : Abs_Bullet
             }
         isArrive = true;
     }
+    #endregion
 }

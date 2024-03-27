@@ -153,7 +153,7 @@ public class Orc : MonsterUnitClass, IActByUnit
     void Update()
     {
         Unit_Attack_Skill_CoolTime();
-
+        //print(_nav.velocity.magnitude);
         // 타겟이 죽었을 때 호출되는 함수
         if (unitTargetSearchCs._targetUnit!=null&& unitTargetSearchCs._targetUnit.GetComponent<SphereCollider>().enabled.Equals(false))
         {
@@ -213,8 +213,8 @@ public class Orc : MonsterUnitClass, IActByUnit
         _unitData.level = character_Data.level;
 
         // 체력
-        _unitData.maxHp = character_Data.hp;
-        _unitData.hp = character_Data.hp;
+        _unitData.maxHp = character_Data.hp * 2;
+        _unitData.hp = character_Data.hp * 2;
 
         // 방어 타입
         _unitData.defenseType = character_Data.defenseType;

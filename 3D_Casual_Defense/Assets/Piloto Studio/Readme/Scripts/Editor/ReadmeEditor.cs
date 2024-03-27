@@ -80,7 +80,7 @@ namespace ReadmeSystem.Editor
             }
             else
             {
-                Debug.LogWarning("Couldn't find a readme");
+                Debug.LogWarning("Couldn'_t find a readme");
             }
 
             return result;
@@ -268,7 +268,7 @@ namespace ReadmeSystem.Editor
 
         static List<Readme> GetAllRootReadme()
         {
-            var ids = AssetDatabase.FindAssets("Readme t:Readme");
+            var ids = AssetDatabase.FindAssets("Readme _t:Readme");
             List<Readme> results = new List<Readme>();
 
             foreach (string guid in ids)
