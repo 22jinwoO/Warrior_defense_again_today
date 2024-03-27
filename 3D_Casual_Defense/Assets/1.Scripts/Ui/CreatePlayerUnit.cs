@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnitDataManager;
 
 public class CreatePlayerUnit : MonoBehaviour
 {
@@ -20,8 +19,14 @@ public class CreatePlayerUnit : MonoBehaviour
     [SerializeField]
     private Button clickUnitFreeBtn;
 
+
+    public Image clickUnitFreeBtnImg;
+
+
     [SerializeField]
     private Button clickUnitHoldBtn;
+
+    public Image clickUnitHoldBtnImg;
 
 
     public PlayerUnitClass clikUnitInfo;
@@ -72,12 +77,17 @@ public class CreatePlayerUnit : MonoBehaviour
     [SerializeField]
     private AudioClip[] audioSources;
 
+    public Sprite[] holdImgs;
 
-
+    public Sprite[] freeImgs;
+    //
     private void Awake()
     {
-        clickUnitFreeBtn.onClick.AddListener(ClickUnitFree);
-        clickUnitHoldBtn.onClick.AddListener(ClickUnitHold);
+        clickUnitFreeBtn.onClick.AddListener(()=> StartCoroutine(ClickUnitFree()));
+        clickUnitHoldBtn.onClick.AddListener(() => StartCoroutine(ClickUnitHold()));
+
+        clickUnitFreeBtnImg = clickUnitFreeBtn.GetComponent<Image>();
+        clickUnitHoldBtnImg = clickUnitHoldBtn.GetComponent<Image>();
 
         print(UnitDataManager.Instance._unitInfo_Dictionary.Keys);
 
@@ -242,17 +252,28 @@ public class CreatePlayerUnit : MonoBehaviour
 
     }
 
-    private void ClickUnitFree()
+    private IEnumerator ClickUnitFree()
     {
         if (clikUnitInfo==null)
         {
-            return;
+            yield return null;
         }
+
+        clickUnitFreeBtnImg.sprite = freeImgs[1];
+
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        clickUnitFreeBtnImg.sprite = freeImgs[0];
+
+
         audioPlayer.PlayOneShot(audioSources[1]);
         playerCs.unitCtrlCanvas.SetActive(false);
         print("클릭한 유닛 자유모드");
+        clikUnitInfo.canAct =false;
+        clikUnitInfo.tranceImg.SetActive(true);
+        clikUnitInfo.isChangeState = false;
         clikUnitInfo.changeTime = 0f;
-
+        clikUnitInfo._isClick = true;
         clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
         clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
         //likUnitInfo.transform.position = initPos;
@@ -264,22 +285,29 @@ public class CreatePlayerUnit : MonoBehaviour
         playerCs.isMove = false;
         playerCs.flagTr.gameObject.SetActive(false);
 
-
-        clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
 
-    private void ClickUnitHold()
+    private IEnumerator ClickUnitHold()
     {
-
         if (clikUnitInfo == null)
         {
-            return;
+            yield return null;
         }
+        clikUnitInfo._nav.SetDestination(clikUnitInfo.transform.position);
+        clickUnitHoldBtnImg.sprite = holdImgs[1];
+
+        yield return new WaitForSecondsRealtime(0.05f);
+
+        clickUnitHoldBtnImg.sprite = holdImgs[0];
 
         audioPlayer.PlayOneShot(audioSources[0]);
 
         playerCs.unitCtrlCanvas.SetActive(false);
+        clikUnitInfo.canAct = false;
+        clikUnitInfo._isClick = true;
+        clikUnitInfo.tranceImg.SetActive(true);
+        clikUnitInfo.isChangeState = false;
         clikUnitInfo.changeTime = 0f;
 
         print("클릭한 유닛 홀드모드");
@@ -291,7 +319,6 @@ public class CreatePlayerUnit : MonoBehaviour
         playerCs.isChoice = false;
         playerCs.isMove = false;
         playerCs.flagTr.gameObject.SetActive(false);
-        clikUnitInfo._isClick = false;
         clikUnitInfo = null;
     }
 
