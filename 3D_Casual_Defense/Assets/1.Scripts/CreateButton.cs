@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
@@ -21,9 +22,18 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     [SerializeField]
     private PlayerUnitSpawnPoint spawnPointCs;
 
+
+    [SerializeField]
+    private Image btnImage;
+
+    [SerializeField]
+    private Sprite[] actSprites;
+
+
     private void Awake()
     {
         spawnPointCs= spawnPoint.GetComponent<PlayerUnitSpawnPoint>();
+        btnImage=GetComponent<Button>().image;
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -42,7 +52,7 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     public void OnBeginDrag(PointerEventData eventData)
     {
         spawnPointCs.SetBase();
-
+        btnImage.sprite = actSprites[1];
         spawnPoint.gameObject.SetActive(true);
 
         //unitFactory.playerUnit = unitFactory.RedayUnit(playerUnitId);
@@ -50,11 +60,11 @@ public class CreateButton : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if(spawnPointCs.canCreate)
+        btnImage.sprite = actSprites[0];
+
+        if (spawnPointCs.canCreate)
         {
             unitFactory.SpawnSummon(spawnPoint.position, btnIndex);
-
-
         }
         //playerUnitId = null;
         //spawnPoint = null;
