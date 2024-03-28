@@ -23,8 +23,12 @@ public class Stage1_TextManager : Singleton<Stage1_TextManager>
     // 성 내구도 텍스트
     public TextMeshProUGUI castleHpTxt;
 
+    // 팝업 타이틀 텍스트
+    public TextMeshProUGUI popUpTitleTxt;
+
     // 팝업 메세지 텍스트
     public TextMeshProUGUI popUpMessageTxt;
+
 
     [SerializeField]
     float hpTimeValue;
@@ -41,14 +45,28 @@ public class Stage1_TextManager : Singleton<Stage1_TextManager>
         hpTimeValue = 30f;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            PlayerWinTxt();
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            PlayerLoseTxt();
+        }
+    }
+
     public void PlayerWinTxt()
     {
-        popUpMessageTxt.text = "플레이어가 승리하셨습니다!!";
+        popUpTitleTxt.text = "전투승리";
+        popUpMessageTxt.text = "오크들로부터 성을 안전하게 지켰습니다!";
     }
 
     public void PlayerLoseTxt()
     {
-        popUpMessageTxt.text = "플레이어가 패배하였습니다...";
+        popUpTitleTxt.text = "전투패배";
+        popUpMessageTxt.text = "오크들이 성을 장악했습니다!..";
     }
 
 
