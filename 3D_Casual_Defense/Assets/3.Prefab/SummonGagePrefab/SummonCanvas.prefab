@@ -153,7 +153,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxGage: 0
-  gageSlider: {fileID: 3153642380973829486}
   playerID: 
   unitFactory: {fileID: 0}
   btnIndex: 0
@@ -274,7 +273,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxGage: 0
-  gageSlider: {fileID: 3153642380973829486}
   playerID: 
   unitFactory: {fileID: 0}
   btnIndex: 0
