@@ -74,6 +74,12 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     [SerializeField]
     private AudioClip[] audioSources;
 
+    [SerializeField]
+    private Button holdImg;
+
+    [SerializeField]
+    private Button freeImg;
+
     private void Awake()
     {
         //audioPlayer.PlayOneShot();
@@ -99,12 +105,13 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    if (hit.transform.CompareTag("Player"))
+                    if (hit.transform.CompareTag("Player")&& clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
                     {
                         times += Time.deltaTime;
                         if (times >= 0.6f)
                         {
                             isMove = true;
+                            clickUnitInfo.moveImg.SetActive(true);
                             StartCoroutine(FlagAnim());
                             times = 0f;
                         }
@@ -122,20 +129,38 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                 {
                     if (hit.transform.CompareTag("Player"))
                     {
-                        if (!isChoice)
+                        clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+
+
+                        if (!isChoice&&!clickUnitInfo._isClick)
                         {
                             audioPlayer.PlayOneShot(audioSources[0]);
-                            clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
-
                             clickUnitInfo._isClick = true;
+                            //clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+
+                            //clickUnitInfo._isClick = true;
                             clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
                             //isMove = true;
                             _flag_Material = _Materials[0];
 
                             // 플레이어 조작 창 활성화
                             unitCtrlCanvas.transform.position = transform.position;
-                            unitCtrlCanvas.SetActive(true);
+                            if (clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_HoldMode))
+                            {
+                                clickUnitCs.clickUnitFreeBtnImg.sprite = clickUnitCs.freeImgs[0];
+                                clickUnitCs.clickUnitHoldBtnImg.sprite= clickUnitCs.holdImgs[2];
+                                holdImg.interactable = false;
+                                freeImg.interactable = true;
+                            }
+                            else if (clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+                            {
+                                clickUnitCs.clickUnitHoldBtnImg.sprite = clickUnitCs.holdImgs[0];
+                                clickUnitCs.clickUnitFreeBtnImg.sprite = clickUnitCs.freeImgs[2];
+                                holdImg.interactable = true;
+                                freeImg.interactable = false;
+                            }
 
+                            unitCtrlCanvas.SetActive(true);
                             //플레이어 선택창 활성화
                             flagTr.position = transform.position;
                             flagTr.gameObject.SetActive(true);
@@ -162,7 +187,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                         isChoice = false;
                         flagTr.gameObject.SetActive(false);
 
-                        if (clickUnitInfo != null)
+                        if (clickUnitInfo != null&&clickUnitInfo.isChangeState)
                         {
                             clickUnitInfo._isClick = false;
                         }
@@ -293,7 +318,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
             
 
-            clickUnitInfo._isClick = false;
+            //clickUnitInfo._isClick = false;
             clickUnitInfo = null;
             //GameObject clone = Instantiate(flagTr.gameObject, transform.position,Quaternion.identity);
             //Destroy(clone, 7f);
