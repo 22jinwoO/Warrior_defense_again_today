@@ -38,18 +38,25 @@ public abstract class PlayerUnitClass : UnitInfo
     [Header("홀드 모드 전환 시 활성화 되는 이미지")]
     public GameObject tranceImg;
 
+    public bool _isHoldeMode;
+
+    public bool _isFreeeMode;
+
     [SerializeField]
     private GameObject circleObj;
 
     [SerializeField]
     private float rotSpeed=1200f;
 
-    [SerializeField]
-    private SpriteRenderer holdObj;
+    public SpriteRenderer holdObj;
 
-
+    public AbsPlayerUnitFactory unitFactory;
 
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
+
+    public abstract void SetUnitValue();    // 활성화 시 필요한 초기 데이터 값 부여하는 함수
+
+    public abstract void SetStructValue(CharacterData character_Data);  // 해당 유닛의 Json 파일 데이터들을 가져와 할당해주는 함수
 
 
     public void CheckChangeMode()
@@ -61,16 +68,18 @@ public abstract class PlayerUnitClass : UnitInfo
             //chageModeVfx.transform.position = transform.position;
             //chageModeVfx.SetActive(true);
             changeTime += Time.deltaTime;
-            if(_enum_Unit_Action_Mode==eUnit_Action_States.unit_HoldMode)
+            if(_isHoldeMode&& holdObj.color.a<1f)
             {
-                holdObj.color += new Color(0, 0, 0, 0.1f);
+                holdObj.gameObject.SetActive(true);
+                holdObj.color += new Color(0, 0, 0, 0.005f);
                 print("홀드출력");
 
 
             }
-            if (_enum_Unit_Action_Mode==eUnit_Action_States.unit_FreeMode)
+            if (_isFreeeMode && holdObj.color.a > 0f)
             {
-                holdObj.color += new Color(0, 0, 0, -0.1f);
+                holdObj.color -= new Color(0, 0, 0, 0.005f);
+                print(holdObj.color);
                 print("출력");
             }
             circleObj.transform.Rotate(new Vector3(0, 0, rotSpeed * Time.deltaTime));
@@ -84,20 +93,22 @@ public abstract class PlayerUnitClass : UnitInfo
             canAct = true;
             isChangeState = true;
             changeTime = 0f;
-            if (_enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+            if (_isFreeeMode)
             {
                 holdObj.transform.SetParent(circleObj.transform.parent);
-                if(_nav.isOnNavMesh)
+                holdObj.gameObject.SetActive(false);
+                if (_nav.isOnNavMesh)
                     _nav.isStopped = false;
+                _isFreeeMode = false;
             }
-            else if (_enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_HoldMode))
+            else if (_isHoldeMode)
             {
                 holdObj.transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
             }
             holdObj.transform.rotation = Quaternion.Euler(-90f,0f,0f);
 
             tranceImg.SetActive(false);
-
+            _isHoldeMode = false;
             print("모드전환");
 
         }
