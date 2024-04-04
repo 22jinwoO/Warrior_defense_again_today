@@ -390,7 +390,11 @@ public class ActUnit : MonoBehaviour
 
             if (unitInfoCs.gameObject.tag.Equals("Player"))
             {
-                unitInfoCs.GetComponent<PlayerUnitClass>().holdObPref.transform.SetParent(unitInfoCs.transform);
+                //if(playerClass.holdObPref!=null)
+                //    playerClass.holdObPref.transform.SetParent(unitInfoCs.transform);
+                playerClass.holdObj.color = new Color(0f, 0f, 0f, 0f);
+                playerClass.arriveFlag.transform.SetParent(transform);
+                playerClass.arriveFlag.gameObject.SetActive(false);
                 unitInfoCs._enum_Unit_Action_Mode = unitInfoCs._enum_pUnit_Action_BaseMode;
                 unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_pUnit_Action_BaseState;
             }
@@ -439,7 +443,7 @@ public class ActUnit : MonoBehaviour
         unitInfoCs.bodyMeshRener.material = unitInfoCs.bodyMtr;
     }
 
-    #region
+    #region # DieUnit() : 유닛 사망 시 호출되는 함수
     IEnumerator DieUnit()
     {
         unitInfoCs.atkSoundPlayer.volume = SoundManager.Instance.VolumeCheck(transform);
@@ -447,7 +451,7 @@ public class ActUnit : MonoBehaviour
         unitInfoCs.atkSoundPlayer.PlayOneShot(unitInfoCs.use_Sfxs[1]);
 
         // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결 해제
-        Castle.Instance.OnCastleDown -= unitInfoCs.OnCastleDown;
+        Castle.Instance.OnCastleDown -= unitInfoCs.StopUnitAct;
 
         unitInfoCs.sprCol.enabled = false;
 
@@ -455,16 +459,13 @@ public class ActUnit : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
 
-
-
-        // 클로킹 됐다가 노말 머태리얼로 다시 돌아옴; 이유는?,,, 아마 겟데미지드 함수 때문일듯 (해결)
-
+        // 머태리얼 투명화
         for (int j = 0; j < unitInfoCs.someMeshReners.Length; j++)
         {
             unitInfoCs.someMeshReners[j].material = unitInfoCs.cloaking_someMtr[j];
             yield return null;
-            //0.157f
         }
+
         unitInfoCs.bodyMeshRener.material = unitInfoCs.cloaking_bodyMtr;
 
         yield return new WaitForSeconds(1f);
@@ -485,14 +486,20 @@ public class ActUnit : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
 
         }
+
         // 사망한 유닛이 플레이어 유닛 일 때 만
-        if (unitInfoCs.gameObject.tag.Equals("Player")&& unitInfoCs.GetComponent<PlayerUnitClass>().holdOb!=null)
+        if (unitInfoCs.gameObject.tag.Equals("Player"))
         {
-            unitInfoCs.GetComponent<PlayerUnitClass>().holdOb.SetActive(false);
+            // 유닛 사망 시 팩토리의 풀로 Push
+            playerClass.unitFactory.units.Push(playerClass);
+
         }
 
         else if (unitInfoCs.gameObject.tag.Equals("Monster"))
         {
+            // 몬스터 사망 시 팩토리의 풀로 Push
+            monsterClass.monsterFactory.monsters.Push(monsterClass);
+
             MonsterSpawnManager.Instance.currentWave.deathMonsterCnt++;
 
             // 몬스터 처치 수 텍스트 변환
