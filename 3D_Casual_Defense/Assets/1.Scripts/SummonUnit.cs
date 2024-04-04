@@ -51,11 +51,17 @@ public class SummonUnit : MonoBehaviour
         // 버튼인덱스에 해당하는 플레이어 유닛 팩토리 찾아서 유닛 생산
         PlayerUnitClass unit = unitFactory.playerUnitFactorys[btnIndex].CreatePlayerUnit();
 
+        // 유닛 초기값 할당하는 함수 호출
+        unit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary[unitFactory.playerUnitFactorys[btnIndex].unitId]);
+
+        // 유닛 오브젝트 활성화
         unit.gameObject.SetActive(true);
+
         unit.transform.position = unitTr;
 
         yield return null;
 
+        // 소환 이펙트 파괴
         Destroy(gameObject);
     }
     #endregion
