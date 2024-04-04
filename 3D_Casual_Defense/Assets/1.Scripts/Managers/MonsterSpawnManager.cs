@@ -8,10 +8,12 @@ using UnityEngine.UI;
 public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 {
 
-
+    [Header("몬스터 유닛 팩토리들")]
     [SerializeField]
-    AbsMonsterUnitFactory[] monsterUnitFactorys;
+    private AbsMonsterUnitFactory[] monsterUnitFactorys;
 
+
+    [Header("몬스터 네비메쉬 서페이스")]
     public NavMeshSurface nms;
 
     [Header("오크 프리팹 리스트 인덱스")]
@@ -25,88 +27,78 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
     private Transform orcPrefab_Objects;
     //====================================================
 
+    [Header("몬스터 스폰 포인트")]
     [SerializeField]
     private Transform spawnPoint;
 
+    [Header("스폰된 몬스터")]
     [SerializeField]
     private MonsterUnitClass spawnMonster;  //스폰된 몬스터
 
+    [Header("현재 웨이브")]
     public Wave currentWave;   // 현재 웨이브
 
+    [Header("웨이브 몬스터 종류 배열 인덱스")]
     [SerializeField]
     private int currentMonsterIndex = 0;  // 웨이브 몬스터 종류 배열 인덱스
 
+    [Header("현재 웨이브에서 생성한 몬스터 숫자")]
     [SerializeField]
-    // 현재 웨이브에서 생성한 몬스터 숫자
-    private int spawnMonsterCount = 0;
+    private int spawnMonsterCount = 0;      // 현재 웨이브에서 생성한 몬스터 숫자
 
-
-    [Header("몬스터 종류")]
-    public MonsterUnitClass[] monsters;
-
-    [Header("몬스터 종류 딕셔너리 (Key :string / Value : MonsterUnitClass)")]
+    [Header("몬스터 종류에 해당하는 팩토리 딕셔너리 (Key :string / Value : AbsMonsterUnitFactory)")]
     public SerializableDictionary<string, AbsMonsterUnitFactory> d_MonsterDictonary=new SerializableDictionary<string, AbsMonsterUnitFactory>();
 
+    [Header("웨이브 시스템 변수")]
     public WaveSystem waveSys;
 
-
+    [Header("웨이브 제이슨 파일")]
     public TextAsset data;  // Json 데이터 에셋  이 파일은 유니티 상에서 드래그해서 넣어줍니다.
 
+    [Header("웨이브 제이슨 파일 변환 데이터형")]
     public AllData datas;  // 변환 데이터형
 
-
+    [Header("텍스트 매니저 변수")]
+    [SerializeField]
     private Stage1_TextManager txtManager;
 
+    [Header("UI 팝업 매니저 변수")]
     [SerializeField]
     private UI_PopUpManager uiManager;
 
+    [Header("스폰된 몬스터들 리스트")]
     [SerializeField]
     private List<MonsterUnitClass> spawnList = new List<MonsterUnitClass>();
 
+    [Header("웨이브 텍스트 문구 대기시간")]
     [SerializeField]
     private float time;
-    //public Text intervalTxt;
+
 
     private void Awake()
     {
-        //StartCoroutine(C_DynamicBake());
-        //print(monsters[0]);
-        //print(d_MonsterDictonary);
-        d_MonsterDictonary.Add("orc_warr01", monsterUnitFactorys[0]);
-        d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1]);
-        d_MonsterDictonary.Add("orc_sham01", monsterUnitFactorys[2]);
-        d_MonsterDictonary.Add("orc_boss01", monsterUnitFactorys[3]);
-        //d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1].monsterPrefab);
+        SetDicMonsterFactory();     // 몬스터 팩토리들 키, 값 할당하는 함수
 
-        waveSys=GetComponent<WaveSystem>();
+
+        waveSys = GetComponent<WaveSystem>();
 
         datas = JsonUtility.FromJson<AllData>(data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
 
-        //foreach (var item in datas.waveDatas)
-        //{
-        //    print(datas.waveDatas[3].interval);
-        //}
-        //print("이거 오류 맞음??"+nms.name);
+
         txtManager = Stage1_TextManager.Instance;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        // 몬스터 네비메쉬 서페이스 5초마다 초기화
-        //StartCoroutine(C_DynamicBake());
-        //StartCoroutine(SpawnMonster());
-        //waveSys.StartWave();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // 웨이브 몬스터를 다 처지 했을때, 3초의 대기시간이 주어짐
         if (time < 3f && waveSys.currentWaveIndex != -1 && currentWave.wave_maxMonsterCount == currentWave.deathMonsterCnt)
         {
             txtManager.currentWave_IntervalTxt.gameObject.SetActive(true);
             txtManager.currentWave_IntervalTxt.text = $"휼륭합니다! {waveSys.currentWaveIndex+1}차 침공을 물리쳤습니다!";
             time += Time.deltaTime;
         }
+
         // 여기서 현재 웨이브 시작함
         else if (time >= 3f && waveSys.currentWaveIndex != -1 && currentWave.wave_maxMonsterCount == currentWave.deathMonsterCnt)
         {
@@ -114,55 +106,53 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
             txtManager.currentWave_IntervalTxt.gameObject.SetActive(false);
             currentWave.deathMonsterCnt = 0;
             time = 0f;
+
+            // 웨이브 시작하는 함수
             waveSys.StartWave();
         }
     }
 
+    private void SetDicMonsterFactory()
+    {
+        d_MonsterDictonary.Add("orc_warr01", monsterUnitFactorys[0]);
+        d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1]);
+        d_MonsterDictonary.Add("orc_sham01", monsterUnitFactorys[2]);
+        d_MonsterDictonary.Add("orc_boss01", monsterUnitFactorys[3]);
+    }
 
     public void StartWave(Wave wave)
     {
         txtManager.currentWaveTxt.text = $"웨이브 {waveSys.currentWaveIndex+1}";
         txtManager.currentWave_IntervalTxt.gameObject.SetActive(true);
+
         // 현재 웨이브 몬스터 종류 리스트 초기화
         currentWave.wave_monsterClasses.Clear();
 
         // 매개변수로 받아온 웨이브 정보 저장
         currentWave = wave;
-        //intervalTxt.text = currentWave.wave_interval.ToString();
+
         txtManager.currentWave_IntervalTxt.text = $"오크 침공까지 {currentWave.wave_StartTime} 초";
+
         // 현재 웨이브 시작
         StartCoroutine(SpawnMonster());
     }
 
     private IEnumerator SpawnMonster()    // 몬스터 생성해주는 코루틴 함수
     {
-        //txtManager.currentWaveTxt.text = currentWave.wave_Name;
-        //txtManager.CountDeadMonster();
-
-
         int repeatNum = 0;
-        int waveTime = currentWave.wave_StartTime;
-        //Debug.LogWarning("대기시간 :"+currentWave.wave_StartTime);
+
+        // 웨이브 대기시간이 0초 보다 클 동안 오크 침공 메세지 텍스트 활성화
         while (currentWave.wave_StartTime > 0)
         {
-            //intervalTxt.text=currentWave.wave_StartTime.ToString();
             currentWave.wave_StartTime--;
             txtManager.currentWave_IntervalTxt.text = $"오크 침공까지 {currentWave.wave_StartTime} 초";
-            //txtManager.currentWave_IntervalTxt.text = "웨이브 대기 시간 : " + currentWave.wave_StartTime.ToString();
             yield return new WaitForSeconds(1f);
-            //if (currentWave.wave_StartTime== waveTime - 4&& txtManager.currentWave_IntervalTxt.gameObject.activeSelf)
-            //{
-            //    txtManager.currentWave_IntervalTxt.gameObject.SetActive(false);
-            //}
-        }
-        //txtManager.currentWave_IntervalTxt.gameObject.SetActive(false);
-        //yield return new WaitForSeconds(currentWave.wave_interval);
 
-        //txtManager.currentWave_IntervalTxt.gameObject.SetActive(true);
+        }
+
+        // 웨이브 몬스터 생성주기동안 반복
         while (repeatNum<currentWave.wave_RepeatNum)
         {
-            //txtManager.currentWave_IntervalTxt.gameObject.SetActive(true);
-
             int currentMonsterCount = 0;
     
             txtManager.currentWave_IntervalTxt.text = $"오크들이 성을 향해 돌격하고 있습니다!";
@@ -175,15 +165,12 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
                     currentMonsterCount++;
                     spawnMonsterCount++;
 
-                    //Debug.LogWarning("currentMonsterCount " + currentMonsterCount);
                     yield return new WaitForSeconds(currentWave.wave_interval);
                     if(spawnMonsterCount==2)
                     {
                         txtManager.currentWave_IntervalTxt.gameObject.SetActive(false);
                     }
                 }
-
-            //Debug.LogWarning("repeatNum " + repeatNum);
             repeatNum++;
         }
         yield return null;
@@ -191,41 +178,44 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         spawnMonsterCount = 0;
     }
 
+    #region # CheckSpawnMonster() 함수 :  구상생산자 호출하는 함수
     private void CheckSpawnMonster(int monsterCnt)
     {
         // 오크 종류 확인하는 게 아니라 딕셔너리 키 밸류를 키로 몬스터아이디, 밸류로 해당 몬스터 팩토리 연결하도록 해서 몬스터팩토리.createMonster하도록설정하기
-        //List<MonsterUnitClass> monsterSpawnList = currentWave.wave_monsterClasses;
         print(currentWave.wave_monsterClasses[monsterCnt]);
         CreateMonster(currentWave.wave_monsterClasses[monsterCnt]);
-        //CreateOrc();
-        //switch (monsterSpawnFactorys[monsterKindsIndex]) // 몬스터 종류 배열의 현재 몬스터 배열 인덱스
-        //{
-        //    case Orc:
 
-        //        break;
-
-        //}
     }
+    #endregion
 
-    //오크 생산자
+    #region # CreateMonster() 함수 :  몬스터 생산자 함수
     private void CreateMonster(string monsterUnitId)
     {
         // 몬스터 종류 리스트 인덱스에 해당하는 팩토리 찾은 후 팩토리.CreateMonster로 반환받은 몬스터 소환하기
         // 몬스터 종류 리스트에서 인덱스가 증가하면서 종류 리스트 스트링을 인덱스 값에 해당하는 팩토리를 찾아서 createmonsterUnit해주기 
-        //GameObject spawnOrc = null;
+
         //  유닛 생산자
         spawnMonster = d_MonsterDictonary[monsterUnitId].CreateMonsterUnit();
+
+        // 초깃값 할당
         spawnMonster.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary[monsterUnitId]);
         spawnMonster.transform.position = spawnPoint.position;
+
+        spawnMonster.gameObject.SetActive(true);
+
+        spawnMonster._nav.SetDestination(spawnMonster.castleTr.position);
 
         print("네비메쉬 위에 있는지 확인" + spawnMonster._nav.isOnNavMesh);
         //spawnMonster.transform.position = spawnPoint;
         spawnMonster.gameObject.name = monsterUnitId;
-        spawnMonster.transform.SetParent(orcPrefab_Objects);
+
         spawnList.Add(spawnMonster);
+
         spawnMonster = null;    //spawnMonster 변수 값 초기화
     }
+    #endregion
 
+    #region # CreateMonster() 함수 :  스폰된 모든 몬스터들 사망시키는 함수
     public void DeadAllMonster()
     {
         for(int i=0; i<spawnList.Count; i++)
@@ -236,60 +226,18 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
         spawnList.Clear();
 
     }
+    #endregion
 
+    #region # SkipWaveStartTime() 함수 :  웨이브 대기시간 스킵하는 함수
     public void SkipWaveStartTime()
     {
         currentWave.wave_StartTime = 0;
     }
+    #endregion
 
+    #region # C_DynamicBake() 함수 :  몬스터 네비메쉬 서페이스 동적 베이크 실행하는 코루틴 함수
 
-
-    //오크 생산자
-    private void CreateOrc()
-    {
-        //GameObject spawnOrc = null;
-        bool cantSetActive = false;
-        //  유닛 생산자
-        print("스페이스 바 눌림!");
-
-        if (!orcList.Count.Equals(0))
-        {
-            foreach (var item in orcList)
-            {
-                if (!item.gameObject.activeSelf)
-                {
-                    print("여기 나오면 안됨");
-                    spawnMonster = item;
-                    spawnMonster.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_warr01"]);
-                    spawnMonster.transform.position = monsterUnitFactorys[0].spawnPoint;
-                    item.gameObject.SetActive(true);
-                    //
-                    //spawnMonster.InitUnitInfoSetting();
-                    //spawnOrc = item.gameObject;
-                    cantSetActive = true;
-                    break;
-                }
-            }
-        }
-
-        if (orcList.Count.Equals(0) || !cantSetActive)
-        {
-            monsterUnitFactorys[0].orcClass = AbsMonsterUnitFactory.OrcClass.Orc;
-            spawnMonster = monsterUnitFactorys[0].CreateMonsterUnit();
-            //spawnOrc = spawnMonster.gameObject;
-            orcList.Add(spawnMonster.GetComponent<Orc>());
-            print("프리팹 생성!");
-        }
-
-        print("네비메쉬 위에 있는지 확인" + spawnMonster._nav.isOnNavMesh);
-        //spawnMonster.transform.position = spawnPoint;
-        spawnMonster.gameObject.name = "오크";
-        spawnMonster.transform.SetParent(orcPrefab_Objects);
-        spawnMonster = null;    //spawnMonster 변수 값 초기화
-    }
-
-
-    IEnumerator C_DynamicBake() // 동적 베이크 실행하는 코루틴 함수
+    private IEnumerator C_DynamicBake() // 동적 베이크 실행하는 코루틴 함수
     {
         yield return new WaitForSeconds(5f);
         print("초기화");
@@ -298,6 +246,8 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
 
     }
+    #endregion
+
 }
 
 [System.Serializable]
@@ -321,6 +271,4 @@ public class WaveData   // WaveDatas 구글 시트에 해당하는 값을 갖고
     public string character5;   // 다섯번째 종류 몬스터
     public int maxMonster_Count;    // 최대 생성되는 몬스터 수
     public int repeatNum;   // 생성주기 반복 횟수
-
-
 }

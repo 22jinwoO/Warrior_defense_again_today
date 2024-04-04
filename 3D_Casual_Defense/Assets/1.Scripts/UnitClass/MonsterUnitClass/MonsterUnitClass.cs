@@ -18,17 +18,17 @@ public abstract class MonsterUnitClass : UnitInfo
     [SerializeField]
     private float resetWayTime;    // 경로 초기화 시간
 
+
     public abstract void InitUnitInfoSetting(CharacterData character_Data);     // 유닛 정보 초기화 시켜주는 함수
 
-    public NavMeshPath path;
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            print("스탑해제");
-            _nav.isStopped = false;
-        }
-    }
+    public abstract void SetUnitValue();    // 활성화 시 필요한 초기 데이터 값 부여하는 함수
+
+    public abstract void SetStructValue(CharacterData character_Data);  // 해당 유닛의 Json 파일 데이터들을 가져와 할당해주는 함수
+
+    [Header("유닛의 몬스터 팩토리")]
+    public AbsMonsterUnitFactory monsterFactory;
+
+
     #region # Act_By_Unit() : 유닛 행동 구분지어주는 함수
     public void Act_By_Unit()
     {
@@ -48,97 +48,6 @@ public abstract class MonsterUnitClass : UnitInfo
         }
     }
     #endregion
-
-    //#region # Act_NormalMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
-    //private void Act_NormalPhase()
-    //{
-    //    switch (_enum_Unit_Action_State)     // 현재 유닛 행동
-    //    {
-    //        case eUnit_Action_States.unit_Move: // 유닛 이동
-
-    //            if (isChangeState)  // 상태가 변환됐을 때
-    //            {
-    //                _isSearch = false;
-
-
-    //                unitTargetSearchCs._targetUnit = null;
-    //                print("애니메이션 실행");
-    //                float time = 0f;
-
-    //                while (time < 0.3f)
-    //                {
-    //                    time += Time.deltaTime;
-    //                }
-    //                isChangeState = false;
-    //            }
-
-    //            //_nav.SetDestination(castleTr.position); // 성으로 이동
-
-    //            //unitTargetSearchCs._unitModelTr.LookAt(castleTr.position);
-    //            //unitTargetSearchCs._unitModelTr.localRotation = Quaternion.Euler(0f, transform.rotation.y, transform.rotation.z);
-    //            //_nav.isStopped = false;
-
-    //            resetWayTime += Time.deltaTime;
-    //            while (resetWayTime >= 3f)
-    //            {
-    //                for (int i = 0; i < Castle.Instance.caslteModels.Length; i++)
-    //                {
-    //                    float baseDistance = Vector3.Distance(transform.position, castleTr.position);
-    //                    float distance = Vector3.Distance(transform.position, Castle.Instance.caslteModels[i].position);
-
-    //                    if (distance < baseDistance)
-    //                    {
-    //                        castleTr = Castle.Instance.caslteModels[i];
-    //                    }
-
-    //                }
-    //                path= new NavMeshPath();
-    //                _nav.CalculatePath(Castle.Instance.transform.position, path);
-    //                _nav.SetPath(path);
-    //                if (path.status == NavMeshPathStatus.PathPartial)
-    //                {
-    //                    Debug.LogError("분노모드로 전환");
-    //                    _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
-    //                    _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-    //                }
-
-    //                //_nav.ResetPath();
-    //                //_nav.SetDestination(castleTr.position);
-    //                resetWayTime = 0f;
-    //            }
-
-    //            _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-    //            if (_nav.velocity.magnitude <= 0.3f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
-    //            {
-    //                _anim.SetBool("isMove", false);
-    //                delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
-
-    //                if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
-    //                {
-    //                    if (_nav.isOnNavMesh)
-    //                    {
-    //                        _nav.isStopped = false;
-    //                    }
-    //                    _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
-    //                    _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-    //                    delayTime = 0f;
-    //                }
-
-    //            }
-
-    //            //
-    //            if (Vector3.Distance(transform.position, castleTr.position) <= _unitData.attackRange + Castle.Instance.halfColiderValue)
-    //            {
-    //                _anim.SetBool("isMove", false);
-
-    //                _enum_Unit_Action_Mode = eUnit_Action_States.monster_AttackCastlePhase;
-    //                _enum_Unit_Action_State = eUnit_Action_States.unit_Attack;
-    //            }
-
-    //            break;
-    //    }
-    //}
-    //#endregion
 
 
     #region # Act_NormalMode() : 몬스터가 일반 모드일 때 호출되는 함수 , 구현된 행동 : 대기(탐지), 이동(성), 추적, 공격
@@ -185,28 +94,28 @@ public abstract class MonsterUnitClass : UnitInfo
 
                     }
 
-                    Debug.LogError("1"+_nav.pathEndPosition);
+                    //Debug.LogError("1"+_nav.pathEndPosition);
                     //_nav.ResetPath();
 
                     _nav.SetDestination(castleTr.position);
 
-                    print(_nav.remainingDistance);
-                    if (_nav.pathEndPosition.magnitude< castleTr.position.magnitude-3f)//62/64
-                    {
-                        Debug.LogError("2" + _nav.pathEndPosition);
+                    //print(_nav.remainingDistance);
+                    //if (_nav.pathEndPosition.magnitude< castleTr.position.magnitude-3f)//62/64
+                    //{
+                    //    Debug.LogError("2" + _nav.pathEndPosition);
 
-                        Debug.LogError("sad" + _nav.pathEndPosition.magnitude);
-                        Debug.LogError("분fa" + castleTr.position);
+                    //    Debug.LogError("sad" + _nav.pathEndPosition.magnitude);
+                    //    Debug.LogError("분fa" + castleTr.position);
 
-                        Debug.LogError("분fa" + castleTr.position.magnitude);
+                    //    Debug.LogError("분fa" + castleTr.position.magnitude);
 
-                        Debug.LogError("분노몸드 전환" + _nav.pathStatus);
+                    //    Debug.LogError("분노몸드 전환" + _nav.pathStatus);
 
-                        _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
-                        _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-                        delayTime = 0f;
+                    //    _enum_Unit_Action_Mode = eUnit_Action_States.monster_AngryPhase;
+                    //    _enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+                    //    delayTime = 0f;
 
-                    }
+                    //}
                     Debug.LogWarning("이동전환"+_nav.pathStatus);
 
                     resetWayTime = 0f;
@@ -221,12 +130,12 @@ public abstract class MonsterUnitClass : UnitInfo
 
                 _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
 
-                if (_nav.velocity.magnitude <= 1f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
+                if (_nav.velocity.magnitude < 1f)   // 네비 메쉬 에이전트의 이동속도가 0 이하라면
                 {
                     //_anim.SetBool("isMove", false);
                     delayTime += Time.deltaTime;    // 대기 시간에 타임.델타타임 더해줌
 
-                    if (delayTime >= 5f)  // 딜레이타임이 5초 이상 됐을 때
+                    if (delayTime >= 2f)  // 딜레이타임이 5초 이상 됐을 때
                     {
                         _anim.SetBool("isMove", false);
                         if (_nav.isOnNavMesh)
@@ -238,6 +147,10 @@ public abstract class MonsterUnitClass : UnitInfo
                         delayTime = 0f;
                     }
 
+                }
+                else if(_nav.velocity.magnitude >= 1f)
+                {
+                    delayTime = 0f;
                 }
 
                 //

@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class OrcMinionFactory : AbsMonsterUnitFactory
 {
+    private void Awake()
+    {
+        // 오브젝트 풀링 셋팅하는 함수
+        InitObjPool(monsterPrefab);
+    }
+
+
     // 오크 주술사를 생산하도록 결정해주는 구상 생산자
     public override MonsterUnitClass CreateMonsterUnit()
     {
         MonsterUnitClass MonsterUnit = null;
 
-        print("오크 주술사 생산");
-        MonsterUnit = Instantiate(monsterPrefab, new Vector3(5.1f, 8.5f, 5.9f), Quaternion.identity);
-        MonsterUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_sham01"]);
+        if (monsters.Count > 0)
+        {
+            MonsterUnit = monsters.Pop();
+            print("오크 주술사 스택 팝 실행");
+        }
 
+        else
+        {
+            print("오크 주술사 생산");
+            MonsterUnit = Instantiate(monsterPrefab);
+            MonsterUnit.monsterFactory = this;
+
+        }
 
         return MonsterUnit;
     }
