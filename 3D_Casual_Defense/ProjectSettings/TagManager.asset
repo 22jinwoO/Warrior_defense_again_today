@@ -12,6 +12,7 @@ TagManager:
   - UnitUI
   - Stairs
   - Obstacle
+  - Plane
   layers:
   - Default
   - TransparentFX

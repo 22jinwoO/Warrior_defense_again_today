@@ -7,143 +7,119 @@ using UnityEngine.UI;
 
 public class CreatePlayerUnit : MonoBehaviour
 {
+    [Header("플레이어 유닛 팩토리들")]
     [SerializeField]
     public AbsPlayerUnitFactory[] playerUnitFactorys;
 
+    [Header("기사버튼")]
     [SerializeField]
     private Button clickKnightBtn;
 
+    [Header("궁수버튼")]
     [SerializeField]
     private Button clickArcherBtn;
 
+    [Header("유닛자유모드")]
     [SerializeField]
     private Button clickUnitFreeBtn;
 
-
+    [Header("자유모드 이미지")]
     public Image clickUnitFreeBtnImg;
 
-
+    [Header("유닛홀드모드")]
     [SerializeField]
     private Button clickUnitHoldBtn;
 
+    [Header("홀드모드 이미지")]
     public Image clickUnitHoldBtnImg;
 
+    [Header("클리한 플레이어 유닛")]
+    public PlayerUnitClass clickUnitInfo;
 
-    public PlayerUnitClass clikUnitInfo;
-
+    [Header("UI 팝업매니저 스크립트")]
     [SerializeField]
     private UI_PopUpManager popUpMgr;
 
+    [Header("유닛생산하는 버튼들")]
     [SerializeField]
     private CreateButton[] CreateBtns;
 
+    [Header("유닛 아이디 문자형 변수")]
     [SerializeField]
     private List<string> unitIds;
 
+    [Header("캔버스 변수")]
     [SerializeField]
     private Canvas canvas;
 
+    [Header("렉트트랜스폼 변수")]
     [SerializeField]
     private RectTransform canvasRectTr;
 
-
-
-    public PlayerUnitClass[] playerUnits;
-
-
-    [SerializeField]
-    private GameObject summonUnit;
-
+    [Header("스폰이펙트 게임오브젝트")]
     [SerializeField]
     private GameObject summonPortal;
 
-
+    [Header("uiCam 카메라")]
     [SerializeField]
     private Camera uiCam;
 
+    [Header("screenPoint 변수")]
+    [SerializeField]
     private Vector2 screenPoint;
 
+    [Header("딕셔너리 (키 : 플레이어 아이디 / 값 : 플레이어 유닛 클래스)")]
     [SerializeField]
     private SerializableDictionary<string, PlayerUnitClass> dicplayerUnits;
 
+    [Header("플레이어 스크립트")]
     [SerializeField]
     private Player playerCs;
 
-
+    [Header("오디오 소스")]
     [SerializeField]
     private AudioSource audioPlayer;
 
-
+    [Header("오디오 클립")]
     [SerializeField]
     private AudioClip[] audioSources;
 
+    [Header("홀드 이미지 버튼들")]
     public Sprite[] holdImgs;
 
+    [Header("자유 이미지 버튼들")]
     public Sprite[] freeImgs;
-    //
+    
+
     private void Awake()
     {
+        // 자유모드 / 홀드모드
         clickUnitFreeBtn.onClick.AddListener(()=> StartCoroutine(ClickUnitFree()));
         clickUnitHoldBtn.onClick.AddListener(() => StartCoroutine(ClickUnitHold()));
 
+        // 자유모드 이미지 / 홀드모드 이미지
         clickUnitFreeBtnImg = clickUnitFreeBtn.GetComponent<Image>();
         clickUnitHoldBtnImg = clickUnitHoldBtn.GetComponent<Image>();
 
-        print(UnitDataManager.Instance._unitInfo_Dictionary.Keys);
-
+        // AudioSource 로 변수 가져오기
         if (TryGetComponent(out AudioSource audioSource))
         {
             audioPlayer = audioSource;
         }
 
-
-
-
+        // _unitInfo_Dictionary.Keys 키 값들 할당
         unitIds = new List<string>(UnitDataManager.Instance._unitInfo_Dictionary.Keys);
 
+        // CreateBtns[i] 의 플레이어 유닛 ID, 버튼 인덱스 할당
         for (int i = 0; i < CreateBtns.Length; i++)
         {
             CreateBtns[i].playerUnitId = unitIds[i];
             CreateBtns[i].btnIndex = i;
         }
-
-        // 궁수 데이터 키, 값 할당
-        dicplayerUnits.Add(key: unitIds[0], value: playerUnits[0]);
-
-        // 기사 데이터 키, 값 할당
-        dicplayerUnits.Add(key: unitIds[1], value: playerUnits[1]);
-
     }
 
-
-    //클래스마다 생산될 유닛을 결정해주는 구상 생산자
-    public PlayerUnitClass RedayUnit(string unitId)
-    {
-        PlayerUnitClass playerUnit = null;
-
-        playerUnit = dicplayerUnits[unitId];
-
-        return playerUnit;
-    }
-
-    // 드래그 끝났을 때 호출되도록?
-    public PlayerUnitClass CreateUnit()
-    {
-        print("유닛생산");
-
-        // 생산자 실행
-        PlayerUnitClass unit = playerUnitFactorys[0].CreatePlayerUnit();
-
-        //unit.InitUnitInfoSetting();
-
-        //popUpMgr.isUseShop = false;
-
-        //// 유닛 생산 팝업창 닫기
-        //StartCoroutine(popUpMgr.UseUnitPopUp());
-        return unit;
-    }
-
-
+    #region # SpawnSummon() : 소환 이펙트 유닛 생산지점에 생성하는 함수
+    // SpawnSummon 소환 이펙트 유닛 생산지점에 생성하는 함수
     public void SpawnSummon(Vector3 Pos,int btnIndex)
     {
         audioPlayer.PlayOneShot(audioSources[2]);
@@ -159,167 +135,148 @@ public class CreatePlayerUnit : MonoBehaviour
 
         // 터치한 위치 반환
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTr, Input.mousePosition, uiCam, out screenPoint);
-        //
-        // 셔먼 게이지 오브젝트 복사 생성
-        // summon = Instantiate(summonUnit, Pos+Vector3.up*10f,Quaternion.Euler(50f,0f,0f));
-        //summon.transform.position = Pos;
-
-        //summon.transform.position = Pos;
-
-        //summonCs.portal = portal.transform;
-        //summon.transform.SetParent(canvas.transform);
-        //summon.transform.localPosition = screenPoint - new Vector2(0, 30f);
-        //summonCs.myPos = screenPoint - new Vector2(0, 30f);
-
-        //, screenPoint, Quaternion.identity,canvas.transform
     }
+    #endregion
 
-
-    // 드래그 끝났을 때 호출되도록?
-    //public GameObject CreateUnit()
-    //{
-    //    // 소환진 활성화
-
-    //    // 대기시간 다 지나면
-
-    //    // 반환된 유닛 활성화
-
-    //    // 기사 유닛 생산자
-    //    //playerUnitFactorys[0].knightClass = AbsPlayerUnitFactory.KnightClass.Knight;
-
-    //    // 생산자 실행
-    //    //GameObject unit = CreatePlayerUnit();
-
-    //    //print(UnitDataManager.Instance._unitInfo_Dictionary[unit._unitData.unit_Id]);
-    //    //Vector3 setPos = new Vector3(Input.mousePosition.x, 0f, Input.mousePosition.z);
-    //    //unit.transform.position = setPos;
-    //    GameObject unit = Instantiate(RedayUnit("sd").gameObject);
-    //    unit.gameObject.name = "기사";
-
-    //    popUpMgr.isUseShop = false;
-
-    //    // 유닛 생산 팝업창 닫기
-    //    StartCoroutine(popUpMgr.UseUnitPopUp());
-    //    return unit;
-    //}
-
-
-
-    // 드래그 끝났을 때 호출되도록?
-    public PlayerUnitClass CreateKnight()
-    {
-        print("기사생산");
-
-        // 소환진 활성화
-
-        // 대기시간 다 지나면
-
-        // 반환된 유닛 활성화
-
-
-        // 기사 유닛 생산자
-        playerUnitFactorys[0].knightClass = AbsPlayerUnitFactory.KnightClass.Knight;
-
-        // 생산자 실행
-        PlayerUnitClass knight = playerUnitFactorys[0].CreatePlayerUnit();
-
-        //print(UnitDataManager.Instance._unitInfo_Dictionary[unit._unitData.unit_Id]);
-        //Vector3 setPos = new Vector3(Input.mousePosition.x, 0f, Input.mousePosition.z);
-        //unit.transform.position = setPos;
-
-        knight.gameObject.name = "기사"+ knight._unitData.char_id;
-
-        popUpMgr.isUseShop = false;
-        
-        // 유닛 생산 팝업창 닫기
-        StartCoroutine(popUpMgr.UseUnitPopUp());
-        return knight;
-    }
-
-    public PlayerUnitClass CreateArcher()
-    {
-        print("궁수생산");
-        // 궁수 유닛 생산자
-        playerUnitFactorys[1].archerClass = AbsPlayerUnitFactory.ArcherClass.Archer;
-
-        // 생산자 실행
-        PlayerUnitClass Archor = playerUnitFactorys[1].CreatePlayerUnit();
-        //Archor.transform.position = Vector3.zero;
-        Archor.gameObject.name = "궁수";
-        popUpMgr.isUseShop = false;
-        StartCoroutine(popUpMgr.UseUnitPopUp());
-        return Archor;
-
-    }
-
+    #region # ClickUnitFree() : 클릭한 유닛 자유모드로 변환하는 함수
     private IEnumerator ClickUnitFree()
     {
-        if (clikUnitInfo==null)
+        if (clickUnitInfo==null ||!clickUnitInfo._isClick)
         {
             yield return null;
         }
 
+        // 이미지 전환
         clickUnitFreeBtnImg.sprite = freeImgs[1];
 
         yield return new WaitForSecondsRealtime(0.05f);
 
+        // 이미지 전환
         clickUnitFreeBtnImg.sprite = freeImgs[0];
 
-
+        // 사운드 실행
         audioPlayer.PlayOneShot(audioSources[1]);
+
+        // 클릭한 유닛 컨트롤 UI 비활성화
         playerCs.unitCtrlCanvas.SetActive(false);
+
         print("클릭한 유닛 자유모드");
-        clikUnitInfo.canAct =false;
-        clikUnitInfo.tranceImg.SetActive(true);
-        clikUnitInfo.isChangeState = false;
-        clikUnitInfo.changeTime = 0f;
-        clikUnitInfo._isClick = true;
-        clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
-        clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-        //likUnitInfo.transform.position = initPos;
-        clikUnitInfo._isSearch = false;
-        clikUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
-        //clikUnitInfo.transform.position = initPos;
+
+        // 클릭한 유닛 행동 불가능
+        clickUnitInfo.canAct =false;
+
+        // 클릭한 유닛의 모드 전환 이미지 활성화
+        clickUnitInfo.tranceImg.SetActive(true);
+
+        clickUnitInfo._isFreeeMode = true;
+
+        // 모드 전환 변수 false로 전환
+        clickUnitInfo.isChangeState = false;
+
+        // 클릭한 유닛의 모드 전환시간 0으로 할당
+        clickUnitInfo.changeTime = 0f;
+
+        // 클릭한 유닛의 _isClick 변수 true로 전환
+        clickUnitInfo._isClick = true;
+
+        // 클릭한 유닛의 모드 자유모드로 전환
+        clickUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;
+
+        // 클릭한 유닛의 상태 Idle 상태로 전환
+        clickUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+
+        // 클릭한 유닛의 탐지 변수 false로 변환
+        clickUnitInfo._isSearch = false;
+
+        clickUnitInfo.gameObject.name = clickUnitInfo._unitData.char_id;
+
+        // 클릭한 유닛의 기본 공격 상태 추적 상태로 변환
+        clickUnitInfo._enum_Unit_Attack_State=eUnit_Action_States.unit_Tracking;
 
         playerCs.isChoice = false;
         playerCs.isMove = false;
         playerCs.flagTr.gameObject.SetActive(false);
 
-        clikUnitInfo = null;
+        // 클릭한 유닛 변수 null로 변환
+        clickUnitInfo = null;
     }
+    #endregion
 
+
+    #region # ClickUnitHold() : 클릭한 유닛 홀드모드로 변환하는 함수
     private IEnumerator ClickUnitHold()
     {
-        if (clikUnitInfo == null)
+        if (clickUnitInfo == null||!clickUnitInfo._isClick)
         {
             yield return null;
         }
-        clikUnitInfo._nav.SetDestination(clikUnitInfo.transform.position);
+
+        // 클릭한 유닛 자기 위치로 이동
+        clickUnitInfo._nav.SetDestination(clickUnitInfo.transform.position);
+
+        // 이미지 전환
         clickUnitHoldBtnImg.sprite = holdImgs[1];
 
         yield return new WaitForSecondsRealtime(0.05f);
 
+        // 이미지 전환 
         clickUnitHoldBtnImg.sprite = holdImgs[0];
 
+        // 사운드 실행
         audioPlayer.PlayOneShot(audioSources[0]);
 
+        // 클릭한 유닛 컨트롤 UI 비활성화
         playerCs.unitCtrlCanvas.SetActive(false);
-        clikUnitInfo.canAct = false;
-        clikUnitInfo._isClick = true;
-        clikUnitInfo.tranceImg.SetActive(true);
-        clikUnitInfo.isChangeState = false;
-        clikUnitInfo.changeTime = 0f;
+
+        clickUnitInfo._nav.SetDestination(clickUnitInfo.transform.position);
+
+
+        // 클릭한 유닛 행동 불가능
+        clickUnitInfo.canAct = false;
+
+        // 클릭한 유닛의 _isClick 변수 true로 전환
+        clickUnitInfo._isClick = true;
+
+        // 클릭한 유닛의 모드 전환 이미지 활성화
+        clickUnitInfo.tranceImg.SetActive(true);
+
+        clickUnitInfo._isHoldeMode = true;
+
+        // 모드 전환 변수 false로 전환
+        clickUnitInfo.isChangeState = false;
+
+        // 클릭한 유닛의 모드 전환시간 0으로 할당
+        clickUnitInfo.changeTime = 0f;
 
         print("클릭한 유닛 홀드모드");
-        clikUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
-        clikUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
-        clikUnitInfo._isSearch = false;
-        clikUnitInfo._enum_Unit_Attack_State = eUnit_Action_States.unit_Boundary;
-        //initPos = clikUnitInfo.transform.position;
+
+        // 클릭한 유닛의 모드 홀드모드로 전환
+        clickUnitInfo._enum_Unit_Action_Mode = eUnit_Action_States.unit_HoldMode;
+
+        // 클릭한 유닛의 상태 Idle 상태로 전환
+        clickUnitInfo._enum_Unit_Action_State = eUnit_Action_States.unit_Idle;
+
+        // 클릭한 유닛의 탐지 변수 false로 변환
+        clickUnitInfo._isSearch = false;
+
+        // 클릭한 유닛의 모드 탐지모드로 전환
+        clickUnitInfo._enum_Unit_Attack_State = eUnit_Action_States.unit_Boundary;
+
+
+        clickUnitInfo.gameObject.name = clickUnitInfo._unitData.char_id;
+
+        // 
         playerCs.isChoice = false;
+
+        // 
         playerCs.isMove = false;
+
+        // 
         playerCs.flagTr.gameObject.SetActive(false);
-        clikUnitInfo = null;
+
+        // 
+        clickUnitInfo = null;
     }
+    #endregion
 
 }

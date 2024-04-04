@@ -5,24 +5,30 @@ using static UnityEngine.GraphicsBuffer;
 
 public class Bullet_Arrow : Abs_Bullet
 {
+    [Header("시작위치")]
     [SerializeField]
     private Vector3 startPosition;  // 시작 위치
 
+    [Header("도착위치")]
     [SerializeField]
     private Vector3 endPosition;    // 도착 위치
 
+    [Header("시작위치와 도착위치의 중간 위치값")]
     [SerializeField]
     private Vector3 center;     // 시작위치와 도착위치의 중간 위치값
 
+    [Header("시간")]
     [Range(0, 1)]
     public float _t; // 시간
 
     private bool isArrive = false;  // 도착했는지 확인하기 위한 변수
 
+    [Header("Slerp 함수로 이동할 시 의 속도 값")]
     // Slerp 함수로 이동할 시 의 속도 값
     [SerializeField]
     private float slerpValue;
 
+    [Header("Lerp함수로 이동할 시의 속도 값")]
     // Lerp 함수로 이동할 시 의 속도 값
     [SerializeField]
     private float lerpValue;
@@ -33,7 +39,7 @@ public class Bullet_Arrow : Abs_Bullet
         lerpValue = 8f;
         transform.position = _start_Pos.position;
         transform.rotation = unitInfoCs.transform.rotation;
-
+        //transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
         StartCoroutine(Move_Slerp());
     }
 

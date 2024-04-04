@@ -33,7 +33,7 @@ public class CreateButton_2 : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        playerUnit = _unit.CreateArcher();
+        //playerUnit = _unit.CreateArcher();
     }
 
     public void OnEndDrag(PointerEventData eventData)

@@ -73,7 +73,6 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         All_character_Datas = JsonUtility.FromJson<All_Character_Data>(character_Json_Data.text);   // Json파일의 텍스트들을 datas 값에 넣어주고
 
-        //Add_Skill_Dictionary(); // 스킬 딕셔너리에 키, 값 할당하는 함수 (스킬데이터 매니저로 옮겨줘서 삭제할 에정)
 
         Add_Armor_Dictionary(); // 아머 속성 딕셔너리에 키, 값 할당하는 함수
 
@@ -83,12 +82,12 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
 
-
+        // 플레이어 유닛
         Set_UnitSkillData("hum_warr01");
         Set_UnitSkillData("hum_arch01");
         Set_UnitSkillData("hum_warr02");
 
-        //
+        // 몬스터 (오크)
         Set_UnitSkillData("orc_hunt01");
         Set_UnitSkillData("orc_warr01");
         Set_UnitSkillData("orc_sham01");
@@ -138,7 +137,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
         public ArmorCalculate unit_ArmorCalculateCs;
         public eUnit_targetSelectType unit_targetSelectType;
 
-        
+
         //= Instance._skill_Dictionary.TryGetValue();
 
         //public eUnit_Defense_Property_States unit_Armor_property;
@@ -150,7 +149,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
         //_this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
 
         //// 유닛 타겟 설정 타입 할당
-        
+
         //_unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
 
         //_eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[_unitData.targetSelectType];
@@ -161,22 +160,27 @@ public class UnitDataManager : Singleton<UnitDataManager>
     // 링크스킬, 스킬데이터가 장착된 스킬들을 유닛 데이터에 할당
     public void Set_UnitSkillData(string unit_ID)
     {
-        _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
-        if (unit_ID!= "orc_warr01"&& unit_ID != "orc_hunt01" && unit_ID != "orc_sham01" && unit_ID != "orc_boss01")
-        {
-            print(unit_ID);
-            print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1]);
-            print(skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2]);
+        // 몬스터가 아닐 경우 (플레이어 유닛일 경우 일 때만)
+        bool isNotMonster = unit_ID != "orc_warr01" && unit_ID != "orc_hunt01" && unit_ID != "orc_sham01" && unit_ID != "orc_boss01";
 
+        _unitInfo_Dictionary[unit_ID].unit_Gen_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].generalSkill];
+
+        // 플레이어 유닛일 경우
+        if (isNotMonster)
+        {
+            // 유닛 ID에 해당하는 첫번째 특수스킬 장착
             _unitInfo_Dictionary[unit_ID].unit_Spc_Skill = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill1];
+
+            // 유닛 ID에 해당하는 두번째 특수스킬 장착
             _unitInfo_Dictionary[unit_ID].unit_Spc_Skill2 = skillDataManagerCs.Set_skill_Dictionary[_unitInfo_Dictionary[unit_ID].specialSkill2];
         }
-        print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Id);
-        print(_unitInfo_Dictionary[unit_ID].unit_Gen_Skill.skill_Name);
+
+        // 플레이어와 몬스터 둘 다 유닛 데이터에 해당하는 방어구 속성 장착
         _unitInfo_Dictionary[unit_ID].unit_Armor_property = Instance._armor_Dictionary[_unitInfo_Dictionary[unit_ID].defenseType];
         _unitInfo_Dictionary[unit_ID].unit_ArmorCalculateCs = Instance._armorCs_Dictionary[_unitInfo_Dictionary[unit_ID].unit_Armor_property];
-        //Instance._unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[Instance._unitInfo_Dictionary[unit_ID].targetSelectType];
 
+        // 타겟 선정 타입 할당
+        _unitInfo_Dictionary[unit_ID].unit_targetSelectType = Instance._targetSelect_Dictionary[_unitInfo_Dictionary[unit_ID].targetSelectType];
     }
 
 
@@ -210,16 +214,6 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
     }
     #endregion
-
-    //#region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
-    //private void Add_Skill_Dictionary()
-    //{
-    //    //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
-    //    _skill_Dictionary.Add(key : "1_101", value : skillDataManagerCs.genral_Skills[0]);
-    //    _skill_Dictionary.Add(key : "1_201", value : skillDataManagerCs.genral_Skills[1]);
-
-    //}
-    //#endregion
 
     #region # Add_UnitData_Dictionary() : 유닛 데이터 딕셔너리에 키, 값 추가해주는 함수
     private void Add_UnitData_Dictionary()

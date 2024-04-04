@@ -36,20 +36,18 @@ public class SummonUnit : MonoBehaviour
         // 오브젝트에 따른 HP Bar 위치 이동
         //transform.localPosition = Camera.main.WorldToScreenPoint(portal.position + new Vector3(0, -0.8f, 0));
     }
+
+    #region # CreateUnit() : 플레이어 유닛 생산자
     public IEnumerator CreateUnit()
     {
         float time = 0f;
 
         while (time <= 3f)
         {
-            //gageSlider.value = time / maxGage;
             time += Time.deltaTime;
-            //print(time);
             yield return null;
-            //
         }
-        print(unitFactory);
-        print(unitFactory.playerUnitFactorys[1]);
+
         // 버튼인덱스에 해당하는 플레이어 유닛 팩토리 찾아서 유닛 생산
         PlayerUnitClass unit = unitFactory.playerUnitFactorys[btnIndex].CreatePlayerUnit();
 
@@ -60,4 +58,5 @@ public class SummonUnit : MonoBehaviour
 
         Destroy(gameObject);
     }
+    #endregion
 }

@@ -63,24 +63,11 @@ public class Castle : Singleton<Castle>
     {
         _castle_maxHp= 100f;
         _castle_Hp = 100f;
-        //caslteModels=new Transform[3];
-
-        //// 자식 성들 멀쩡한지 확인
-        //for (int i = 0; i < caslteModels.Length; i++)
-        //{
-        //    caslteModels[i] = transform.GetChild(i);
-        //    print("성입니다"+caslteModels[i]);
-        //}
 
 
         isDown = false;
-        //_boxCollider = GetComponent<BoxCollider>();
-        //halfColiderValue = GetComponent<NavMeshObstacle>().size.x / 2;
         halfColiderValue = 1.4f;
-        //_anim = GetComponent<Animator>();
         _source = GetComponent<AudioSource>();
-        //_hitCaslteClip = _source.GetComponent<AudioClip>();
-        //caslteModel.position = new Vector3(caslteModel.position.x - 0.1f, caslteModel.position.y, caslteModel.position.z);
 
         txtManager = Stage1_TextManager.Instance;
 
@@ -104,17 +91,22 @@ public class Castle : Singleton<Castle>
         //이벤트 호출
         OnCastleDown();
 
+        // 불타는 이펙트 활성화
         for(int i=0; i<downVfxs.Length;i++)
         {
             downVfxs[i].SetActive(true);
         }
+
+        // 무너질 때 연기 이펙트 활성화
         for (int i = 0; i < downSmokes.Length; i++)
         {
             downSmokes[i].SetActive(true);
         }
-        //_boxCollider.enabled = false;
+
+        // 사운드 실행
         _source.PlayOneShot(_downCaslteClip);
 
+        // 성 오브젝트 흔들리면서 기준 y값까지 y값 낮추기
         while (transform.localPosition.y>=-6f)
         {
             UnityEngine.Debug.LogWarning("성다운");

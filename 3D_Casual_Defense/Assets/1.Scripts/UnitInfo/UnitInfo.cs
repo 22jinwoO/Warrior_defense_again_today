@@ -7,7 +7,6 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using UnityEngine.AI;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 
 // 함수이름은 명사말고 동사 먼저, enum은 변수이름 앞에 소문자 e 작성, 변수는 카멜표기법으로 소문자 이후 단어 첫글자 대문자
@@ -16,8 +15,7 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
 {
     [Header("유닛 이름")]
     public string _unit_Name;                           // 유닛 이름
-    //public float _unit_maxHealth;                       // 유닛 최대 체력
-    //public float _unit_currentHealth;                   // 유닛 현재 체력 유닛 최대체력 넣어주기
+
     public int _unit_Level;                             // 유닛 레벨
 
     public int no; // 캐릭터 넘버
@@ -30,14 +28,14 @@ public struct unit_Data    // 유닛 데이터 가져오는 구조체
     public float moveSpeed;   // 이동속도
     public float moveAcc;   // 이동 가속도
 
-    //public int sightRange;   // 시야 범위
-    //public int attackRange;   // 공격 범위
-
     public int criticRate;    // 크리티컬 확률
+
     public string generalSkill;   // 일반스킬
     public string generalSkillName;   // 일반스킬 이름
+
     public string specialSkill1;   // 특수 스킬 , 자유모드 일 때 사용하는 스킬
     public string specialSkill1Name;   // 특수 스킬 1 이름
+
     public string specialSkill2;   // 특수 스킬 , 홀드모드 일 때 사용하는 스킬
     public string specialSkill2Name;   // 특수 스킬 2 이름
     public string targetSelectType;   // 유닛 설정 타입
@@ -494,7 +492,7 @@ public abstract class UnitInfo : MonoBehaviour
     }
 
 
-    public void OnCastleDown()
+    public void StopUnitAct()
     {
         
         _isSearch = false;

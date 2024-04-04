@@ -18,19 +18,23 @@ public class StunStatus : Abs_StatusEffect
             thisUnit._status_Effect_Stun.SetActive(false);
 
             yield return null;
+
             isStatusApply = false;
+
             float times = 0f;
 
 
             float defaultSpd = thisUnit._unitData.moveSpeed;
             float defaultAcc = thisUnit._unitData.moveAcc;
+
             thisUnit.canAct = false;
-            //thisUnit._anim.SetTrigger("isStun");
-            //thisUnit._nav.isStopped = true; 
+
             thisUnit._nav.speed = 0f;
             thisUnit._nav.acceleration = 0f;
             thisUnit._nav.velocity = Vector3.zero;
+
             thisUnit._anim.SetBool("isMove", false);
+
             if (thisUnit._nav.isOnNavMesh)
             {
                 thisUnit._nav.isStopped = true;
@@ -54,10 +58,6 @@ public class StunStatus : Abs_StatusEffect
                     break;
                 }
                 times += Time.deltaTime;
-                //Debug.LogWarning("스턴중 + "+times);
-                //Debug.LogWarning("스피드 + "+ thisUnit._nav.speed);
-                //Debug.LogWarning("가속도 + "+ thisUnit._nav.acceleration);
-                //Debug.LogWarning("velocity + "+ thisUnit._nav.velocity);
 
                 yield return null;
             }
@@ -75,42 +75,11 @@ public class StunStatus : Abs_StatusEffect
                 thisUnit.canAct = true;
 
             }
-
-            //if (thisUnit.sprCol.enabled == true)
-            //{
-
-            //}
-
-
             thisUnit._nav.speed = defaultSpd;
             Debug.LogWarning("기본이속"+ defaultSpd);
             thisUnit._nav.acceleration = defaultAcc;
 
         }
-
-        //yield return new WaitForSeconds(0.8f);
-        //isStatusApply = false;
-
-        //float defaultSpd = thisUnit._unitData.moveSpeed;
-        //float defaultAcc = thisUnit._unitData.moveAcc;
-        //Console.ReadLine();
-        //int times = 0;
-
-        //thisUnit._nav.speed = 0f;
-        //thisUnit._nav.acceleration = 0f;
-
-        //while (times < duration)
-        //{
-        //    if (isStatusApply)
-        //    {
-        //        yield return null;
-
-        //        break;
-        //    }
-
-        //    times++;
-        //    yield return new WaitForSeconds(1f);
-        //}
 
     }
 

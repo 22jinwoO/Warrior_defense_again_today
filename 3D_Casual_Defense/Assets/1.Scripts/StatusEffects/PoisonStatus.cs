@@ -38,6 +38,7 @@ public class PoisonStatus : Abs_StatusEffect
             if (thisUnit._unitData.hp<=0f&&thisUnit.canAct&&!thisUnit._isDead)
             {
                 Debug.LogError("독으로 죽음");
+                isStatusApply = false;
                 thisUnit.actUnitCs.DeadCheck();
                 yield break;    // 리턴같은거
             }

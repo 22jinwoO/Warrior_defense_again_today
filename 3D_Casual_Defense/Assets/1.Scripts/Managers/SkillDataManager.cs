@@ -25,21 +25,6 @@ public class SkillDataManager : MonoBehaviour
     [Header("스킬 공격 속성 딕셔너리")]
     public SerializableDictionary<string, eUnit_Attack_Property_States> _skill_AtkType_Dictionary;
 
-    [SerializeField]
-    StunStatus stunStatus = new StunStatus();
-
-    [SerializeField]
-    BleedingStatus bleedingStatus = new BleedingStatus();
-
-    [SerializeField]
-    PoisonStatus poisonStatus = new PoisonStatus();
-
-    [SerializeField]
-    BurningStatus burningStatus = new BurningStatus();
-
-    [SerializeField]
-    SlowStatus slowStatus = new SlowStatus();
-
     [Header("스킬 Json 데이터 에셋")]
     public TextAsset skill_Json_Data;  // Json 데이터 에셋 이 파일은 유니티 상에서 드래그해서 넣어줍니다.
 
@@ -67,8 +52,6 @@ public class SkillDataManager : MonoBehaviour
         Add_skill_Dictionary(num:genral_Skills.Length);
 
 
-
-
         //링크 스킬 데이터 할당
         for (int i = 0; i < genral_Skills.Length; i++)
         {           
@@ -91,13 +74,13 @@ public class SkillDataManager : MonoBehaviour
     #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
     private void Add_Set_Skill_Dictionary()
     {
-        //_skill_Dictionary.Add(key : "베기", value : skillDataManagerCs.genral_Skills[0]);
+        // 일반 스킬
         Set_skill_Dictionary.Add(key: "1_101", value: genral_Skills[0]);
         Set_skill_Dictionary.Add(key: "1_201", value: genral_Skills[1]);
         Set_skill_Dictionary.Add(key: "1_302", value: genral_Skills[2]);
         Set_skill_Dictionary.Add(key: "1_202", value: genral_Skills[3]);
 
-        // 스폐셜 스킬
+        // 특수 스킬
         Set_skill_Dictionary.Add(key: "2_202", value: special_Skills[0]);
         Set_skill_Dictionary.Add(key: "2_303", value: special_Skills[1]);
         Set_skill_Dictionary.Add(key: "2_304", value: special_Skills[2]);
@@ -105,6 +88,9 @@ public class SkillDataManager : MonoBehaviour
     }
     #endregion
 
+
+    // 초기 데이터 설정 할당 완료된 스킬 딕셔너리에 스킬ID를 키, 스킬ID에 해당하는 스킬을 값 할당해주는 함수
+    #region # Add_Skill_Dictionary() : 스킬 딕셔너리에 키, 값 추가해주는 함수
     // 스킬 공격 속성 딕셔너리에 키, 값 할당하는 함수
     private void Add_Skill_AtkType_Dictionary()
     {
@@ -112,10 +98,11 @@ public class SkillDataManager : MonoBehaviour
         _skill_AtkType_Dictionary.Add(key: "crush", value: eUnit_Attack_Property_States.crushing_attack);
         _skill_AtkType_Dictionary.Add(key: "slash", value: eUnit_Attack_Property_States.slash_Attack);
     }
+    #endregion
 
-    // # 스킬 지정해주는 함수
 
-    private void Add_skill_Dictionary(int num)
+    #region # Add_skill_Dictionary() : 스킬 지정해주는 함수
+    private void Add_skill_Dictionary(int num)    // # 스킬 지정해주는 함수
     {
         for (int i = 0; i < num; i++)
         {
@@ -129,8 +116,6 @@ public class SkillDataManager : MonoBehaviour
             genral_Skills[i]._skill_AtkType = _skill_AtkType_Dictionary[genral_Skills[i]._damgeType];
 
             Instantiate(genral_Skills[i], transform);
-
-            
         }
 
         // 링크 스킬 스턴
@@ -146,13 +131,13 @@ public class SkillDataManager : MonoBehaviour
             special_Skills[i- genral_Skills.Length]._skill_AtkType = _skill_AtkType_Dictionary[special_Skills[i - genral_Skills.Length]._damgeType];
 
             Instantiate(special_Skills[i - genral_Skills.Length], transform);
-
-
         }
 
     }
+    #endregion
 
 
+    #region # Set_Link_Skill() : 스킬 딕셔너리에 키, 값 추가해주는 함수
     public void Set_Link_Skill(Abs_Skill skill)
     {
         switch (skill._link_Id)
@@ -203,22 +188,11 @@ public class SkillDataManager : MonoBehaviour
             print(skill._link_Skill.duration_s);
             print(skill._link_Skill.moveSpeedreduce);
         }
-
-
-        //print(skill._link_Skill.link_id);
-        //print(skill._link_Skill.link_name);
-        //print(skill._link_Skill.link_script);
-        //print(skill._link_Skill.linkValue_ps);
-        //print(skill._link_Skill.duration_s);
-        //print(skill._link_Skill.moveSpeedreduce);
-
     }
+    #endregion
 
-
-
-
+    #region # Add_skill_Link_Dictionary() : 스킬의 링크 스킬 지정해주는 함수
     // # 스킬의 링크 스킬 지정해주는 함수
-
     private void Add_skill_Link_Dictionary(int num)
     {
         for (int i = 0; i < num; i++)
@@ -226,24 +200,8 @@ public class SkillDataManager : MonoBehaviour
             _skill_Link_Dictionary.Add(key: all_LinkSkill_Datas.SkillLinkDatas[i].link_id, value: all_LinkSkill_Datas.SkillLinkDatas[i]);
 
         }
-        // 링크 스킬 스턴
-
-        //// 링크 스킬 스턴
-        //_skill_Link_Dictionary.Add(key: "stun01", value: stunStatus);
-
-        //// 링크 스킬 출혈
-        //_skill_Link_Dictionary.Add(key: "bleed01", value: bleedingStatus);
-
-        //// 링크 스킬 중독
-        //_skill_Link_Dictionary.Add(key: "poison01", value: poisonStatus);
-
-        //// 링크 스킬 화염피해
-        //_skill_Link_Dictionary.Add(key: "burn01", value: burningStatus);
-
-        //// 링크 스킬 이속감소
-        //_skill_Link_Dictionary.Add(key: "slow01", value: slowStatus);
-
     }
+    #endregion
 
 
     //링크 스킬 데이터
@@ -256,8 +214,6 @@ public class SkillDataManager : MonoBehaviour
     [System.Serializable]
     public class LinkSkillData
     {
-        //no	link_id	link_name	link_script	linkValue_ps	duration_s	moveSpeedreduce																			
-
         public int no;
 
         public string link_id;
@@ -286,8 +242,6 @@ public class SkillDataManager : MonoBehaviour
     [System.Serializable]
     public class SkillData
     {
-        // skill_id	skill_name	skill_script	coolTm	targetType	useRange	castingType	traceType	areaShape	areaLength	areaWidth	damageType	baseValue	criticDamage	link_id											
-
         public string skill_id;
 
         public string skill_name;

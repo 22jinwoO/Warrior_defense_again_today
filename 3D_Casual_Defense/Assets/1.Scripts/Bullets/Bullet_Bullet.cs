@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class Bullet_ : Abs_Bullet
 {
+    [Header("시작위치")]
     [SerializeField]
-    private Vector3 startPosition;
+    private Vector3 startPosition;  // 시작 위치
 
+    [Header("도착위치")]
     [SerializeField]
-    private Vector3 endPosition;
+    private Vector3 endPosition;    // 도착 위치
 
+    [Header("시작위치와 도착위치의 중간 위치값")]
     [SerializeField]
-    private Vector3 center;
+    private Vector3 center;     // 시작위치와 도착위치의 중간 위치값
 
     [Range(0, 1)]
     public float t;
 
-    LineRenderer lr;
-
     bool isArrive = false;
-    //
-    [SerializeField]
-    private float slerpValue;
 
     private void Awake()
     {
