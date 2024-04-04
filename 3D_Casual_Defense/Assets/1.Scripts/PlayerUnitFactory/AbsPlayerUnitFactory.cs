@@ -9,6 +9,8 @@ public abstract class AbsPlayerUnitFactory : MonoBehaviour
 
     public PlayerUnitClass playerUnitPrefab;
 
+    public string unitId;
+
     // 인스펙터 창을 정리하기 위한 팩토리 프리팹 리스트
     [SerializeField]
     protected Transform prefabLists;

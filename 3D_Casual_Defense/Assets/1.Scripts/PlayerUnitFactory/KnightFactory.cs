@@ -7,6 +7,8 @@ public class KnightFactory : AbsPlayerUnitFactory
 {
     private void Awake()
     {
+        unitId = "hum_warr01";
+
         // 오브젝트 풀링 셋팅하는 함수
         InitObjPool(playerUnitPrefab);
     }
@@ -29,9 +31,6 @@ public class KnightFactory : AbsPlayerUnitFactory
             playerUnit.unitFactory = this;
 
         }
-
-        // 기사 유닛 ID에 해당하는 제이슨 파일 찾아서 필요한 데이터 할당
-        playerUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["hum_warr01"]);
 
         return playerUnit;
     }

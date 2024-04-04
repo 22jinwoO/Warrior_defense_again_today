@@ -7,6 +7,8 @@ public class ArcherFactory : AbsPlayerUnitFactory
 
     private void Awake()
     {
+        unitId = "hum_arch01";
+
         // 오브젝트 풀링 셋팅하는 함수
         InitObjPool(playerUnitPrefab);
     }
@@ -30,9 +32,6 @@ public class ArcherFactory : AbsPlayerUnitFactory
 
         }
 
-        // 궁수 유닛 ID에 해당하는 제이슨 파일 찾아서 필요한 데이터 할당
-        playerUnit.InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["hum_arch01"]);
-    
         return playerUnit;
     }
 }
