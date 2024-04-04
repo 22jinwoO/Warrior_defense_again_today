@@ -14,6 +14,7 @@ public class OrcShaman : MonsterUnitClass
         print(_nav.obstacleAvoidanceType);
 
         Init_Vfx();
+
         _this_Unit_ArmorCalculateCs = new PlateArmor();
 
         _enum_Unit_Action_Mode = eUnit_Action_States.monster_NormalPhase;
@@ -50,8 +51,6 @@ public class OrcShaman : MonsterUnitClass
         hitSoundPlayer = GetComponents<AudioSource>()[1];
         _nav.SetDestination(castleTr.position); // 성으로 이동
 
-        //StartCoroutine(Test());
-        //InitUnitInfoSetting(UnitDataManager.Instance._unitInfo_Dictionary["orc_sham01"]);
     }
 
     private void OnEnable()
@@ -109,10 +108,9 @@ public class OrcShaman : MonsterUnitClass
 
     }
 
-    //private void U
 
     // 활성화 시 필요한 초기 데이터 값 부여하는 함수
-    private void SetUnitValue()
+    public override void SetUnitValue()
     {
         canAct = true;
         sprCol.enabled = true;
@@ -124,7 +122,7 @@ public class OrcShaman : MonsterUnitClass
 
     }
 
-    private void SetStructValue(CharacterData character_Data)
+    public override void SetStructValue(CharacterData character_Data)
     {
         // 유닛 가속도
         _unitData.moveAcc = 8f;
@@ -180,13 +178,8 @@ public class OrcShaman : MonsterUnitClass
         gen_skill._link_Skill = character_Data.unit_Gen_Skill._link_Skill;
         gen_skill.unitInfoCs = this;
 
-        //gen_skill._projectile_Prefab.SetActive(false);
-
-
         // 유닛 타겟 설정 타입
         _unitData.targetSelectType = character_Data.targetSelectType;
-
-
 
         // 유닛 방어구 속성 할당
         _unitData._eUnit_Defense_Property = character_Data.unit_Armor_property;
@@ -224,11 +217,11 @@ public class OrcShaman : MonsterUnitClass
     {
         if (Castle.Instance._castle_Hp.Equals(0))
         {
-            OnCastleDown();
+            StopUnitAct();
         }
 
         // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결
-        Castle.Instance.OnCastleDown += OnCastleDown;
+        Castle.Instance.OnCastleDown += StopUnitAct;
 
 
         // 활성화 시 필요한 초기 데이터 값 부여하는 함수

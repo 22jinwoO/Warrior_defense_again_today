@@ -111,10 +111,8 @@ public class OrcHunter : MonsterUnitClass
 
     }
 
-    //private void U
-
-    // 활성화 시 필요한 초기 데이터 값 부여하는 함수
-    private void SetUnitValue()
+    // 비활성화 => 활성화 시 호출되는 함수
+    public override void SetUnitValue()
     {
         canAct = true;
         sprCol.enabled = true;
@@ -126,7 +124,8 @@ public class OrcHunter : MonsterUnitClass
 
     }
 
-    private void SetStructValue(CharacterData character_Data)
+    #region # SetStructValue(): Json파일 => C#으로 파싱한 값들 할당해주는 함수
+    public override void SetStructValue(CharacterData character_Data)
     {
         // 유닛 가속도
         _unitData.moveAcc = 8f;
@@ -226,17 +225,18 @@ public class OrcHunter : MonsterUnitClass
         _unitData._unit_Attack_CoolTime = 5f;                                                // 유닛 기본 공격 쿨타임
         _unitData._unit_Skill_CoolTime = 8f;                                                 // 유닛 스킬 공격 쿨타임
     }
+    #endregion
 
     #region # InitUnitInfoSetting(): 유닛 정보 셋팅하는 함수
     public override void InitUnitInfoSetting(CharacterData character_Data)
     {
         if (Castle.Instance._castle_Hp.Equals(0))
         {
-            OnCastleDown();
+            StopUnitAct();
         }
 
         // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결
-        Castle.Instance.OnCastleDown += OnCastleDown;
+        Castle.Instance.OnCastleDown += StopUnitAct;
 
 
         // 활성화 시 필요한 초기 데이터 값 부여하는 함수

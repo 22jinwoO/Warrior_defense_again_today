@@ -109,10 +109,9 @@ public class OrcWarlock : MonsterUnitClass
 
     }
 
-    //private void U
 
     // 활성화 시 필요한 초기 데이터 값 부여하는 함수
-    private void SetUnitValue()
+    public override void SetUnitValue()
     {
         canAct = true;
         sprCol.enabled = true;
@@ -124,10 +123,11 @@ public class OrcWarlock : MonsterUnitClass
 
     }
 
-    private void SetStructValue(CharacterData character_Data)
+    public override void SetStructValue(CharacterData character_Data)
     {
         // 유닛 가속도
         _unitData.moveAcc = 8f;
+
         // 유닛 이름
         _unitData._unit_Name = character_Data.char_id;
 
@@ -224,11 +224,11 @@ public class OrcWarlock : MonsterUnitClass
     {
         if (Castle.Instance._castle_Hp.Equals(0))
         {
-            OnCastleDown();
+            StopUnitAct();
         }
 
         // 성 무너졌을 때 기본 상태로 변환되는 이벤트 함수 연결
-        Castle.Instance.OnCastleDown += OnCastleDown;
+        Castle.Instance.OnCastleDown += StopUnitAct;
 
 
         // 활성화 시 필요한 초기 데이터 값 부여하는 함수
