@@ -6,7 +6,6 @@ using TMPro;
 using UnityEngine.EventSystems;
 using EnumTypes;
 using System;
-using Unity.VisualScripting;
 
 namespace EnumTypes
 {
@@ -80,9 +79,15 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     [SerializeField]
     private Button freeImg;
 
+    [SerializeField]
+    private float times = 0f;
+
+    [SerializeField]
+    private LayerMask layermask;
+
     private void Awake()
     {
-        //audioPlayer.PlayOneShot();
+
         if (TryGetComponent(out AudioSource audioSource))
         {
             audioPlayer = audioSource;
@@ -97,31 +102,165 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
     {
         if (canPlay)
         {
-            // 유닛 클릭 지속 시 이동상태로 전환시켜주는 구문
+            // 유닛 클릭 지속 시 이동상태로 전환시켜주는 구문 (유닛 선택 O / 드래그하여 이동 위치 지정중이 아닐 때)
             if (isChoice && Input.GetMouseButton(0) && !isMove)
             {
+                // 레이
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-
+                // 레이 발사
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    if (hit.transform.CompareTag("Player")&& clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+                    // 레이에 맞은 타겟의 태그가 "Player" 이고 레이에 맞은 트랜스폼이 이전에 클릭한 유닛의 트랜스폼과 같지 않을 경우
+                    if (hit.transform.CompareTag("Player") && !hit.transform.Equals(clickUnitInfo.transform))
                     {
+
+                        // 이전에 클릭했던 유닛의 오브젝트 이름에 유닛의 캐릭터 id 명 부여
+                        clickUnitInfo.gameObject.name = clickUnitInfo._unitData.char_id;
+
+                        //unitCtrlCanvas.SetActive(false);
+
+                        // 이전에 클릭했던 유닛의 선택상황 false
+                        clickUnitInfo._isClick = false;
+
+                        // 이전에 클릭했던 유닛 정보 = null
+                        clickUnitInfo = null;
+
+                        // 플레이어 UI의 클릭한 유닛의 정보 = null
+                        clickUnitCs.clickUnitInfo = null;
+
+                        // clickUnitInfo 변수에 레이를 맞은 타겟의 PlayerUnitClass 할당
+                        clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+
+                        // 선택한 유닛의 선택상황 true
+                        clickUnitInfo._isClick = true;
+
+                        // 선택한 유닛의 오브젝트 이름 ClickUnit로 변경
+                        clickUnitInfo.gameObject.name = "ClickUnit";
+
+                        // 유닛 선택 오디오 실행
+                        audioPlayer.PlayOneShot(audioSources[0]);
+
+                        // 플레이어 UI의 클릭한 유닛의 정보에 데이터 할당
+                        clickUnitCs.clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+
+
+                        // 플레이어 조작 창 활성화
+                        unitCtrlCanvas.transform.position = transform.position;
+
+                        // 클릭한 유닛의 액션 모드가 홀드모드 일 때 유닛 선택 ui 이미지 중 홀드모드 이미지 비활성화
+                        if (clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_HoldMode))
+                        {
+                            // 자유모드 버튼 이미지 활성화
+                            clickUnitCs.clickUnitFreeBtnImg.sprite = clickUnitCs.freeImgs[0];
+
+                            // 홀드모드 버튼 이미지 비활성화
+                            clickUnitCs.clickUnitHoldBtnImg.sprite = clickUnitCs.holdImgs[2];
+
+                            // 홀드모드 버튼 비활성화
+                            holdImg.interactable = false;
+
+                            // 자유모드 버튼 활성화
+                            freeImg.interactable = true;
+                        }
+
+                        //  클릭한 유닛의 액션 모드가 자유모드 일 때 유닛 선택 ui 이미지 중 자유모드 이미지 비활성화
+                        else if (clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+                        {
+                            // 자유모드 버튼 이미지 비활성화
+                            clickUnitCs.clickUnitFreeBtnImg.sprite = clickUnitCs.freeImgs[2];
+
+                            // 홀드모드 버튼 이미지 활성화
+                            clickUnitCs.clickUnitHoldBtnImg.sprite = clickUnitCs.holdImgs[0];
+
+                            // 홀드모드 버튼 활성화
+                            holdImg.interactable = true;
+
+                            // 자유모드 버튼 비활성화
+                            freeImg.interactable = false;
+                        }
+
+                        // 유닛 Ui 활성화
+                        unitCtrlCanvas.SetActive(true);
+
+                        // 유닛 선택 플래그 현재 자기 자신의 위치로 변경
+                        flagTr.position = transform.position;
+
+                        // 플래그 오브젝트 활성화
+                        flagTr.gameObject.SetActive(true);
+
+                        textMeshProUGUI.text = hit.transform.name + "지정 완료!\n" + "사용자 지정 가능여부 " + isChoice + "\n 유닛이동 가능 여부 " + hit.transform.GetComponent<PlayerUnitClass>()._isClick;
+
+                        print("156 // 오류 1");
+
+                        //isChoice = true;
+
+                    }
+
+                    // 맞은 유닛의 태그가 Player 고 선택한 유닛의 정보가 자유모드 일 때
+                    else if (hit.transform.CompareTag("Player") && clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_FreeMode))
+                    {
+                        // 해당 유닛을 누르고 있는 동안 시간 증가
                         times += Time.deltaTime;
+
+                        // 시간이 0.6초보다 크거나 같아지면 이동모드로 전환
                         if (times >= 0.6f)
                         {
+                            // 유닛 이동모드로 전환
                             isMove = true;
+
+                            // 선택한 유닛의 이동모드 이미지 활성화
                             clickUnitInfo.moveImg.SetActive(true);
+
+                            // 선택한 플래그 크기 커졌다가 줄어드는 애니메이션 실행
                             StartCoroutine(FlagAnim());
+
+                            // 타임 = 0
                             times = 0f;
                         }
 
                     }
+
+                    // 레이를 발사할 때 UnitUi 레이어마스크를 가진애들만 레이를 맞게 함.
+                    else if (!Physics.Raycast(ray, out RaycastHit hit2, 1f, layermask))
+                    {
+                        print("174// 오류 3");
+                        
+                        // 유닛 선택 상황 
+                        isChoice = false;
+
+                        // 플래그 오브젝트 비활성화
+                        flagTr.gameObject.SetActive(false);
+
+                        // 선택한 유닛이 존재하고, 선택한 유닛의 모드전환이 끝난 상태일 때
+                        if (clickUnitInfo != null && clickUnitInfo.isChangeState)
+                        {
+                            clickUnitInfo._isClick = false;
+                            clickUnitInfo.gameObject.name = clickUnitInfo._unitData.char_id;
+                        }
+
+
+
+                        clickUnitInfo = null;
+
+
+                        unitCtrlCanvas.SetActive(false);
+
+
+                        clickUnitCs.clickUnitInfo = null;
+
+
+                        isChoice = false;
+                    }
+
                 }
             }
 
-            if (!isMove && Input.GetMouseButtonDown(0))
+            //유닛 첫 터치 시
+            else if (!isMove && Input.GetMouseButtonDown(0) && !isChoice)
             {
+                times = 0f;
+
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
@@ -132,14 +271,15 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                         clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
 
 
-                        if (!isChoice&&!clickUnitInfo._isClick)
+                        if (!isChoice && !clickUnitInfo._isClick)
                         {
+                            clickUnitInfo.gameObject.name = "ClickUnit";
                             audioPlayer.PlayOneShot(audioSources[0]);
                             clickUnitInfo._isClick = true;
                             //clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
 
                             //clickUnitInfo._isClick = true;
-                            clickUnitCs.clikUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
+                            clickUnitCs.clickUnitInfo = hit.transform.GetComponent<PlayerUnitClass>();
                             //isMove = true;
                             _flag_Material = _Materials[0];
 
@@ -148,7 +288,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                             if (clickUnitInfo._enum_Unit_Action_Mode.Equals(eUnit_Action_States.unit_HoldMode))
                             {
                                 clickUnitCs.clickUnitFreeBtnImg.sprite = clickUnitCs.freeImgs[0];
-                                clickUnitCs.clickUnitHoldBtnImg.sprite= clickUnitCs.holdImgs[2];
+                                clickUnitCs.clickUnitHoldBtnImg.sprite = clickUnitCs.holdImgs[2];
                                 holdImg.interactable = false;
                                 freeImg.interactable = true;
                             }
@@ -181,37 +321,47 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
                         //}
                     }
 
+
                     else if (!hit.transform.tag.Equals("UnitUI"))
                     {
-                        print("다른거 맞음");
+                        print("174// 오류 1");
+                        print(hit.transform.name);
                         isChoice = false;
                         flagTr.gameObject.SetActive(false);
 
-                        if (clickUnitInfo != null&&clickUnitInfo.isChangeState)
+                        if (clickUnitInfo != null && clickUnitInfo.isChangeState)
                         {
                             clickUnitInfo._isClick = false;
+                            clickUnitInfo.gameObject.name = clickUnitInfo._unitData.char_id;
                         }
-
+                        print(hit.transform);
                         clickUnitInfo = null;
                         unitCtrlCanvas.SetActive(false);
 
-                        clickUnitCs.clikUnitInfo = null;
+                        clickUnitCs.clickUnitInfo = null;
                         isChoice = false;
                     }
+
                 }
+
+
+
+
+
             }
+            if (isChoice && !isMove)
+            {
+                transform.position = clickUnitInfo.transform.position;
+                unitCtrlCanvas.transform.position = transform.position + new Vector3(xValue, yValue, zValue);
 
+                flagTr.position = transform.position;
+            }
         }
 
-        if (isChoice&&!isMove)
-        {
-            transform.position = clickUnitInfo.transform.position;
-            unitCtrlCanvas.transform.position = transform.position+new Vector3(xValue,yValue,zValue);
-
-            flagTr.position = transform.position;
-        }
 
     }
+
+    //private void 
 
     private IEnumerator FlagAnim()
     {
@@ -223,7 +373,7 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
         float value = 4f;
         flagTr.localScale = new Vector3(value, 0f, value);
-        while (value>1.5f)
+        while (value > 1.5f)
         {
             flagTr.localScale = new Vector3(value, 0f, value);
             value -= 0.1f;
@@ -233,7 +383,8 @@ public class Player : MonoBehaviour, IDragHandler, IPointerDownHandler, IBeginDr
 
     }
 
-    public float times = 0f;
+
+
     public void OnDrag(PointerEventData eventData)
     {
         //times += Time.deltaTime;
