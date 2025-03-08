@@ -114,10 +114,10 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
 
     private void SetDicMonsterFactory()
     {
-        d_MonsterDictonary.Add("orc_warr01", monsterUnitFactorys[0]);
-        d_MonsterDictonary.Add("orc_hunt01", monsterUnitFactorys[1]);
-        d_MonsterDictonary.Add("orc_sham01", monsterUnitFactorys[2]);
-        d_MonsterDictonary.Add("orc_boss01", monsterUnitFactorys[3]);
+        d_MonsterDictonary.Add(key : "orc_warr01", value : monsterUnitFactorys[0]);
+        d_MonsterDictonary.Add(key: "orc_hunt01", value: monsterUnitFactorys[1]);
+        d_MonsterDictonary.Add(key: "orc_sham01", value: monsterUnitFactorys[2]);
+        d_MonsterDictonary.Add(key: "orc_boss01", value: monsterUnitFactorys[3]);
     }
 
     public void StartWave(Wave wave)
@@ -161,8 +161,11 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
             while (currentMonsterCount < currentWave.wave_monsterClasses.Count)
                 {
 
+                    // 현재 웨이브에서 생성된 몬스터 인덱스 수를 매개변수로 넣어줌
                     CheckSpawnMonster(currentMonsterCount);
+
                     currentMonsterCount++;
+
                     spawnMonsterCount++;
 
                     yield return new WaitForSeconds(currentWave.wave_interval);
@@ -181,9 +184,8 @@ public class MonsterSpawnManager : Singleton<MonsterSpawnManager>
     #region # CheckSpawnMonster() 함수 :  구상생산자 호출하는 함수
     private void CheckSpawnMonster(int monsterCnt)
     {
-        // 오크 종류 확인하는 게 아니라 딕셔너리 키 밸류를 키로 몬스터아이디, 밸류로 해당 몬스터 팩토리 연결하도록 해서 몬스터팩토리.createMonster하도록설정하기
-        print(currentWave.wave_monsterClasses[monsterCnt]);
-        CreateMonster(currentWave.wave_monsterClasses[monsterCnt]);
+        // 몬스터 종류 리스트의 인덱스로 monsterCnt를 넣고, 인덱스에 해당하는 리스트 값(UnitId - string 자료형) 을 매개변수로 전달
+        CreateMonster(monsterUnitId : currentWave.wave_monsterClasses[monsterCnt]);
 
     }
     #endregion

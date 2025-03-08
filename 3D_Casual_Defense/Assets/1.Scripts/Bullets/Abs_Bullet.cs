@@ -6,6 +6,7 @@ public abstract class Abs_Bullet : MonoBehaviour
 {
     // 스킬
     public Abs_Skill _skill;
+    public AbsNewSKill _newSkill;
 
     // 타겟 유닛
     public Transform _target_Unit;
@@ -21,6 +22,9 @@ public abstract class Abs_Bullet : MonoBehaviour
 
     // 발사한 유닛의 UnitInfo.cs
     public UnitInfo unitInfoCs;
+
+    // 발사한 유닛의 UnitInfo.cs
+    public NewUnitInfo newUnitInfoCs;
 
     // 공격 데미지
     public float atkDmg;

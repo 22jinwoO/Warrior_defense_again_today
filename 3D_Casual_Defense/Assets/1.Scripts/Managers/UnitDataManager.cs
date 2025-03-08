@@ -48,7 +48,6 @@ public class UnitDataManager : Singleton<UnitDataManager>
     [Header("방어 속성에 따른 스크립트 딕셔너리")]
     public SerializableDictionary<eUnit_Defense_Property_States,ArmorCalculate> _armorCs_Dictionary;
 
-
     [Header("타겟 선정 딕셔너리")]
     public SerializableDictionary<string, eUnit_targetSelectType> _targetSelect_Dictionary;
 
@@ -82,16 +81,18 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         Add_UnitData_Dictionary(); // 유닛 데이터에 해당하는 제이슨 파일 값 키, 값 할당하는 함수
 
+
+        // 링크스킬, 스킬데이터가 장착된 스킬을 유닛 데이터에 할당
         // 플레이어 유닛
-        Set_UnitSkillData("hum_warr01");
-        Set_UnitSkillData("hum_arch01");
-        Set_UnitSkillData("hum_warr02");
+        Set_UnitSkillData(unit_ID : "hum_warr01");
+        Set_UnitSkillData(unit_ID : "hum_arch01");
+        Set_UnitSkillData(unit_ID : "hum_warr02");
 
         // 몬스터 (오크)
-        Set_UnitSkillData("orc_hunt01");
-        Set_UnitSkillData("orc_warr01");
-        Set_UnitSkillData("orc_sham01");
-        Set_UnitSkillData("orc_boss01");
+        Set_UnitSkillData(unit_ID : "orc_hunt01");
+        Set_UnitSkillData(unit_ID : "orc_warr01");
+        Set_UnitSkillData(unit_ID : "orc_sham01");
+        Set_UnitSkillData(unit_ID : "orc_boss01");
 
         //foreach (var item in All_character_Datas.CharacterDatas)
         //{
@@ -131,7 +132,11 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
         public Abs_Skill unit_Gen_Skill;
         public Abs_Skill unit_Spc_Skill;
-        public Abs_Skill unit_Spc_Skill2;
+        public Abs_Skill unit_Spc_Skill2;        
+        
+        public AbsNewSKill new_unit_Gen_Skill;
+        public AbsNewSKill new_unit_Spc_Skill;
+        public AbsNewSKill new_unit_Spc_Skill2;
 
         public eUnit_Defense_Property_States unit_Armor_property;
         public ArmorCalculate unit_ArmorCalculateCs;
@@ -157,7 +162,7 @@ public class UnitDataManager : Singleton<UnitDataManager>
 
     }
 
-    // 링크스킬, 스킬데이터가 장착된 스킬들을 유닛 데이터에 할당
+    // 링크스킬, 스킬데이터가 장착된 스킬을 유닛 데이터에 할당해주는 함수
     public void Set_UnitSkillData(string unit_ID)
     {
         // 몬스터가 아닐 경우 (플레이어 유닛일 경우 일 때만)
@@ -246,9 +251,14 @@ public class UnitDataManager : Singleton<UnitDataManager>
     #region # Add_ArmorScript_Dictionary() : 방어구 속성에 따른 스크립트 키, 값 추가해주는 함수
     private void Add_ArmorScript_Dictionary()
     {
-        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.plate_Armor, new PlateArmor());
-        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.chain_Armor, new ChainArmor());
-        _armorCs_Dictionary.Add(eUnit_Defense_Property_States.padding_Armor, new PaddingArmor());
+        // 판금 갑옷
+        _armorCs_Dictionary.Add(key : eUnit_Defense_Property_States.plate_Armor, value : new PlateArmor());
+
+        // 쇠사슬 갑옷
+        _armorCs_Dictionary.Add(key : eUnit_Defense_Property_States.chain_Armor, value: new ChainArmor());
+
+        // 천갑옷
+        _armorCs_Dictionary.Add(key: eUnit_Defense_Property_States.padding_Armor, value: new PaddingArmor());
     }
     #endregion
 

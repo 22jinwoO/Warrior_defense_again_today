@@ -65,10 +65,10 @@ public class Bullet_Arrow : Abs_Bullet
         {
             Destroy(gameObject);
         }
-        if (unitInfoCs.unitTargetSearchCs._targetUnit == null)
-        {
-            Destroy(gameObject);
-        }
+        //if (unitInfoCs.unitTargetSearchCs._targetUnit == null)
+        //{
+        //    Destroy(gameObject);
+        //}
 
     }
 
@@ -77,17 +77,18 @@ public class Bullet_Arrow : Abs_Bullet
         // 타겟과 발사체 충돌 시 실행
         if (other.transform.Equals(_target_Unit))
         {
+            print("충돌완룡");
             //타겟의 데미지 입는 함수 호출
-            other.GetComponent<ActUnit>().BeAttacked_By_OtherUnit(skill: _skill, myAtkType: _skill._skill_AtkType, attacker: ref unitInfoCs, other: other.transform);
+            other.GetComponent<UnitHp>().NewBeAttacked_By_OtherUnit(skill: _newSkill, AtkType: _newSkill._skill_AtkType, attacker: ref unitInfoCs, other: other.transform);
 
-            // 도착 변수 false로 변경
-            isArrive = false;
+            //// 도착 변수 false로 변경
+            //isArrive = false;
 
-            // 발사체가 타겟을 따라다녀야 하기 떄문에, 발사체를 타겟의 자식으로 넣어줌
-            transform.SetParent(_target_Unit.transform);
+            //// 발사체가 타겟을 따라다녀야 하기 떄문에, 발사체를 타겟의 자식으로 넣어줌
+            //transform.SetParent(_target_Unit.transform);
 
-            // 발사체 4초뒤 파괴
-            Destroy(gameObject,4f);
+            //// 발사체 4초뒤 파괴
+            //Destroy(gameObject,4f);
         }
     }
 

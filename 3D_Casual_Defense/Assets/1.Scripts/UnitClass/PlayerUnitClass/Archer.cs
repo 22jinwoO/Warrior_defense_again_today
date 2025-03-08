@@ -21,6 +21,7 @@ public class Archer : PlayerUnitClass
     private TextMeshProUGUI textMeshProUGUI;
 
     public Player player;
+
     private void Awake()
     {
         someMtr = new Material[someMeshReners.Length];

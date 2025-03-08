@@ -340,7 +340,7 @@ public class ActUnit : MonoBehaviour
         StartCoroutine(Get_DamagedBody());
 
         // 피격자의 유닛 데이터 가져오기
-        unit_Data damagedUnitData = other.GetComponent<UnitInfo>()._unitData;
+        new_Unit_Data damagedUnitData = other.GetComponent<NewUnitInfo>()._unitData;
 
         float attack_Dmg = skill._base_Value;
 
@@ -472,10 +472,13 @@ public class ActUnit : MonoBehaviour
 
         Color cloaking_Mtr_Color = unitInfoCs.bodyMeshRener.material.color;
 
+        // 머태리얼 투명도 조절
         while (colorValue_a>0.0f)
         {
             colorValue_a -= 0.01f;
+
             cloaking_Mtr_Color.a = colorValue_a;
+
             for (int j = 0; j < unitInfoCs.someMeshReners.Length; j++)
             {
                 unitInfoCs.someMeshReners[j].material.color=cloaking_Mtr_Color;
@@ -522,8 +525,11 @@ public class ActUnit : MonoBehaviour
             unitInfoCs.someMeshReners[j].material = unitInfoCs.someMtr[j];
             //0.157f
         }
+
         cloaking_Mtr_Color = unitInfoCs.bodyMeshRener.material.color;
+
         cloaking_Mtr_Color.a = 1f;
+
         unitInfoCs._unit_CloakingMtr.color= cloaking_Mtr_Color;
 
         for (int j = 0; j < unitInfoCs.someMeshReners.Length; j++)
@@ -546,7 +552,7 @@ public class ActUnit : MonoBehaviour
                 break;
 
             case eUnit_targetSelectType.nearest_Target:
-                unitTargetSearchCs.Search_For_Nearest_Target();
+                unitTargetSearchCs.Search_For_longest_Target();
                 break;
 
             case eUnit_targetSelectType.low_Health_Target:

@@ -470,8 +470,8 @@ public abstract class UnitInfo : MonoBehaviour
 
         vfx.transform.rotation = Quaternion.Euler(0, vfxRot.eulerAngles.y, 0);
 
-
         yield return new WaitForSecondsRealtime(0.1f);
+
         vfx.transform.position = transform.position + Vector3.up * 0.5f + vfx.transform.forward * 0.7f;
 
         //히트 사운드 피치 조절
@@ -487,7 +487,9 @@ public abstract class UnitInfo : MonoBehaviour
 
 
         vfx.SetActive(true);
+
         yield return new WaitForSecondsRealtime(0.5f);
+
         vfx.SetActive(false);
     }
 

@@ -13,6 +13,7 @@ TagManager:
   - Stairs
   - Obstacle
   - Plane
+  - Bullet_StartPos
   layers:
   - Default
   - TransparentFX

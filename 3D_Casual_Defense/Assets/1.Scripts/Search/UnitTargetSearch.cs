@@ -15,6 +15,8 @@ public class UnitTargetSearch : MonoBehaviour
     [SerializeField]
     private MonsterUnitClass monsterUnit;
 
+
+
     private void Awake()
     {
         unitInfoCs = GetComponent<UnitInfo>();
@@ -44,8 +46,8 @@ public class UnitTargetSearch : MonoBehaviour
     public void Search_For_Fixed_Target() // 고정 타겟을 탐지하는 함수 , 시야 범위에서 적 인식
     {
 
-        Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
-        //print(gameObject.name + " : " + unitInfoCs._unitData.sightRange);
+        Collider[] _cols; _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
+
         foreach (var item in _cols)
         {
             print(item.gameObject.name);
@@ -53,38 +55,52 @@ public class UnitTargetSearch : MonoBehaviour
         Transform _shortestTarget = null;  // 가장 가까운 적을 의미하는 변수
 
 
-
-        //print(_cols.Length);  
         if (_cols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출
         {
-            //print("적 없음!");
             return;
         }
 
-        //CancelInvoke(); // 근데 이게 안돼
+        float _shortestDistance = 0f;
 
-        float _shortestDistance = Mathf.Infinity;   // 거리 무한 값 할당
-
-        foreach (var _colTarget in _cols)
+        // 선택 정렬
+        for (int i = 0; i < _cols.Length; i++)
         {
-            //Vector3.sqrMagnitude 를 Vector3.Distance로 바꿈
-            float _distance = Vector3.Distance(transform.position, _colTarget.transform.position);
-            if (_shortestDistance > _distance)
-            {
-                _shortestDistance = _distance;
-                _shortestTarget = _colTarget.transform;
+            // 거리 기준 값 할당
+            _shortestDistance = Vector3.Distance(transform.position, _cols[i].transform.position);
 
+            int location = i;
+
+            for (int j = i + 1; j < _cols.Length; j++)
+            {
+                if (_shortestDistance >= Vector3.Distance(transform.position, _cols[j].transform.position))
+                {
+                    // 정렬된 배열의 j번째 값을 타겟으로 부여
+                    _shortestTarget = _cols[j].transform;
+
+                    _shortestDistance = Vector3.Distance(transform.position, _cols[j].transform.position);
+
+                    location = j;
+                }
             }
+
+            Collider temp = null;
+
+            temp = _cols[location];
+            _cols[location] = _cols[i];
+            _cols[i] = temp;
+
         }
 
-        //시야범위 밖의 타겟인데 자꾸 타겟을 인식해서 예외처리 구문 추가해봄
+
+
+        //시야범위 밖의 타겟인데 자꾸 타겟을 인식해서 예외처리 구문 추가
         if (_shortestDistance > unitInfoCs._unitData.sightRange)
         {
             unitInfoCs._isSearch = false;
             print(gameObject.name + " : " + _shortestDistance + "예외처리 실행");
             return;
         }
-
+        _shortestTarget = _cols[0].transform;
         _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
         _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
 
@@ -95,44 +111,72 @@ public class UnitTargetSearch : MonoBehaviour
 
         }
 
+        for (int i = 0; i < _cols.Length; i++)
+        {
+            Debug.LogWarning(Vector3.Distance(transform.position, _cols[i].transform.position));
+        }
+
         // 타겟 바라보는 상태로 변환 (추격)
         unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
 
     }
     #endregion
 
-    #region # Search_For_Nearest_Target() : 가장 가까운 적 탐지하는 함수 , 시야 범위에서 적 인식
-    public void Search_For_Nearest_Target() // 가장 가까운 적 탐지하는 함수 , 시야 범위에서 적 인식
+    #region # Search_For_longest_Target() : 가장 멀리있는 적 탐지하는 함수 , 시야 범위에서 적 인식
+    public void Search_For_longest_Target() // 가장 멀리있는 적 탐지하는 함수 , 시야 범위에서 적 인식
     {
+        //_cols = null;
         Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
-        Transform _shortestTarget = null;  // 가장 가까운 적을 의미하는 변수
 
-        //print(_cols.Length);  
+        Transform _longestTarget = null;  // 가장 가까운 적을 의미하는 변수
+
+        for (int t = 0; t < _cols.Length; t++)
+        {
+            Debug.LogWarning(t+" "+_cols[t].transform.position);
+        }
+
         if (_cols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출
         {
-            //print("적 없음!");
             return;
         }
 
-        //CancelInvoke(); // 근데 이게 안돼
+        // 삽입 정렬
+        int i, j;
 
-        float _shortestDistance = Mathf.Infinity;   // 거리 무한 값 할당
+        Collider Key;
 
-        foreach (var _colTarget in _cols)
+        for (i = 1; i < _cols.Length; i++)
         {
-            float _distance = Vector3.SqrMagnitude(transform.position - _colTarget.transform.position);
-            if (_shortestDistance > _distance)
+            float _LongDistance = Vector3.Distance(transform.position, _cols[i].transform.position);
+
+            Key = _cols[i];
+
+            for (j = i - 1; j >= 0; j--)
             {
-                _shortestDistance = _distance;
-                _shortestTarget = _colTarget.transform;
+                if ( _LongDistance >= Vector3.Distance(transform.position, _cols[j].transform.position))
+                {
+                    _cols[j + 1] = _cols[j];
+                }
+
+                else
+                    break;
             }
+
+            _cols[j + 1] = Key;
         }
-        //
-        _targetUnit = _shortestTarget; // 거리가 가장 가까운 적 타겟을 _targetUnit 변수에 할당
-        _target_Body = _shortestTarget.GetComponent<UnitInfo>().body_Tr;
-        //print(_targetUnit.name);
+
+        _longestTarget = _cols[0].transform;
+
+        for (i = 0; i < _cols.Length; i++)
+        {
+            Debug.LogWarning(Vector3.Distance(transform.position, _cols[i].transform.position));
+        }
+
+        _targetUnit = _longestTarget;  // 거리가 가장 먼 적을  _targetUnit 변수에 할당
+        _target_Body = _longestTarget.GetComponent<UnitInfo>().body_Tr;
+
         unitInfoCs._isSearch = true;
-        unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
+        unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;
 
     }
     #endregion
@@ -141,40 +185,79 @@ public class UnitTargetSearch : MonoBehaviour
     public void Search_For_Lowhealth_Target() // 가장 체력이 낮은 적을 탐지하는 함수 , 시야 범위에서 적 인식
     {
         Collider[] _cols = Physics.OverlapSphere(transform.position, unitInfoCs._unitData.sightRange, _layerMask); // 오버랩 스피어 생성
+
         Transform _lowHeatlh_Target = null;  // 가장 가까운 적을 의미하는 변수
 
         if (_cols.Length <= 0)  // 탐지된 적이 없다면 함수 탈출
         {
-            //print("적 없음!");
             return;
         }
 
-        float low_health = Mathf.Infinity;   // 체력 값 무한 값으로 할당
-        unit_Data unitData;
+        int low = 0;
+        int high = _cols.Length - 1;
 
-        foreach (var _colTarget in _cols)
-        {
-            unitData = _colTarget.GetComponent<unit_Data>();
+        //퀵정렬
+        QuickSort(_cols, low, high);
 
-            if (low_health > unitData.hp)
-            {
-                low_health = unitData.hp;
-                _lowHeatlh_Target = _colTarget.transform;
-            }
-        }
-        //
+        // 낮은 체력으로 정렬된 몬스터 배열의 0번째를 타겟으로 할당
+        _lowHeatlh_Target = _cols[0].transform;
+
         _targetUnit = _lowHeatlh_Target; // 가장 체력이 낮은 타겟을 _targetUnit 변수에 할당
+
         _target_Body = _lowHeatlh_Target.GetComponent<UnitInfo>().body_Tr;
 
-        //print(_targetUnit.name);
+
         unitInfoCs._isSearch = true;
+
         unitInfoCs._enum_Unit_Action_State = unitInfoCs._enum_Unit_Attack_State;    // ㅇㅇ 업데이트에서 FSM 상태 실행중
 
     }
     #endregion
 
-    
+    #region # QuickSort() 함수 : 퀵정렬 기능 해주는 함수
+    public void QuickSort(Collider[] arr, int low, int high)
+    {
+        if (low < high)
+        {
+            int pivotIndex = Partition(arr, low, high);
+            QuickSort(arr, low, pivotIndex - 1);
+            QuickSort(arr, pivotIndex + 1, high);
+        }
 
+        for (int i = 0; i < arr.Length; i++)
+        {
+            Debug.LogWarning($"{i}번째 유닛 HP : { arr[i].GetComponent<UnitInfo>()._unitData.hp}");
+        }
+    }
+    #endregion
+
+    #region # Partition() 함수 : 배열값 정렬해주는 함수
+    private int Partition(Collider[] arr, int low, int high)
+    {
+        float pivot = arr[high].GetComponent<UnitInfo>()._unitData.hp;
+        int i = low - 1;
+
+        for (int j = low; j < high; j++)
+        {
+            if (arr[j].GetComponent<UnitInfo>()._unitData.hp <= pivot)
+            {
+                i++;
+                Swap(arr, i, j);
+            }
+        }
+        Swap(arr, i + 1, high);
+        return i + 1;
+    }
+    #endregion
+
+    #region # Swap() 함수 : 오버랩 스피어 배열 값 위치 변경해주는 함수
+    private void Swap(Collider[] arr, int a, int b)
+    {
+        Collider temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+    #endregion
 
     #region # Look_At_The_Target() : 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수
     public void Look_At_The_Target(eUnit_Action_States next_Action_State = eUnit_Action_States.Default)    // 유닛이 타겟을 감지 했을 때 타겟 쪽으로 몸을 회전하여 타겟을 바라보는 함수

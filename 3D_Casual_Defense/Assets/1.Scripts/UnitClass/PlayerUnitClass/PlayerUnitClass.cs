@@ -18,9 +18,6 @@ public abstract class PlayerUnitClass : UnitInfo
     [Header("플레이어 유닛 홀드 상태 시 필요한 네비메쉬 옵스태클")]
     public NavMeshObstacle navObs;
 
-    public Transform initPos;   // 오브젝트 원래 위치
-    public Vector3 initPos2;    // 오브젝트 원래 위치
-
     [Header("유닛을 클릭했는지 확인하는 변수")]
     public bool _isClick;       // 유닛을 클릭했는지 확인하는 변수
 
@@ -65,8 +62,6 @@ public abstract class PlayerUnitClass : UnitInfo
         {
             holdObj.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
             circleObj.SetActive(true);
-            //chageModeVfx.transform.position = transform.position;
-            //chageModeVfx.SetActive(true);
             changeTime += Time.deltaTime;
             if(_isHoldeMode&& holdObj.color.a<1f)
             {
@@ -87,7 +82,6 @@ public abstract class PlayerUnitClass : UnitInfo
         }
         else if (!isChangeState && changeTime >= 3f)
         {
-            //chageModeVfx.SetActive(false);
             circleObj.SetActive(false);
             _isClick = false;
             canAct = true;
@@ -117,65 +111,60 @@ public abstract class PlayerUnitClass : UnitInfo
 
     public void Act_By_Unit()  // 유닛 행동 구분지어주는 함수
     {
-        //if (_isTargetDead&& unitTargetSearchCs._targetUnit!=null)
-        //{
-        //    StartCoroutine(TestA());
-        //}
         switch (_enum_Unit_Action_Mode) // 유닛 모드에 따라 행동
         {
             case eUnit_Action_States.unit_FreeMode: // 유닛 자유 모드일 때 행동 구분
+
                 _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_FreeMode;
-                //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Idle;
 
                 Act_FreeMode(); // 자유모드일 때 호출되는 함수
                 break;
 
             case eUnit_Action_States.unit_HoldMode:
+
                 _enum_pUnit_Action_BaseMode = eUnit_Action_States.unit_HoldMode;
-                //_enum_pUnit_Action_BaseState = eUnit_Action_States.unit_Boundary;
 
                 Act_HoldMode(); // 홀드모드일 때 호출되는 함수
+
                 break;
         }
     }
-
     #endregion  IActByUnit 함수 
 
     #region # Act_FreeMode() : 플레이어 유닛이 자유모드일 때 호출되는 함수, 구현된 행동 : 대기(탐지), 이동, 추적, 공격
     private void Act_FreeMode()
     {
-        //navObs.enabled = false;
         navObs.enabled = false;
         if (_nav.enabled==false)
             _nav.enabled = true;
 
-        //if (holdOb!=null)
-        //    holdOb.SetActive(false);
-
         switch (_enum_Unit_Action_State)     // 현재 유닛 행동
         {
             case eUnit_Action_States.unit_Idle: // 유닛 대기 상태(탐지 상태)
+
                 _anim.SetBool("isMove", false);
+
                 if (!_isSearch)  // 적 탐지 못했을 때만 실행
                 {
                     actUnitCs.SearchTarget(target_Search_Type: _eUnit_Target_Search_Type);
                 }
-                //if (initPos != null)
-                //{
-                //    print(initPos2);
-                //    transform.position = initPos2;
-                //    initPos = null;
-                //}
                 break;
 
             case eUnit_Action_States.unit_Move: // 유닛 이동
+
+                // 탐지한 타겟 비워주기
                 _isSearch = false;
                 unitTargetSearchCs._targetUnit = null;
+                
+                //
+
                 _nav.isStopped = false;
+
                 _anim.SetBool("isMove", true);   // 걷는 모션 애니메이션 실행
-                                                 //unitTargetSearchCs._unitModelTr.LookAt(_movePos);
-                actUnitCs.MoveUnit(_movePos);
-                //arriveFlag.transform.position = _movePos;
+
+                
+                actUnitCs.MoveUnit(_movePos);   // 목표지점으로 이동하는 함수 호출
+
                 float distance = Vector3.Distance(transform.position, _movePos);
 
                 if(distance <= 2f)
@@ -198,9 +187,6 @@ public abstract class PlayerUnitClass : UnitInfo
                 if (unitTargetSearchCs._targetUnit!=null)
                 {
                     actUnitCs.Attack_Unit(eUnit_Action_States.unit_Tracking);
-
-                    //actUnitCs.ReadyForAttack(unit_Atk_State: eUnit_Action_States.unit_Tracking);
-
                 }
                 break;
 
@@ -219,27 +205,6 @@ public abstract class PlayerUnitClass : UnitInfo
         
         _nav.enabled = false;
         navObs.enabled = true;
-        //_nav.isStopped = true;
-        //_nav.obstacleAvoidanceType = ObstacleAvoidanceType.NoObstacleAvoidance;
-        //_nav.isStopped = true;
-        //if (holdOb == null)
-        //{
-        //    print(gameObject.name);
-        //    holdOb = Instantiate(holdObPref, transform.position, Quaternion.identity);
-        //    holdOb.transform.SetParent(GameObject.FindGameObjectWithTag("HoldPrefabs").transform);
-        //    //navObs = holdOb.GetComponent<NavMeshObstacle>();
-        //    //navObs.enabled = true;
-        //    holdOb.gameObject.name = "홀드발판";
-        //}
-        //else
-        //{
-        //    holdOb.SetActive(true);
-        //    holdOb.transform.position = transform.position;
-        //}
-        initPos = transform;
-        initPos2 = transform.position;
-        //holdObPref.transform.localRotation = Quaternion.Euler(Vector3.zero);
-
 
         switch (_enum_Unit_Action_State)
         {

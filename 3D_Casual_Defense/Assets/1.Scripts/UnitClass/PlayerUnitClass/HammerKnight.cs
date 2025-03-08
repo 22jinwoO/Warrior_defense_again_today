@@ -223,13 +223,17 @@ public class HammerKnight : PlayerUnitClass
         spe_skill_2.unitTargetSearchCs = this.unitTargetSearchCs;
 
         // 유닛 방어구 속성 할당
-        _unitData._eUnit_Defense_Property = character_Data.unit_Armor_property;
+        _unitData._eUnit_Defense_Property = UnitDataManager.Instance._armor_Dictionary[_unitData.defenseType];
 
-        // 유닛 방어구 속성에 따른 계산을 위한 스크립트 할당
-        _this_Unit_ArmorCalculateCs = character_Data.unit_ArmorCalculateCs;
+        // 유닛 방어구 속성 데미지 계산을 위한 스크립트 할당
+        _this_Unit_ArmorCalculateCs = UnitDataManager.Instance._armorCs_Dictionary[_unitData._eUnit_Defense_Property];
 
         // 유닛 타겟 설정 타입 할당
-        _unitData._unit_targetSelectType = character_Data.unit_targetSelectType;
+        print(character_Data.targetSelectType);
+
+        _unitData._unit_targetSelectType = UnitDataManager.Instance._targetSelect_Dictionary[character_Data.targetSelectType];
+
+        _eUnit_Target_Search_Type = UnitDataManager.Instance._targetSelect_Dictionary[character_Data.targetSelectType];
 
         // 유닛 자유 모드
         _enum_Unit_Action_Mode = eUnit_Action_States.unit_FreeMode;

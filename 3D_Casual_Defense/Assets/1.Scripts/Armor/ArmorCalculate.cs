@@ -9,5 +9,5 @@ using UnityEngine;
 public abstract class ArmorCalculate
 {
     // 방어구 데미지 값 계산하는 함수
-    public abstract float CalculateDamaged(eUnit_Attack_Property_States attackType, unit_Data ArmorType, float attack_Dmg);
+    public abstract float CalculateDamaged(eUnit_Attack_Property_States attackType, new_Unit_Data ArmorType, float attack_Dmg);
 }

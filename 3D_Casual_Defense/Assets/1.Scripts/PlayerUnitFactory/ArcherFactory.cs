@@ -10,7 +10,7 @@ public class ArcherFactory : AbsPlayerUnitFactory
         unitId = "hum_arch01";
 
         // 오브젝트 풀링 셋팅하는 함수
-        InitObjPool(playerUnitPrefab);
+        InitObjPool(playerUnitPref : playerUnitPrefab);
     }
     //
     // 궁수 클래스마다 생산될 유닛을 결정해주는 구상 생산자

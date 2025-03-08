@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 461662457144574182}
   - component: {fileID: 1453347195531614785}
   - component: {fileID: 2948091468768739152}
-  - component: {fileID: 3392762486837547098}
   - component: {fileID: 1618289926852369410}
   m_Layer: 7
   m_Name: Orc1
@@ -161,6 +160,7 @@ MonoBehaviour:
   castleTr: {fileID: 0}
   delayTime: 0
   resetWayTime: 0
+  monsterFactory: {fileID: 0}
   hpText: {fileID: 5307049294792087285}
   isMove: 0
   pointTr: {fileID: 0}
@@ -181,6 +181,7 @@ MonoBehaviour:
   actUnitCs: {fileID: 5408964738437836675}
   _unitModelTr: {fileID: 0}
   monsterUnit: {fileID: 0}
+  _cols: []
   _layerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -459,27 +460,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!65 &3392762486837547098
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330953560666848243}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.7, y: 1.7, z: 1.7}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!54 &1618289926852369410
 Rigidbody:
   m_ObjectHideFlags: 0

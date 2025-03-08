@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class ChainArmor : ArmorCalculate
 {
-    public override float CalculateDamaged(eUnit_Attack_Property_States attackType, unit_Data ArmorType, float attackDmg)  // 공격당했을 때 호출하는걸 전제로 함
+    public override float CalculateDamaged(eUnit_Attack_Property_States attackType, new_Unit_Data ArmorType, float attackDmg)  // 공격당했을 때 호출하는걸 전제로 함
     {
         if (ArmorType._eUnit_Defense_Property != eUnit_Defense_Property_States.chain_Armor) // 방어 타입이 쇠사슬 갑옷이 아니면
         {

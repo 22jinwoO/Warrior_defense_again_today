@@ -202,7 +202,7 @@
       "specialSkill2": "2_202",
       "specialSkill2Name": "독 화살",
       "unitMode": "자유",
-      "targetSelectType": "타겟 고정"
+      "targetSelectType": "가까운 적"
     },
     {
       "no": "2",
@@ -242,7 +242,7 @@
       "specialSkill2": "2_901",
       "specialSkill2Name": "위협적인 포효",
       "unitMode": "자유",
-      "targetSelectType": "타겟 고정"
+      "targetSelectType": "낮은 체력"
     },
     {
       "no": "4",
